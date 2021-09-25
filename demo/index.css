@@ -1,0 +1,61 @@
+@font-face {
+    font-family: "AquaPlaygroundRegular";
+    src: url('./font/Lato-Regular.ttf');
+}
+
+body {
+    font-family: AquaPlaygroundRegular, sans-serif; 
+}
+
+.playground-header {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5em;
+}
+
+.playground-logo {
+    background-image: url(./images/favicon_new.png);
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    background-size: cover;
+}
+
+.playground-title {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 60px;
+    margin: 0;
+}
+
+.playground-run-button {
+    background-color: green;
+    color: white;
+    padding: 1em;
+    border-radius: 1em;
+    border-color: darkgreen;
+}
+
+.playground-ide {
+    display: flex;
+    flex-direction: row;
+}
+
+.playground-editor {
+    flex: 1 0;
+}
+
+.playground-codemirror-wrapper {
+    width: 55%;
+    min-height: 75vh;
+}
+
+.playground-output {
+    width: 45%;
+    background-color: hsl(0deg, 0%, 20%);
+    color: white;
+}
+
+.CodeMirror {
+    height: 100%;
+}

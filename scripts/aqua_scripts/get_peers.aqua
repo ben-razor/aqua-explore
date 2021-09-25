@@ -1,0 +1,10 @@
+import "@fluencelabs/aqua-lib"
+
+-- gather Peer.identify from all nodes in the neighbourhood
+func getPeersInfo() -> []Info:
+    infos: *Info
+    nodes <- Kademlia.neighborhood(%init_peer_id%, nil, nil)
+    for node in nodes:
+        on node:
+            infos <- Peer.identify()
+    <- infos

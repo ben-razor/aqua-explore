@@ -1,0 +1,117 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "aqua",
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#semantics"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.flow.aqua",
+          "match": "\\b(try|catch|par|if|else|otherwise|for|co)\\b"
+        },
+        {
+          "name": "keyword.control.other.aqua",
+          "match": "(<<-|<-|->|\\[\\]|\\*|\\?\\=|\\?)"
+        },
+        {
+          "name": "keyword.topology.aqua",
+          "match": "\\b(on|via|use|func|service|data|alias|const)\\b"
+        },
+        {
+          "name": "keyword.operator.logical.aqua",
+          "match": "\\b(eqs|neq)\\b"
+        },
+        {
+          "name": "keyword.control.import",
+          "match": "\\b(import|module|export|declares|from|as)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.other.aqua",
+          "match": "%init_peer_id%"
+        },
+        {
+          "name": "constant.numeric.aqua",
+          "match": "\\b\\d+\\b"
+        },
+        {
+          "name": "constant.language.boolean.aqua",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.language.option.nil.aqua",
+          "match": "nil"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.aqua",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.aqua",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "comments": {
+      "name": "comment.line.aqua",
+      "begin": "--",
+      "end": "$"
+    },
+    "semantics": {
+      "patterns": [
+        {
+          "name": "support.type.primitive.aqua",
+          "match": "\\b(string|bool|u8|u16|u32|u64|s8|s16|s32|s64|f32|f64)\\b"
+        },
+        {
+          "//": "Defines tokens for data types in Aqua (declaration). Tokens are expected to have colon after them (`data Something:`)",
+          "name": "entity.name.type.struct.aqua",
+          "match": "\\b[A-Z][A-Za-z0-9_]+(?=:)"
+        },
+        {
+          "//": "Defines tokens for data types in Aqua (usage). Data types in aqua start with a captial letter and are followed by any space char.",
+          "name": "support.class.aqua",
+          "match": "\\b[A-Z][A-Za-z0-9_]+(?=\\s)"
+        },
+        {
+          "//": "Defines tokens for service methods calls. Token is located between dot and open bracket",
+          "name": "support.variable.method.aqua",
+          "match": "(?<=\\.)[a-z][a-zA-Z0-9_]+(?=\\()"
+        },
+        {
+          "//": "Defines tokens for constants used anywhere in code",
+          "name": "support.type.constant.aqua",
+          "match": "\\b[A-Z][A-Z0-9_]*\\b"
+        },
+        {
+          "//": "Defines tokens for service names both in declaration and in usage. Token starts with a capital letter and is followed by either dot (service usage) or open bracket (service declaratiokn)",
+          "name": "support.service.aqua",
+          "match": "\\b[A-Z][A-Za-z0-9_]+(?=[\\(\\.])"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.aqua"
+}

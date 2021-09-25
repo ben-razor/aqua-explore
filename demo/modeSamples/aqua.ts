@@ -1,0 +1,68 @@
+export default `\
+-- import "@fluencelabs/aqua-lib/builtin.aqua"
+import "builtin.aqua"
+
+data Result:
+  result: f64
+  success: bool
+  error_msg: string
+
+service PriceGetterService:
+  price_getter(coin: string, currency: string, timestamp_ms: u64) -> Result
+
+service MeanService:
+  mean(data: []f64) -> Result
+
+service F64Op("op"):
+    identity(x:f64) -> f64
+
+data Payload:
+    coin: string
+    currency: string
+
+data NodeServicePair:
+    node: string
+    service_id: string
+
+func get_price(coin: string, currency: string, node: string, pg_sid: string, mean_sid: string) -> Result:
+    prices: *f64
+    on node:
+        k <- Op.string_to_b58(node)
+        
+        PriceGetterService pg_sid
+        MeanService mean_sid
+
+        ts_ms0 <- Peer.timestamp_ms()
+        res0 <- PriceGetterService.price_getter(coin, currency, ts_ms0)
+        -- if price.success:
+        prices <- F64Op.identity(res0.result)
+
+        ts_ms1 <- Peer.timestamp_ms()
+        res1 <- PriceGetterService.price_getter(coin, currency, ts_ms1)
+        -- if price.success:
+        prices <- F64Op.identity(res1.result)
+
+        result <- MeanService.mean(prices)
+        -- else:
+             --    logError("price_getter: ", price.error_msg)
+    <- result
+
+
+func get_price_par(coin: string, currency: string, getter_topo: []NodeServicePair, mean_topo: NodeServicePair) -> Result:
+  prices: *f64
+  for topo <- getter_topo par:
+    on topo.node:
+      k <- Op.string_to_b58(topo.node)
+        
+      PriceGetterService topo.service_id
+      ts_ms <- Peer.timestamp_ms()
+      res <- PriceGetterService.price_getter(coin, currency, ts_ms)
+      prices <- F64Op.identity(res.result)
+  F64Op.identity(prices!2)
+
+  on mean_topo.node:
+    MeanService mean_topo.service_id
+    result <- MeanService.mean(prices)
+  <- result
+
+`

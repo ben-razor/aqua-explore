@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CodeMirror TextMate Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="playground-header">
+        <div class="playground-logo"></div>
+        <h1 class="playground-title">Fluence Aqua Playground</h1>
+    </div>
+
+    <button id="run-script-button" class="playground-run-button">Run Script</button>
+    <div class="playground-ide">
+        <div class="playground-codemirror-wrapper">
+            <textarea id="cm-host" class="playground-editor"></textarea>
+        </div>
+        <!-- scripts will be auto injected by html-webpack-plugin -->
+        <div id="output-elem" class="playground-output">
+            <textarea id="cm-viewer" class="playground-editor"></textarea>
+        </div>
+
+    </div>
+
+</body>
+</html>
