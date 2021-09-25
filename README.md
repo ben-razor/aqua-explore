@@ -1,63 +1,21 @@
-# Textmate grammars support for CodeMirror
+## Fluence Explore
 
-Bring TM grammar driven tokenization to your CodeMirror editors.
+A playground for exploring [Fluence Network](https://fluence.network/) Aqua code.
 
-Say goodbye to the not-so-cool and not-so-accurate syntax highlighting you've been living with and up your game with ease!
+### Bounty
 
-### WARNING
+https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#
 
-This package will only work in browsers with `WebAssembly` support. Here's a recommended way to deal with it:
+https://github.com/fluencelabs/aqua-playground/tree/master/aqua/examples
 
-```javascript
-// 95% of your target audience (developers)
-if ('WebAssembly' in window) {
-    const [{
-            loadWASM
-        },
-        {
-            activateLanguage,
-            addGrammar
-        }
-    ] = await Promise.all([
-        import('onigasm'),
-        import('codemirror-textmate'),
-    ])
+### Setting Up The Editor
 
-    // ... (see https://www.npmjs.com/package/onigasm#light-it-up)
-    // ... (see example code below)
-}
-// Fallback for rest 5%
-else {
-    await Promise.all([
-        import('codemirror/mode/javascript/javascript'),
-        import( 'codemirror/mode/htmlmixed/htmlmixed'),
-    ])
-}
+Need to convert the [Aqua TextMate Grammar](https://github.com/fluencelabs/aqua-vscode/blob/main/syntaxes/aqua.tmLanguage.json) for use with [CodeMirror](https://codemirror.net/).
 
-const editor = CodeMirror.fromTextArea( /* ... */ )
-// ... (go on as usual)
-```
+### TextMate to CodeMirror
 
-## Usage
+https://github.com/neeksandhu/codemirror-textmate
 
-### Install
+https://npm.io/package/codemirror-textmate
 
-```bash
-$ npm i codemirror-textmate
 
-# Install peer dependencies if you haven't already
-npm i onigasm codemirror 
-```
-
-See `./demo/index.ts` for instructions on how to light it up!
-
-## API
-
-This package is written in TypeScript and is published with TS declaration files. Once you install the package
-see `node_modules/codemirror-textmate/dist/typings/index.d.ts` for available stuff along with expected data types.
-
-VSCode's intellisense will also pick up the declaration files and guide you nicely with auto-complete and errors.
-
-## License
-
-MIT
