@@ -6,6 +6,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+    "@fluencelabs/fluence": "^0.13.0",
     "codemirror": "^5.43.0",
     "codemirror-textmate": "file:..",
     "onigasm": "^2.2.1"

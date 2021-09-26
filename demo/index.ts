@@ -2,6 +2,15 @@ import * as CodeMirror from 'codemirror'
 import { loadWASM } from 'onigasm'
 import 'codemirror/lib/codemirror.css'
 import './index.css';
+import { Fluence, FluencePeer } from '@fluencelabs/fluence';
+import {
+    ResultCodes,
+    RequestFlow,
+    RequestFlowBuilder,
+    CallParams,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1.js';
+
+import {registerPeer, registerOp, registerTest, betterMessage} from './aqua/compiled/test';
 
 import {
     activateLanguage,

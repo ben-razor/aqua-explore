@@ -28,17 +28,30 @@ body {
     margin: 0;
 }
 
+.playground-controls {
+    position: relative;
+    padding: 0.2em;
+}
+
 .playground-run-button {
-    background-color: green;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+    width: 8em;
+    background-image: linear-gradient(
+    0deg, transparent 0%, hsl(342deg 70% 65%) 50%, transparent 100%);
+    background-color: hsl(342deg 70% 45%);
     color: white;
-    padding: 1em;
-    border-radius: 1em;
-    border-color: darkgreen;
+    padding: 0.7em 1.2em;
+    border-radius: 2em;
+    border-color: #c75db0;
+    font-weight: bold;
 }
 
 .playground-ide {
     display: flex;
     flex-direction: row;
+    border: 1px solid grey;
 }
 
 .playground-editor {
@@ -46,12 +59,12 @@ body {
 }
 
 .playground-codemirror-wrapper {
-    width: 55%;
+    width: 50%;
     min-height: 75vh;
 }
 
 .playground-output {
-    width: 45%;
+    width: 50%;
     background-color: hsl(0deg, 0%, 20%);
     color: white;
 }
