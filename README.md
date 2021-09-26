@@ -4,7 +4,7 @@ A playground for exploring [Fluence Network](https://fluence.network/) Aqua code
 
 ## How To Use
 
-The aqua server takes posted Aqua code and runs it through the aqua compiler. Sends back js/ts/air.
+The aqua server takes posted Aqua code and runs it through the cli Aqua compiler. Sends back js, ts or air.
 
 ```
 git clone git@github.com:ben-razor/aqua-explore.git
