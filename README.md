@@ -22,13 +22,7 @@ npm run start
 
 If this all worked then http://localhost:8080/ will show a web interface with an Aqua editor with syntax highlighting. 
 
-Clicking the run button will post the aqua to the server and the output will display either the compiled js or an error message. 
-
-### Reference Documents
-
-https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#
-
-https://github.com/fluencelabs/aqua-playground/tree/master/aqua/examples
+Clicking the run button will post the aqua to the server and the output will display either the compiled js or an error message. **(It takes about 5s to compile)** 
 
 ### Setting Up The Editor
 
@@ -45,3 +39,9 @@ This repository clones that application and adds support for Fluence code syntax
 ## Compiling Aqua
 
 One of the steps that the online application will need to perform is compiling the entered Aqua code.
+
+### Reference Documents
+
+https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#
+
+https://github.com/fluencelabs/aqua-playground/tree/master/aqua/examples
