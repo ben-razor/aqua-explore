@@ -1,6 +1,9 @@
 ## Fluence Explore
 
-A possible starting point for a playground for exploring [Fluence Network](https://fluence.network/) Aqua code.
+A possible starting point for a playground for exploring [Fluence Network](https://fluence.network/) Aqua code. It consists of:
+
+* A CodeMirror editor configured for Aqua code highlighting
+* A python Flask app that takes posted Aqua and returns compiled version / errors
 
 ## How To Use
 
