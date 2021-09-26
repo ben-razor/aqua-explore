@@ -12,8 +12,8 @@ cd ./aqua-explore/scripts
 python3 aqua_server.py
 ```
 
-(Open another terminal cd back to aqua-explore)
-
+```
+# Open another terminal cd back to aqua-explore
 npm install
 cd ./demo          # The client itself lives in the demo folder
 npm install
