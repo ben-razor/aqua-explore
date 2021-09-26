@@ -2,15 +2,6 @@ import * as CodeMirror from 'codemirror'
 import { loadWASM } from 'onigasm'
 import 'codemirror/lib/codemirror.css'
 import './index.css';
-import { Fluence, FluencePeer } from '@fluencelabs/fluence';
-import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-    CallParams,
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1.js';
-
-import {registerPeer, registerOp, registerTest, betterMessage} from './aqua/compiled/test';
 
 import {
     activateLanguage,
@@ -20,10 +11,7 @@ import {
     linkInjections,
 } from 'codemirror-textmate'
 
-let handlers = {};
-let defaultAqua = `
-
-service Peer("peer"):
+let defaultAqua = `service Peer("peer"):
     is_connected: string -> bool
 
 service Op("op"):
@@ -94,11 +82,6 @@ func betterMessage(relay: string):
         lineWrapping: true,
         mode: 'javascript'
     })
-    viewer.setValue(`function myFunction(thisIsCool) {
-    let cool = true;
-    return cool;
-}
-`)
 
     let host = 'http://127.0.0.1:5000';
     async function compileAqua(aquaCode, outputLang) {
