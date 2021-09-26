@@ -33,11 +33,17 @@ Fluence provides an [Aqua TextMate Grammar](https://github.com/fluencelabs/aqua-
 
 The intention was to [CodeMirror](https://codemirror.net/) for the editor component but this uses a different syntax format.
 
-### TextMate to CodeMirror
+#### TextMate to CodeMirror
 
-[Neek Sandhu]has made a wrapper application that allows TextMate grammar to be used in CodeMirror (https://github.com/neeksandhu/codemirror-textmate). It is in [npm](https://npm.io/package/codemirror-textmate).
+[Neek Sandhu] made a wrapper application that allows TextMate grammar to be used in CodeMirror (https://github.com/neeksandhu/codemirror-textmate). It is in [npm](https://npm.io/package/codemirror-textmate).
 
-This repository clones that application and adds support for Fluence code syntax highlighting.
+This repository cloned that application and adds support for Fluence code syntax highlighting.
+
+### Next Step
+
+The next step would be to load the new module client side and allow for code editing.
+
+I think the solution would be to clone CodeSandbox
 
 ### Reference Documents
 
