@@ -1,9 +1,15 @@
-## Fluence Explore
+# Fluence Explore
 
 A possible starting point for a playground for exploring [Fluence Network](https://fluence.network/) Aqua code. It consists of:
 
 * A CodeMirror editor configured for Aqua code highlighting
 * A Python Flask app that takes posted Aqua and returns compiled version / errors
+
+The CodeMirror angle is probably not the way to go but the Aqua compiler web server might come in handy.
+
+## Prerequisites
+
+You need to have [aqua-cli](https://www.npmjs.com/package/@fluencelabs/aqua-cli) installed to run the aqua_server. You will also need npm + python3.
 
 ## How To Use
 
