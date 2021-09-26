@@ -27,18 +27,6 @@ If this all worked then http://localhost:8080/ will show a web interface with an
 
 Clicking the run button will post the aqua to the server and the output will display either the compiled js or an error message. **(It takes about 5s to compile)** 
 
-### Setting Up The Editor
-
-Fluence provides an [Aqua TextMate Grammar](https://github.com/fluencelabs/aqua-vscode/blob/main/syntaxes/aqua.tmLanguage.json).
-
-The intention was to [CodeMirror](https://codemirror.net/) for the editor component but this uses a different syntax format.
-
-#### TextMate to CodeMirror
-
-[Neek Sandhu] made a wrapper application that allows TextMate grammar to be used in CodeMirror (https://github.com/neeksandhu/codemirror-textmate). It is in [npm](https://npm.io/package/codemirror-textmate).
-
-This repository cloned that application and adds support for Fluence code syntax highlighting.
-
 ### Next Step
 
 The next step would be do hot module replacement of the compiled Aqua client side and allow for code editing.
@@ -46,6 +34,16 @@ The next step would be do hot module replacement of the compiled Aqua client sid
 I think a solution would be to clone [codesandbox](https://github.com/codesandbox/codesandbox-client), strip out the other languages and configure it for Aqua only.
 
 I couldn't get that working so I stopped at this point.
+
+### How The Syntax Highlighting Was Set Up
+
+Fluence provides an [Aqua TextMate Grammar](https://github.com/fluencelabs/aqua-vscode/blob/main/syntaxes/aqua.tmLanguage.json).
+
+The intention was to [CodeMirror](https://codemirror.net/) for the editor component but this uses a different syntax format.
+
+[Neek Sandhu] made a wrapper application that allows TextMate grammar to be used in CodeMirror (https://github.com/neeksandhu/codemirror-textmate). It is in [npm](https://npm.io/package/codemirror-textmate).
+
+This repository cloned that application and adds support for Fluence code syntax highlighting.
 
 ### Reference Documents
 
