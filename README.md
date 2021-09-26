@@ -1,6 +1,6 @@
 ## Fluence Explore
 
-A playground for exploring [Fluence Network](https://fluence.network/) Aqua code.
+A possible starting point for a playground for exploring [Fluence Network](https://fluence.network/) Aqua code.
 
 ## How To Use
 
