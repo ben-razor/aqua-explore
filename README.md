@@ -36,10 +36,6 @@ The intention was to [CodeMirror](https://codemirror.net/) for the editor compon
 
 This repository clones that application and adds support for Fluence code syntax highlighting.
 
-## Compiling Aqua
-
-One of the steps that the online application will need to perform is compiling the entered Aqua code.
-
 ### Reference Documents
 
 https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#
