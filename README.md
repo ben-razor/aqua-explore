@@ -41,9 +41,11 @@ This repository cloned that application and adds support for Fluence code syntax
 
 ### Next Step
 
-The next step would be to load the new module client side and allow for code editing.
+The next step would be do hot module replacement of the compiled Aqua client side and allow for code editing.
 
-I think the solution would be to clone CodeSandbox
+I think a solution would be to clone [codesandbox](https://github.com/codesandbox/codesandbox-client), strip out the other languages and configure it for Aqua only.
+
+I couldn't get that working so I stopped at this point.
 
 ### Reference Documents
 
