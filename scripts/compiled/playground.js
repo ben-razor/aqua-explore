@@ -111,7 +111,7 @@ export function registerHelloWorld(...args) {
    (call %init_peer_id% ("hello-world" "hello") ["Hello, world!"])
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") ["Hello, world!"])
+   (call %init_peer_id% ("callbackSrv" "response") ["hello"])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
   )
  )
@@ -138,6 +138,73 @@ export function registerHelloWorld(...args) {
             .handleScriptError(reject)
             .handleTimeout(() => {
                 reject('Request timed out for sayHello');
+            })
+        if(config && config.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
+    });
+    peer.internals.initiateFlow(request);
+    return promise;
+}
+      
+
+
+ export function getRelayTime(...args) {
+     let peer;
+     
+     let config;
+     if (FluencePeer.isInstance(args[0])) {
+         peer = args[0];
+         config = args[1];
+     } else {
+         peer = Fluence.getPeer();
+         config = args[0];
+     }
+    
+     let request;
+     const promise = new Promise((resolve, reject) => {
+         const r = new RequestFlowBuilder()
+                 .disableInjections()
+                 .withRawScript(
+                     `
+     (xor
+ (seq
+  (seq
+   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+   (xor
+    (call -relay- ("peer" "timestamp_ms") [] ts)
+    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+   )
+  )
+  (xor
+   (call %init_peer_id% ("callbackSrv" "response") [ts])
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+  )
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+)
+
+                 `,
+                 )
+                 .configHandler((h) => {
+                     h.on('getDataSrv', '-relay-', () => {
+                    return peer.getStatus().relayPeerId;
+                });
+                
+                h.onEvent('callbackSrv', 'response', (args) => {
+    const [res] = args;
+  resolve(res);
+});
+
+                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                    const [err] = args;
+                    reject(err);
+                });
+            })
+            .handleScriptError(reject)
+            .handleTimeout(() => {
+                reject('Request timed out for getRelayTime');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)

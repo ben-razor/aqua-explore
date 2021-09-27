@@ -162,4 +162,7 @@ func getRelayTime() -> u64:
     let button = document.getElementById('run-script-button');
     button.onclick = runScript; 
 
+    document.getElementById('playground-content').style.opacity = '1';
+    document.getElementById('playground-content').style.position = 'relative';
+    document.getElementById('playground-loading').style.display = 'none';
 })()

@@ -4,6 +4,10 @@ service HelloWorld("hello-world"):
     hello(str: string)
     
 func sayHello() -> string:
-	message = "Hello, world!"
-    HelloWorld.hello(message)
-    <- message
+    HelloWorld.hello("Hello, world!")
+    <- "hello"
+    
+func getRelayTime() -> u64:
+    on HOST_PEER_ID:
+        ts <- Peer.timestamp_ms()
+    <- ts
