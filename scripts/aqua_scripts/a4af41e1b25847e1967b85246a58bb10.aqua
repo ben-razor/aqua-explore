@@ -1,13 +1,16 @@
+import "@fluencelabs/aqua-dht/pubsub.aqua"
+import "@fluencelabs/aqua-dht/dht.aqua"
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
-service HelloWorld("hello-world"):
-    hello(str: string)
-    
-func sayHello() -> string:
-    HelloWorld.hello("Hello. Welcome to the Aqua Playground.")
-    <- "Hello. Welcome to the Aqua Playground."
-    
-func getRelayTime() -> u64:
-    on HOST_PEER_ID:
-        ts <- Peer.timestamp_ms()
-    <- ts
+export getNeighbours, initTopicAndSubscribe, findSubscribers
+
+func put_value(initial_peer: string, value: string) -> string:
+    initTopicAndSubscribe(initial_peer, "some-const3", value, nil, nil)
+    <- "OK"
+
+func registerKeyPutValue(node_id: string, key: string, value: string, relay_id: ?string, service_id: ?string) -> []string:
+  nodes <- getNeighbours(key, node_id)
+  for n <- nodes par:
+    on n:
+      t <- Peer.timestamp_sec()
+  <- nodes
