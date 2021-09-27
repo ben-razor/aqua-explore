@@ -227,8 +227,6 @@ let liveJS = defaultJS;
 
         // Viewer will either contain compiled js or the error message
         viewer.setValue(result.data.output);
-        elemById('playground-compiled-viewer').style.display = 'initial';
-        elemById('playground-run-output').style.display = 'initial';
         viewer.refresh();
 
         if(result.success) {
