@@ -46,7 +46,7 @@ Clicking the run button will post the aqua to the server and the output will dis
 
 Fluence provides an [Aqua TextMate Grammar](https://github.com/fluencelabs/aqua-vscode/blob/main/syntaxes/aqua.tmLanguage.json).
 
-The intention was to [CodeMirror](https://codemirror.net/) for the editor component but this uses a different syntax format.
+The application uses [CodeMirror](https://codemirror.net/) for the editor component but this uses a different syntax format.
 
 [Neek Sandhu] made a wrapper application that allows TextMate grammar to be used in CodeMirror (https://github.com/neeksandhu/codemirror-textmate). It is in [npm](https://npm.io/package/codemirror-textmate).
 
