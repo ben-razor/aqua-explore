@@ -139,7 +139,7 @@ let liveJS = defaultJS;
 
     let session_id = cookies.get('session_id');
 
-    let host = 'http://127.0.0.1:5000';
+    let host = 'http://34.77.88.57:8080/';
     async function compileAqua(aquaCode, outputLang) {
         let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
             'Content-Type': 'application/json',
@@ -188,9 +188,30 @@ let liveJS = defaultJS;
         }
     }
 
+    let setOutputTab = (elemID) => {
+        elemById(elemID).classList.add('playground-tab-selected');
+        if(elemID === 'playground-tab-output') {
+            elemById('playground-tab-compiled').classList.remove('playground-tab-selected');
+            elemById('playground-run-output').style.display = 'initial';
+            elemById('playground-compiled-viewer').style.display = 'none';
+        }
+        else {
+            elemById('playground-tab-output').classList.remove('playground-tab-selected');
+            elemById('playground-run-output').style.display = 'none';
+            elemById('playground-compiled-viewer').style.display = 'initial';
+            viewer.refresh();
+        }
+    }
+
+
     window['selectTab'] = (elem) {
         let elemID = elem.id;
         setTab(elemID)
+    }
+
+    window['selectOutputTab'] = (elem) {
+        let elemID = elem.id;
+        setOutputTab(elemID)
     }
     
     window['setOutput'] = text => {

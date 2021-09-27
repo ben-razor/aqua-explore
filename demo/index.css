@@ -38,7 +38,6 @@ body {
 
 .playground-output {
     width: 45%;
-    background-color: hsl(0deg, 0%, 20%);
     color: white;
     display: flex;
     flex-direction: column;
@@ -48,7 +47,15 @@ body {
     display: flex;
     flex-direction: row;
     position: relative;
-    border-bottom: 2px solid #c73db0;
+    border-bottom: 2px solid #c73d7e17;
+}
+
+.playground-controls-output {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    border-bottom: 2px solid #c73d7e17;
+    justify-content: flex-end;
 }
 
 .playground-run-button {
@@ -97,6 +104,7 @@ body {
 }
 
 .playground-run-output {
+    background-color: hsl(0deg, 0%, 20%);
     height: 20em;
     padding: 0.3em;
 }
