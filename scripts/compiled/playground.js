@@ -86,7 +86,7 @@ export function registerHelloWorld(...args) {
 
 // Functions
 
- export function hello(...args) {
+ export function sayHello(...args) {
      let peer;
      
      let config;
@@ -130,7 +130,7 @@ export function registerHelloWorld(...args) {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for hello');
+                reject('Request timed out for sayHello');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)

@@ -3,7 +3,7 @@ import "@fluencelabs/aqua-lib/builtin.aqua"
 service HelloWorld("hello-world"):
     hello(str: string)
     
-func hello():
+func sayHello():
     HelloWorld.hello("Hello, world!")
     
 func getRelayTime() -> u64:
