@@ -4,8 +4,7 @@ A playground for exploring [Fluence Network](https://fluence.network/) Aqua code
 
 * A CodeMirror editor configured for Aqua code highlighting
 * A Python Flask app that takes posted Aqua and returns compiled version / errors
-
-The CodeMirror angle is probably not the way to go but the Aqua compiler web server might come in handy.
+* An editor configured to edit the JS to view the output from the compiled Aqua module
 
 ## Prerequisites
 
