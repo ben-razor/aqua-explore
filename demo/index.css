@@ -139,12 +139,11 @@ body {
     height: 90%;
     margin: 2px;
     border-radius: 0.5em;
+    background-image: linear-gradient(0deg, transparent 0%, hsl(342deg 70% 63%) 30%, transparent 100%);
+    background-color: hsl(342deg 70% 43%);
+    color: white;
 }
 
 .ring-loader {
     background-image: url(./images/ring-loader.gif);
-}
-
-.favicon {
-    background-image: url(./images/favicon_io/favicon.ico);
 }
