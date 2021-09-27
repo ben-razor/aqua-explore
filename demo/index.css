@@ -140,3 +140,11 @@ body {
     margin: 2px;
     border-radius: 0.5em;
 }
+
+.ring-loader {
+    background-image: url(./images/ring-loader.gif);
+}
+
+.favicon {
+    background-image: url(./images/favicon_io/favicon.ico);
+}

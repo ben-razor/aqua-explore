@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "npm run __build-cm-tm && webpack-dev-server .",
-    "__build-cm-tm": "tsc --build ../tsconfig.json"
+    "__build-cm-tm": "tsc --build ../tsconfig.json",
+    "build": "webpack --config=webpack.config.js"
   },
   "private": true,
   "license": "MIT",
