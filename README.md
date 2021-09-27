@@ -12,7 +12,7 @@ View the current version at [Aqua Playground](http://34.77.88.57/).
 
 **The server this is currently deployed on will not handle many simultaneous requests**
 
-It is still under development.
+**It is still under development**
 
 A submission for the [Gitcoin GR11](https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#) hackathon.
 
