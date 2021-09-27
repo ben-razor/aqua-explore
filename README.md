@@ -42,6 +42,12 @@ If this all worked then http://localhost:8080/ will show a web interface with an
 
 Clicking the run button will post the aqua to the server and the output will display either the compiled js or an error message. **(It takes about 5s to compile)** 
 
+### About The Code
+
+The code for the client application is in the [demo folder](https://github.com/ben-razor/aqua-explore/tree/main/demo).
+
+The code for the server aqua compiler is in the [scripts folder](https://github.com/ben-razor/aqua-explore/tree/main/scripts).
+
 ### How The Syntax Highlighting Was Set Up
 
 Fluence provides an [Aqua TextMate Grammar](https://github.com/fluencelabs/aqua-vscode/blob/main/syntaxes/aqua.tmLanguage.json).
