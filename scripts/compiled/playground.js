@@ -21,7 +21,7 @@ function missingFields(obj, fields) {
 
 // Services
 
-export function registerHelloWorld(...args) {
+export function registerUnexisted(...args) {
     let peer;
     let serviceId;
     let service;
@@ -37,7 +37,7 @@ export function registerHelloWorld(...args) {
         serviceId = args[1];
     }  
  else {
-     serviceId = "hello-world"
+     serviceId = "unex"
 }
 
     // Figuring out which overload is the service.
@@ -53,9 +53,9 @@ export function registerHelloWorld(...args) {
         service = args[2];
     }
 
-    const incorrectServiceDefinitions = missingFields(service, ['hello']);
+    const incorrectServiceDefinitions = missingFields(service, ['getStr']);
     if (!incorrectServiceDefinitions.length) {
-        throw new Error("Error registering service HelloWorld: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
+        throw new Error("Error registering service Unexisted: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
     }
 
     peer.internals.callServiceHandler.use((req, resp, next) => {
@@ -65,16 +65,80 @@ export function registerHelloWorld(...args) {
             }
 
 
- if (req.fnName === 'hello') {
+ if (req.fnName === 'getStr') {
      
  const callParams = {
      ...req.particleContext,
      tetraplets: {
-         str: req.tetraplets[0]
+         
      },
  };
  resp.retCode = ResultCodes.success;
- service.hello(req.args[0], callParams); resp.result = {}
+ resp.result = service.getStr(callParams)
+
+ }
+    
+
+            next();
+        });
+ }
+      
+
+
+export function registerOpA(...args) {
+    let peer;
+    let serviceId;
+    let service;
+    if (FluencePeer.isInstance(args[0])) {
+        peer = args[0];
+    } else {
+        peer = Fluence.getPeer();
+    }
+
+    if (typeof args[0] === 'string') {
+        serviceId = args[0];
+    } else if (typeof args[1] === 'string') {
+        serviceId = args[1];
+    }  
+ else {
+     serviceId = "op"
+}
+
+    // Figuring out which overload is the service.
+    // If the first argument is not Fluence Peer and it is an object, then it can only be the service def
+    // If the first argument is peer, we are checking further. The second argument might either be
+    // an object, that it must be the service object
+    // or a string, which is the service id. In that case the service is the third argument
+    if (!(FluencePeer.isInstance(args[0])) && typeof args[0] === 'object') {
+        service = args[0];
+    } else if (typeof args[1] === 'object') {
+        service = args[1];
+    } else {
+        service = args[2];
+    }
+
+    const incorrectServiceDefinitions = missingFields(service, ['identity']);
+    if (!incorrectServiceDefinitions.length) {
+        throw new Error("Error registering service OpA: missing functions: " + incorrectServiceDefinitions.map((d) => "'" + d + "'").join(", "))
+    }
+
+    peer.internals.callServiceHandler.use((req, resp, next) => {
+        if (req.serviceId !== serviceId) {
+            next();
+                return;
+            }
+
+
+ if (req.fnName === 'identity') {
+     
+ const callParams = {
+     ...req.particleContext,
+     tetraplets: {
+         s: req.tetraplets[0]
+     },
+ };
+ resp.retCode = ResultCodes.success;
+ resp.result = service.identity(req.args[0], callParams)
 
  }
     
@@ -86,16 +150,18 @@ export function registerHelloWorld(...args) {
 
 // Functions
 
- export function sayHello(...args) {
+ export function tryCatchTest(...args) {
      let peer;
-     
+     let node_id;
      let config;
      if (FluencePeer.isInstance(args[0])) {
          peer = args[0];
-         config = args[1];
+         node_id = args[1];
+config = args[2];
      } else {
          peer = Fluence.getPeer();
-         config = args[0];
+         node_id = args[0];
+config = args[1];
      }
     
      let request;
@@ -107,78 +173,35 @@ export function registerHelloWorld(...args) {
      (xor
  (seq
   (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (call %init_peer_id% ("hello-world" "hello") ["Hello, world!"])
-  )
-  (xor
-   (call %init_peer_id% ("callbackSrv" "response") ["hello"])
-   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-  )
- )
- (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-)
-
-                 `,
-                 )
-                 .configHandler((h) => {
-                     h.on('getDataSrv', '-relay-', () => {
-                    return peer.getStatus().relayPeerId;
-                });
-                
-                h.onEvent('callbackSrv', 'response', (args) => {
-    const [res] = args;
-  resolve(res);
-});
-
-                h.onEvent('errorHandlingSrv', 'error', (args) => {
-                    const [err] = args;
-                    reject(err);
-                });
-            })
-            .handleScriptError(reject)
-            .handleTimeout(() => {
-                reject('Request timed out for sayHello');
-            })
-        if(config && config.ttl) {
-            r.withTTL(config.ttl)
-        }
-        request = r.build();
-    });
-    peer.internals.initiateFlow(request);
-    return promise;
-}
-      
-
-
- export function getRelayTime(...args) {
-     let peer;
-     
-     let config;
-     if (FluencePeer.isInstance(args[0])) {
-         peer = args[0];
-         config = args[1];
-     } else {
-         peer = Fluence.getPeer();
-         config = args[0];
-     }
-    
-     let request;
-     const promise = new Promise((resolve, reject) => {
-         const r = new RequestFlowBuilder()
-                 .disableInjections()
-                 .withRawScript(
-                     `
+   (seq
+    (seq
+     (seq
+      (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+      (call %init_peer_id% ("getDataSrv" "node_id") [] node_id)
+     )
+     (call -relay- ("op" "noop") [])
+    )
+    (xor
      (xor
- (seq
-  (seq
-   (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
-   (xor
-    (call -relay- ("peer" "timestamp_ms") [] ts)
-    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+      (call node_id ("unex" "getStr") [] $f)
+      (seq
+       (seq
+        (call node_id ("op" "identity") [%last_error%.$.msg!] $f)
+        (call node_id ("peer" "identify") [] i)
+       )
+       (call node_id ("op" "identity") [i.$.external_addresses.[0]!] $f)
+      )
+     )
+     (seq
+      (call -relay- ("op" "noop") [])
+      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+     )
+    )
    )
+   (call -relay- ("op" "noop") [])
   )
   (xor
-   (call %init_peer_id% ("callbackSrv" "response") [ts])
+   (call %init_peer_id% ("callbackSrv" "response") [$f])
    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
   )
  )
@@ -191,7 +214,7 @@ export function registerHelloWorld(...args) {
                      h.on('getDataSrv', '-relay-', () => {
                     return peer.getStatus().relayPeerId;
                 });
-                
+                h.on('getDataSrv', 'node_id', () => {return node_id;});
                 h.onEvent('callbackSrv', 'response', (args) => {
     const [res] = args;
   resolve(res);
@@ -204,7 +227,7 @@ export function registerHelloWorld(...args) {
             })
             .handleScriptError(reject)
             .handleTimeout(() => {
-                reject('Request timed out for getRelayTime');
+                reject('Request timed out for tryCatchTest');
             })
         if(config && config.ttl) {
             r.withTTL(config.ttl)

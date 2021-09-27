@@ -32,8 +32,8 @@ service HelloWorld("hello-world"):
     hello(str: string)
     
 func sayHello() -> string:
-    HelloWorld.hello("Hello, world!")
-    <- "hello"
+    HelloWorld.hello("Hello. Welcome to the Aqua Playground.")
+    <- "Hello. Welcome to the Aqua Playground."
     
 func getRelayTime() -> u64:
     on HOST_PEER_ID:
@@ -126,10 +126,30 @@ func getRelayTime() -> u64:
 
     await Fluence.start({ connectTo: krasnodar[2] });
 
+    function elemById(id) {
+        return document.getElementById(id);
+    }
+    function showElem(id) {
+        elemById(id).style.display = 'initial';
+    }
+    function hideElem(id) {
+        elemById(id).style.display = 'none';
+    }
+    function showCompilingOverlay() {
+        showElem('playground-compiling-overlay');
+        setTimeout(() => {
+            // In case something goes wrong with the compile
+            hideElem('playground-compiling-overlay');
+        }, 10000);
+    }
+    function setContent(id, text) {
+        elemById(id).innerHTML = text;
+    }
     async function runScript() {
+        setContent('playground-run-output', '');
+        showCompilingOverlay();
         let script = editor.getValue();
         let result = await compileAqua(script, 'js');
-
         viewer.setValue(result.data.output);
 
         if(result.success) {
@@ -157,6 +177,10 @@ func getRelayTime() -> u64:
             let code = cleanedJS + ';' + liveJS;
             eval(code);
         }
+        else {
+            setContent('playground-run-output', 'There was an error while compiling the Aqua.');
+        }
+        hideElem('playground-compiling-overlay');
     }
 
     let button = document.getElementById('run-script-button');
