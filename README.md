@@ -1,4 +1,4 @@
-# Fluence Explore
+# Aqua Explore
 
 A playground for exploring [Fluence Network](https://fluence.network/) Aqua code. It consists of:
 
