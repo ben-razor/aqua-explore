@@ -197,7 +197,7 @@ let liveJS = defaultJS;
     }
 
     async function runScript() {
-        setContent('playground-run-output', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.');
+        setContent('playground-run-output', '');
         showCompilingOverlay();
         let script = editor.getValue();
         let jsScript = jsEditor.getValue();
@@ -233,6 +233,8 @@ let liveJS = defaultJS;
             
             let cleanedJS = cleanedLines.join('\n');
             let code = cleanedJS + ';' + jsScript;
+
+            setContent('playground-run-output', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.');
             eval(code);
         }
         else {
@@ -252,6 +254,7 @@ let liveJS = defaultJS;
     document.getElementById('playground-loading').style.display = 'none';
 
     let {success, examplesData} = await getExamples();
+    examplesData.unshift(defaultExample); 
 
     window["exampleChanged"] = (e) => {
         let selValue = e.options[e.selectedIndex].value;
@@ -272,9 +275,8 @@ let liveJS = defaultJS;
         console.log(examplesData);
         let select = `<select class="playground-examples-select" 
                               id="playground-examples-select" onchange="exampleChanged(this)">"`
-        select += `<option value="${defaultExample.name}">${defaultExample.title}</option>`
         for(let data of examplesData) {
-            select += `<option value="${data.name}">${data.title}</option>`
+            select += `<option value="${data.name}">${data.title}</option>`;
         }
         select += '</select>';
 
