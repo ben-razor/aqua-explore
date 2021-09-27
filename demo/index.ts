@@ -261,7 +261,6 @@ let liveJS = defaultJS;
         }
         else {
             setContent('playground-run-output', 'There was an error while compiling the Aqua.');
-            elemById('playground-compiled-viewer').style.display = 'initial';
             elemById('playground-run-output').style.display = 'none';
             viewer.refresh();
         }
@@ -271,6 +270,7 @@ let liveJS = defaultJS;
     let button = document.getElementById('run-script-button');
     button.onclick = runScript; 
 
+    document.getElementById('playground-header').style.display = 'flex';
     document.getElementById('playground-content').style.opacity = '1';
     document.getElementById('playground-content').style.position = 'relative';
     document.getElementById('playground-loading').style.display = 'none';

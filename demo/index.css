@@ -155,3 +155,30 @@ body {
 .ring-loader {
     background-image: url(./images/ring-loader.gif);
 }
+
+.playground-menu {
+    margin-left: auto;
+}
+
+.playground-menu-item {
+    display: inline-block;
+    padding: 1em;
+}
+
+a {
+    text-decoration: none;
+    color: hsl(0deg, 50%, 40%);
+}
+
+.playground-foooter {
+    display: flex;
+}
+
+.playground-info {
+    width: 25%;
+    margin: 0.25em 0.25em 0 auto;
+    padding: 1em;
+    border: 1px solid hsl(0deg, 50%, 40%);
+    color: hsl(0deg, 50%, 40%);
+    text-align: center;
+}
