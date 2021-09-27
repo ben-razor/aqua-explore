@@ -4,7 +4,9 @@ A playground for exploring [Fluence Network](https://fluence.network/) Aqua code
 
 * A CodeMirror editor configured for Aqua code highlighting
 * A Python Flask app that takes posted Aqua and returns compiled version / errors
-* An editor configured to edit the JS to view the output from the compiled Aqua module
+* An editor configured to edit the JS to create the output from the compiled Aqua module
+* User can select from a number of example codes
+* The app displays the generated JS allowing the user to copy it in their project
 
 A submission for the [Gitcoin GR11](https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#) hackathon.
 
