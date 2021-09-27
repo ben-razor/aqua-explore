@@ -24,6 +24,9 @@
                 <div class="playground-controls">
                     <div class="playground-tab playground-tab-selected" id="playground-tab-aqua" onclick="selectTab(this)">Aqua</div>
                     <div class="playground-tab" id="playground-tab-js" onclick="selectTab(this)">JS</div>
+                    <div id="example-select-holder">
+                        
+                    </div>
                     <button id="run-script-button" class="playground-run-button">Run Script</button>
                 </div>
                 <div class="playground-codemirror-wrapper">
@@ -38,7 +41,7 @@
            <!-- scripts will be auto injected by html-webpack-plugin -->
             <div id="output-elem" class="playground-output">
                 <div id="playground-run-output" class="playground-run-output">
-                    Output will appear here...
+                    Use setOutput in JS to output to this console.
                 </div>
                 <div id="playground-compiled-viewer" style="display: none;">
                     <textarea id="cm-viewer" class="playground-editor"></textarea>

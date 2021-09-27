@@ -132,3 +132,10 @@ body {
     text-align: center;
     transform: translateY(30%);
 }
+
+.playground-examples-select {
+    box-sizing: border-box;
+    font-size: 1.2em;
+    height: 90%;
+    margin: 2px;
+}

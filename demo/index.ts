@@ -5,6 +5,7 @@ var cookies = require('browser-cookies');
 import './index.css';
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
 import { krasnodar } from "@fluencelabs/fluence-network-environment";
+import { getExamples } from './examples';
 
 import {
     ResultCodes,
@@ -53,13 +54,8 @@ const helloBtnOnClick = async () => {
     const relayTime = await getRelayTime();
     const dateStr = new Date(relayTime).toLocaleString();
     
-    setHelloMessage(message + '<br /><br />Time on host: ' + dateStr);
+    setOutput(message + '<br /><br />Time on host: ' + dateStr);
 };
-
-function setHelloMessage(msg) {
-    console.log(msg);
-    document.getElementById('playground-run-output').innerHTML = msg;
-}
 
 helloBtnOnClick();`;
 
@@ -183,8 +179,12 @@ helloBtnOnClick();`;
         }
     }
     
+    window['setOutput'] = text => {
+        document.getElementById('playground-run-output').innerHTML = text;
+    }
+
     async function runScript() {
-        setContent('playground-run-output', '');
+        setContent('playground-run-output', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.');
         showCompilingOverlay();
         let script = editor.getValue();
         let jsScript = jsEditor.getValue();
@@ -192,8 +192,9 @@ helloBtnOnClick();`;
 
         // Viewer will either contain compiled js or the error message
         viewer.setValue(result.data.output);
-        elemById('playground-compiled-viewer').style.display = 'none';
+        elemById('playground-compiled-viewer').style.display = 'initial';
         elemById('playground-run-output').style.display = 'initial';
+        viewer.refresh();
 
         if(result.success) {
             cookies.set('session_id', result.data.id);
@@ -236,4 +237,35 @@ helloBtnOnClick();`;
     document.getElementById('playground-content').style.opacity = '1';
     document.getElementById('playground-content').style.position = 'relative';
     document.getElementById('playground-loading').style.display = 'none';
+
+    let {success, examplesData} = await getExamples();
+
+    window["exampleChanged"] = (e) => {
+        let selValue = e.options[e.selectedIndex].value;
+        console.log(selValue);
+        for(let data of examplesData) {
+            if(data.name === selValue) {
+                editor.setValue(data.aqua);
+                jsEditor.setValue(data.js || '');
+                editor.refresh();
+                jsEditor.refresh();
+                break;
+            }
+        }
+    }
+
+    if(success) {
+        console.log(examplesData);
+        let select = `<select class="playground-examples-select" 
+                              id="playground-examples-select" onchange="exampleChanged(this)">"`
+        for(let data of examplesData) {
+            select += `<option value="${data.name}">${data.title}</option>`
+        }
+        select += '</select>';
+
+        elemById('example-select-holder').innerHTML = select;
+    }
+    else {
+        console.log('failed to get examples data'); 
+    }
 })()
