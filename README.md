@@ -2,7 +2,7 @@
 
 A playground for exploring [Fluence Network](https://fluence.network/) Aqua code. It consists of:
 
-* A CodeMirror editor configured for Aqua code highlighting
+* An editor configured for Aqua code highlighting
 * A Python Flask app that takes posted Aqua and returns compiled version / errors
 * An editor configured to edit the JS to create the output from the compiled Aqua module
 * User can select from a number of example codes
