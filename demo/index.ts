@@ -2,6 +2,13 @@ import * as CodeMirror from 'codemirror'
 import { loadWASM } from 'onigasm'
 import 'codemirror/lib/codemirror.css'
 import './index.css';
+import { Fluence } from "@fluencelabs/fluence";
+import { krasnodar } from "@fluencelabs/fluence-network-environment";
+import { 
+    registerHelloWorld,
+    sayHello,
+    getRelayTime
+} from './aqua/compiled/hello_world';
 
 import {
     activateLanguage,
@@ -11,26 +18,18 @@ import {
     linkInjections,
 } from 'codemirror-textmate'
 
-let defaultAqua = `service Peer("peer"):
-    is_connected: string -> bool
+let defaultAqua = `import "@fluencelabs/aqua-lib/builtin.aqua"
 
-service Op("op"):
-    identity: -> ()
-
-data User:
-    peer_id: string
-    relay_id: string
-    name: string
-
-service Test("test"):
-    getUserList: -> []User
-    doSomething: -> bool
-
-func betterMessage(relay: string):
-    on relay:
-        isOnline <- Peer.is_connected(relay)
-    if isOnline:
-        Test.doSomething()
+service HelloWorld("hello-world"):
+    hello(str: string)
+    
+func sayHello():
+    HelloWorld.hello("Hello, world!")
+    
+func getRelayTime() -> u64:
+    on HOST_PEER_ID:
+        ts <- Peer.timestamp_ms()
+    <- ts
 `;
 
 (async () => {
@@ -105,4 +104,36 @@ func betterMessage(relay: string):
 
     let button = document.getElementById('run-script-button');
     button.onclick = runScript; 
+
+
+    let relayPeerId = '/dns4/kras-01.fluence.dev/tcp/19001/wss/p2p/12D3KooWKnEqMfYo9zvfHmqTLpLdiHXPe4SVqUWcWHDJdFGrSmcA';
+
+    let client;
+    function setClient(newClient) {
+        client = newClient;
+    }
+
+    await Fluence.start({ connectTo: krasnodar[2] });
+
+    registerHelloWorld({
+        "hello": async (str) => {
+            console.log(str)
+        }
+    });
+
+    const helloBtnOnClick = async () => {
+        await sayHello();
+        const relayTime = await getRelayTime();
+        setHelloMessage(relayTime);
+    };
+
+    function setHelloMessage(msg) {
+        console.log(msg);
+    }
+
+    document.getElementById('hello-button').onclick = async function() {
+        await helloBtnOnClick();
+    };
+
+      const isConnected = client !== null;
 })()
