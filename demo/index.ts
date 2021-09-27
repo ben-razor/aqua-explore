@@ -42,6 +42,26 @@ func getRelayTime() -> u64:
     <- ts
 `;
 
+let liveJS = `registerHelloWorld({
+    hello: async (str) => {
+        console.log(str)
+    }
+});
+
+const helloBtnOnClick = async () => {
+    const message = await sayHello();
+    const relayTime = await getRelayTime();
+    setHelloMessage(message);
+};
+
+function setHelloMessage(msg) {
+    console.log(msg);
+    document.getElementById('playground-run-output').innerHTML = msg;
+}
+
+helloBtnOnClick();`;
+
+
 (async () => {
     await loadWASM(
         // webpack has been configured to resolve `.wasm` files to actual 'paths" as opposed to using the built-in wasm-loader
@@ -83,35 +103,20 @@ func getRelayTime() -> u64:
         lineNumbers: true,
         mode: 'typescript'
     })
-    editor.setValue(defaultAqua)
+    editor.setValue(defaultAqua);
 
+    const jsEditor = CodeMirror.fromTextArea(document.getElementById('cm-js-editor') as HTMLTextAreaElement, {
+        lineNumbers: true,
+        mode: 'javascript'
+    })
+    jsEditor.setValue(liveJS);
+    elemById('cm-js-container').style.display = 'none';
 
     const viewer = CodeMirror.fromTextArea(document.getElementById('cm-viewer') as HTMLTextAreaElement, {
         lineNumbers: true,
         lineWrapping: true,
         mode: 'javascript'
     })
-
-    let liveJS = `
-    registerHelloWorld({
-        hello: async (str) => {
-            console.log(str)
-        }
-    });
-
-    const helloBtnOnClick = async () => {
-        const message = await sayHello();
-        const relayTime = await getRelayTime();
-        setHelloMessage(message);
-    };
-
-    function setHelloMessage(msg) {
-        console.log(msg);
-        document.getElementById('playground-run-output').innerHTML = msg;
-    }
-
-    helloBtnOnClick();
-    `;
 
     let session_id = cookies.get('session_id');
 
@@ -153,9 +158,15 @@ func getRelayTime() -> u64:
         elemById(elemID).classList.add('playground-tab-selected');
         if(elemID === 'playground-tab-aqua') {
             elemById('playground-tab-js').classList.remove('playground-tab-selected');
+            elemById('cm-aqua-container').style.display = 'initial';
+            elemById('cm-js-container').style.display = 'none';
+            editor.refresh();
         }
         else {
             elemById('playground-tab-aqua').classList.remove('playground-tab-selected');
+            elemById('cm-aqua-container').style.display = 'none';
+            elemById('cm-js-container').style.display = 'initial';
+            jsEditor.refresh();
         }
     }
     
@@ -163,6 +174,7 @@ func getRelayTime() -> u64:
         setContent('playground-run-output', '');
         showCompilingOverlay();
         let script = editor.getValue();
+        let jsScript = jsEditor.getValue();
         let result = await compileAqua(script, 'js');
         viewer.setValue(result.data.output);
 
@@ -189,7 +201,7 @@ func getRelayTime() -> u64:
             }
             
             let cleanedJS = cleanedLines.join('\n');
-            let code = cleanedJS + ';' + liveJS;
+            let code = cleanedJS + ';' + jsScript;
             eval(code);
         }
         else {

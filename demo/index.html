@@ -27,7 +27,12 @@
                     <button id="run-script-button" class="playground-run-button">Run Script</button>
                 </div>
                 <div class="playground-codemirror-wrapper">
-                    <textarea id="cm-host" class="playground-editor"></textarea>
+                    <div id="cm-aqua-container">
+                        <textarea id="cm-host" class="playground-editor"></textarea>
+                    </div>
+                    <div id="cm-js-container">
+                        <textarea id="cm-js-editor" class="playground-editor"></textarea>
+                    </div>
                 </div>
             </div>
            <!-- scripts will be auto injected by html-webpack-plugin -->
@@ -35,7 +40,9 @@
                 <div id="playground-run-output" class="playground-run-output">
                     Output will appear here...
                 </div>
-                <textarea id="cm-viewer" class="playground-editor"></textarea>
+                <div id="playground-compiled-viewer" style="display: none;">
+                    <textarea id="cm-viewer" class="playground-editor"></textarea>
+                </div>
             </div>
         </div>
     </div>
