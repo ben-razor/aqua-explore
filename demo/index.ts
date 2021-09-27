@@ -123,6 +123,7 @@ let liveJS = defaultJS;
     const viewer = CodeMirror.fromTextArea(document.getElementById('cm-viewer') as HTMLTextAreaElement, {
         lineNumbers: false,
         lineWrapping: true,
+        readOnly: true,
         mode: 'javascript'
     })
 
