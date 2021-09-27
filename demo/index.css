@@ -60,13 +60,19 @@ body {
 
 .playground-codemirror-wrapper {
     width: 50%;
-    min-height: 75vh;
+    height: 20em;
 }
 
 .playground-output {
     width: 50%;
     background-color: hsl(0deg, 0%, 20%);
     color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.playground-run-output {
+    height: 20em;
 }
 
 .CodeMirror {
