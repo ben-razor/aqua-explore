@@ -5,7 +5,7 @@ A playground for exploring [Fluence Network](https://fluence.network/) Aqua code
 * An editor configured for Aqua code highlighting
 * A Python Flask app that takes posted Aqua and returns compiled version / errors
 * An editor configured to edit the JS to create the output from the compiled Aqua module
-* User can select from a number of example codes
+* User can select from a number of example Aqua scripts
 * The app displays the generated JS allowing the user to copy it in their project
 
 View the current version at [Aqua Playground](http://34.77.88.57/).
