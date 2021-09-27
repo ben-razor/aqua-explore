@@ -148,6 +148,16 @@ func getRelayTime() -> u64:
     function setContent(id, text) {
         elemById(id).innerHTML = text;
     }
+    window['selectTab'] = (elem) {
+        let elemID = elem.id;
+        elemById(elemID).classList.add('playground-tab-selected');
+        if(elemID === 'playground-tab-aqua') {
+            elemById('playground-tab-js').classList.remove('playground-tab-selected');
+        }
+        else {
+            elemById('playground-tab-aqua').classList.remove('playground-tab-selected');
+        }
+    }
     
     async function runScript() {
         setContent('playground-run-output', '');

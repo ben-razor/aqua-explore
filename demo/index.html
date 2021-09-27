@@ -20,11 +20,17 @@
             </div>
         </div>
         <div class="playground-ide">
-            <div class="playground-codemirror-wrapper">
-                <button id="run-script-button" class="playground-run-button">Run Script</button>
-                <textarea id="cm-host" class="playground-editor"></textarea>
+            <div class="playground-editor">
+                <div class="playground-controls">
+                    <div class="playground-tab playground-tab-selected" id="playground-tab-aqua" onclick="selectTab(this)">Aqua</div>
+                    <div class="playground-tab" id="playground-tab-js" onclick="selectTab(this)">JS</div>
+                    <button id="run-script-button" class="playground-run-button">Run Script</button>
+                </div>
+                <div class="playground-codemirror-wrapper">
+                    <textarea id="cm-host" class="playground-editor"></textarea>
+                </div>
             </div>
-            <!-- scripts will be auto injected by html-webpack-plugin -->
+           <!-- scripts will be auto injected by html-webpack-plugin -->
             <div id="output-elem" class="playground-output">
                 <div id="playground-run-output" class="playground-run-output">
                     Output will appear here...
