@@ -28,7 +28,7 @@ import {
     linkInjections,
 } from 'codemirror-textmate'
 
-let defaultAqua = `import "@fluencelabs/aqua-lib/builtin.aqua"
+const defaultAqua = `import "@fluencelabs/aqua-lib/builtin.aqua"
 
 service HelloWorld("hello-world"):
     hello(str: string)
@@ -43,7 +43,7 @@ func getRelayTime() -> u64:
     <- ts
 `;
 
-let liveJS = `registerHelloWorld({
+const defaultJS = `registerHelloWorld({
     hello: async (str) => {
         console.log(str)
     }
@@ -58,6 +58,15 @@ const helloBtnOnClick = async () => {
 };
 
 helloBtnOnClick();`;
+
+let defaultExample =     {
+    "aqua": defaultAqua,
+    "js": defaultJS,
+    "name": "helloAqua",
+    "title": "Hello Aqua"
+};
+
+let liveJS = defaultJS;
 
 (async () => {
     await loadWASM(
@@ -162,8 +171,7 @@ helloBtnOnClick();`;
     function setContent(id, text) {
         elemById(id).innerHTML = text;
     }
-    window['selectTab'] = (elem) {
-        let elemID = elem.id;
+    let setTab = (elemID) => {
         elemById(elemID).classList.add('playground-tab-selected');
         if(elemID === 'playground-tab-aqua') {
             elemById('playground-tab-js').classList.remove('playground-tab-selected');
@@ -177,6 +185,11 @@ helloBtnOnClick();`;
             elemById('cm-js-container').style.display = 'initial';
             jsEditor.refresh();
         }
+    }
+
+    window['selectTab'] = (elem) {
+        let elemID = elem.id;
+        setTab(elemID)
     }
     
     window['setOutput'] = text => {
@@ -245,6 +258,7 @@ helloBtnOnClick();`;
         console.log(selValue);
         for(let data of examplesData) {
             if(data.name === selValue) {
+                setTab('playground-tab-aqua');
                 editor.setValue(data.aqua);
                 jsEditor.setValue(data.js || '');
                 editor.refresh();
@@ -258,6 +272,7 @@ helloBtnOnClick();`;
         console.log(examplesData);
         let select = `<select class="playground-examples-select" 
                               id="playground-examples-select" onchange="exampleChanged(this)">"`
+        select += `<option value="${defaultExample.name}">${defaultExample.title}</option>`
         for(let data of examplesData) {
             select += `<option value="${data.name}">${data.title}</option>`
         }
