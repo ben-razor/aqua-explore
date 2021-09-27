@@ -1,6 +1,6 @@
 # Fluence Explore
 
-A possible starting point for a playground for exploring [Fluence Network](https://fluence.network/) Aqua code. It consists of:
+A playground for exploring [Fluence Network](https://fluence.network/) Aqua code. It consists of:
 
 * A CodeMirror editor configured for Aqua code highlighting
 * A Python Flask app that takes posted Aqua and returns compiled version / errors
@@ -32,14 +32,6 @@ npm run start
 If this all worked then http://localhost:8080/ will show a web interface with an Aqua editor with syntax highlighting. 
 
 Clicking the run button will post the aqua to the server and the output will display either the compiled js or an error message. **(It takes about 5s to compile)** 
-
-### Next Step
-
-The next step would be do hot module replacement of the compiled Aqua client side and allow for code editing.
-
-I think a solution would be to clone [codesandbox](https://github.com/codesandbox/codesandbox-client), strip out the other languages and configure it for Aqua only.
-
-I couldn't get that working so I stopped at this point.
 
 ### How The Syntax Highlighting Was Set Up
 
