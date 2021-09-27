@@ -29,8 +29,17 @@ body {
 }
 
 .playground-editor {
-    width: 60%;
+    width: 55%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 0;
+}
+
+.playground-output {
+    width: 45%;
+    background-color: hsl(0deg, 0%, 20%);
+    color: white;
     display: flex;
     flex-direction: column;
 }
@@ -79,23 +88,12 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
-}
-
-.playground-editor {
-    flex: 1 0;
+    border-bottom: 5px solid hsl(342deg 50% 83%);
 }
 
 .playground-codemirror-wrapper {
     position: relative;
     width: 100%;
-}
-
-.playground-output {
-    width: 40%;
-    background-color: hsl(0deg, 0%, 20%);
-    color: white;
-    display: flex;
-    flex-direction: column;
 }
 
 .playground-run-output {

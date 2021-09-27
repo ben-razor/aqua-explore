@@ -51,7 +51,9 @@ let liveJS = `registerHelloWorld({
 const helloBtnOnClick = async () => {
     const message = await sayHello();
     const relayTime = await getRelayTime();
-    setHelloMessage(message);
+    const dateStr = new Date(relayTime).toLocaleString();
+    
+    setHelloMessage(message + '<br /><br />Time on host: ' + dateStr);
 };
 
 function setHelloMessage(msg) {
@@ -60,7 +62,6 @@ function setHelloMessage(msg) {
 }
 
 helloBtnOnClick();`;
-
 
 (async () => {
     await loadWASM(
@@ -101,22 +102,34 @@ helloBtnOnClick();`;
 
     const editor = CodeMirror.fromTextArea(document.getElementById('cm-host') as HTMLTextAreaElement, {
         lineNumbers: true,
-        mode: 'typescript'
+        mode: 'typescript',
+        lineWrapping: true;
     })
     editor.setValue(defaultAqua);
 
     const jsEditor = CodeMirror.fromTextArea(document.getElementById('cm-js-editor') as HTMLTextAreaElement, {
         lineNumbers: true,
+        lineWrapping: true,
         mode: 'javascript'
     })
     jsEditor.setValue(liveJS);
     elemById('cm-js-container').style.display = 'none';
 
     const viewer = CodeMirror.fromTextArea(document.getElementById('cm-viewer') as HTMLTextAreaElement, {
-        lineNumbers: true,
+        lineNumbers: false,
         lineWrapping: true,
         mode: 'javascript'
     })
+
+    const themeX: ITextmateThemePlus = {
+        ...(await import('./tm/themes/OneDark.tmTheme.json')),
+        gutterSettings: {
+            background: '#1d1f25',
+            divider: '#1d1f25'
+        }
+    }
+    addTheme(themeX)
+    viewer.setOption('theme', themeX.name)
 
     let session_id = cookies.get('session_id');
 
@@ -176,7 +189,11 @@ helloBtnOnClick();`;
         let script = editor.getValue();
         let jsScript = jsEditor.getValue();
         let result = await compileAqua(script, 'js');
+
+        // Viewer will either contain compiled js or the error message
         viewer.setValue(result.data.output);
+        elemById('playground-compiled-viewer').style.display = 'none';
+        elemById('playground-run-output').style.display = 'initial';
 
         if(result.success) {
             cookies.set('session_id', result.data.id);
@@ -206,6 +223,9 @@ helloBtnOnClick();`;
         }
         else {
             setContent('playground-run-output', 'There was an error while compiling the Aqua.');
+            elemById('playground-compiled-viewer').style.display = 'initial';
+            elemById('playground-run-output').style.display = 'none';
+            viewer.refresh();
         }
         hideElem('playground-compiling-overlay');
     }
