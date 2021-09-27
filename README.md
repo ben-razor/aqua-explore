@@ -18,7 +18,7 @@ A submission for the [Gitcoin GR11](https://gitcoin.co/issue/fluencelabs/Gitcoin
 
 ## Prerequisites
 
-You need to have [aqua-cli](https://www.npmjs.com/package/@fluencelabs/aqua-cli) installed to run the aqua_server. You will also need npm + python3.
+You need to have [Aqua](https://doc.fluence.dev/aqua-book/getting-started/installation) installed to run the aqua_server. You will also need npm + python3.
 
 ## How To Use
 
