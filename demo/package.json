@@ -8,8 +8,11 @@
   "dependencies": {
     "@fluencelabs/fluence": "^0.13.0",
     "@fluencelabs/fluence-network-environment": "^1.0.10",
+    "@types/js-cookie": "^2.2.7",
+    "browser-cookies": "^1.2.0",
     "codemirror": "^5.43.0",
     "codemirror-textmate": "file:..",
+    "js-cookie": "^3.0.1",
     "onigasm": "^2.2.1"
   },
   "devDependencies": {

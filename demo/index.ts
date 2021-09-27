@@ -1,6 +1,7 @@
 import * as CodeMirror from 'codemirror'
 import { loadWASM } from 'onigasm'
 import 'codemirror/lib/codemirror.css'
+var cookies = require('browser-cookies');
 import './index.css';
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
 import { krasnodar } from "@fluencelabs/fluence-network-environment";
@@ -112,12 +113,14 @@ func getRelayTime() -> u64:
     helloBtnOnClick();
     `;
 
+    let session_id = cookies.get('session_id');
+
     let host = 'http://127.0.0.1:5000';
     async function compileAqua(aquaCode, outputLang) {
         let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
             'Content-Type': 'application/json',
             'Accept': 'application/json'
-        }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang})})
+        }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang, 'id': session_id})})
 
         let j = await r.json();
 
@@ -145,6 +148,7 @@ func getRelayTime() -> u64:
     function setContent(id, text) {
         elemById(id).innerHTML = text;
     }
+    
     async function runScript() {
         setContent('playground-run-output', '');
         showCompilingOverlay();
@@ -153,6 +157,7 @@ func getRelayTime() -> u64:
         viewer.setValue(result.data.output);
 
         if(result.success) {
+            cookies.set('session_id', result.data.id);
             let jsFromAqua = result.data.output; 
 
             let inImport = false;
