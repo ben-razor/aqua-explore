@@ -6,6 +6,8 @@ A playground for exploring [Fluence Network](https://fluence.network/) Aqua code
 * A Python Flask app that takes posted Aqua and returns compiled version / errors
 * An editor configured to edit the JS to view the output from the compiled Aqua module
 
+A submission for the [Gitcoin GR11](https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#) hackathon.
+
 ## Prerequisites
 
 You need to have [aqua-cli](https://www.npmjs.com/package/@fluencelabs/aqua-cli) installed to run the aqua_server. You will also need npm + python3.
