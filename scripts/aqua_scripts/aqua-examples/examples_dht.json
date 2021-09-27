@@ -1,0 +1,7 @@
+[
+    {
+        "aqua": "import \"@fluencelabs/aqua-dht/pubsub.aqua\"\nimport \"@fluencelabs/aqua-dht/dht.aqua\"\nimport \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nexport getNeighbours, initTopicAndSubscribe, findSubscribers\n\nfunc put_value(initial_peer: string, value: string) -> string:\n    initTopicAndSubscribe(initial_peer, \"some-const3\", value, nil, nil)\n    <- \"OK\"\n\nfunc registerKeyPutValue(node_id: string, key: string, value: string, relay_id: ?string, service_id: ?string) -> []string:\n  nodes <- getNeighbours(key, node_id)\n  for n <- nodes par:\n    on n:\n      t <- Peer.timestamp_sec()\n  <- nodes",
+        "name": "dht-example.aqua",
+        "title": "dht-example"
+    }
+]
