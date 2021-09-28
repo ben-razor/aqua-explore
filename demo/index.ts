@@ -139,7 +139,7 @@ let liveJS = defaultJS;
 
     let session_id = cookies.get('session_id');
 
-    let host = 'https://benrazor.net:8080/';
+    let host = 'https://benrazor.net:8080';
     async function compileAqua(aquaCode, outputLang) {
         let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
             'Content-Type': 'application/json',
