@@ -151,7 +151,12 @@ let liveJS = defaultJS;
         return j;
     }
 
-    await Fluence.start({ connectTo: krasnodar[2] });
+    try {
+        await Fluence.start({ connectTo: krasnodar[2] });
+    }
+    catch(e) {
+        console.log(e);
+    }
 
     function elemById(id) {
         return document.getElementById(id);
