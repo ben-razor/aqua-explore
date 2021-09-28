@@ -140,6 +140,9 @@ let liveJS = defaultJS;
     let session_id = cookies.get('session_id');
 
     let host = 'https://benrazor.net:8080';
+    if(isLocal()) {
+        host = 'http://localhost:8082';
+    }
     async function compileAqua(aquaCode, outputLang) {
         let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
             'Content-Type': 'application/json',
@@ -212,7 +215,9 @@ let liveJS = defaultJS;
             viewer.refresh();
         }
     }
-
+    function isLocal() {
+        return window.location.href.includes('localhost');
+    }
 
     window['selectTab'] = (elem) {
         let elemID = elem.id;
@@ -310,7 +315,7 @@ let liveJS = defaultJS;
 
     window["exampleChanged"] = (e) => {
         let selValue = e.options[e.selectedIndex].value;
-        console.log(selValue);
+
         for(let data of examplesData) {
             if(data.name === selValue) {
                 setTab('playground-tab-aqua');
@@ -324,7 +329,6 @@ let liveJS = defaultJS;
     }
 
     if(success) {
-        console.log(examplesData);
         let select = `<select class="playground-examples-select" 
                               id="playground-examples-select" onchange="exampleChanged(this)">"`
         for(let data of examplesData) {
