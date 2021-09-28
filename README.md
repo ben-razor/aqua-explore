@@ -12,7 +12,7 @@ View the current version at [Aqua Playground](http://34.77.88.57/).
 
 **The server this is currently deployed on will not handle many simultaneous requests**
 
-It is still under development.
+**It is still under development**
 
 A submission for the [Gitcoin GR11](https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#) hackathon.
 
@@ -41,6 +41,12 @@ npm run start
 If this all worked then http://localhost:8080/ will show a web interface with an Aqua editor with syntax highlighting. 
 
 Clicking the run button will post the aqua to the server and the output will display either the compiled js or an error message. **(It takes about 5s to compile)** 
+
+### About The Code
+
+The code for the client application is in the [demo folder](https://github.com/ben-razor/aqua-explore/tree/main/demo).
+
+The code for the server aqua compiler is in the [scripts folder](https://github.com/ben-razor/aqua-explore/tree/main/scripts).
 
 ### How The Syntax Highlighting Was Set Up
 
