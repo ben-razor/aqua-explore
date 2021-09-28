@@ -8,7 +8,7 @@ A playground for exploring [Fluence Network](https://fluence.network/) Aqua code
 * User can select from a number of example Aqua scripts
 * The app displays the generated JS allowing the user to copy it in their project
 
-View the current version at [Aqua Playground](http://34.77.88.57/).
+View the current version at [Aqua Playground](https://aqua-explore.web.app/).
 
 **The server this is currently deployed on will not handle many simultaneous requests**
 
