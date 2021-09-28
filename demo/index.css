@@ -182,3 +182,16 @@ a {
     color: hsl(0deg, 50%, 40%);
     text-align: center;
 }
+
+.error-alert {
+    background-color: hsl(0deg, 100%, 50%);
+    vertical-align: middle;
+    border: 1px solid hsl(0deg, 100%, 20%);
+    box-sizing: border-box;
+    display: flex;
+    padding: 0.2em;
+    margin: 0.1em;
+}
+
+.error-text {
+}

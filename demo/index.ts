@@ -151,13 +151,18 @@ let liveJS = defaultJS;
         return j;
     }
 
-    try {
-        await Fluence.start({ connectTo: krasnodar[2] });
+    function hideError() {
+        let errorElem = elemById('error-alert');
+        errorElem.style.display = 'none';
+        let errorText = elemById('error-text');
+        errorText.innerHTML = '';
     }
-    catch(e) {
-        console.log(e);
+    function showError(message) {
+        let errorElem = elemById('error-alert');
+        errorElem.style.display = 'flex';
+        let errorText = elemById('error-text');
+        errorText.innerHTML = message;
     }
-
     function elemById(id) {
         return document.getElementById(id);
     }
@@ -223,6 +228,14 @@ let liveJS = defaultJS;
         document.getElementById('playground-run-output').innerHTML = text;
     }
 
+    try {
+        await Fluence.start({ connectTo: krasnodar[2] });
+        hideError();
+    }
+    catch(e) {
+        showError('krasnodar is down. refresh later.');
+    }
+
     async function runScript() {
         setContent('playground-run-output', '');
         showCompilingOverlay();
@@ -260,7 +273,12 @@ let liveJS = defaultJS;
             let code = cleanedJS + ';' + jsScript;
 
             setContent('playground-run-output', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.');
-            eval(code);
+            try {
+                eval(code);
+            }
+            catch(e) {
+                viewer.setValue('JS Error: ' + e.getMessage());
+            }
         }
         else {
             setContent('playground-run-output', 'There was an error while compiling the Aqua.');
