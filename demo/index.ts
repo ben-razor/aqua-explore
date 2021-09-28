@@ -139,7 +139,7 @@ let liveJS = defaultJS;
 
     let session_id = cookies.get('session_id');
 
-    let host = 'http://34.77.88.57:8080/';
+    let host = 'https://benrazor.net:8080/';
     async function compileAqua(aquaCode, outputLang) {
         let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
             'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ let liveJS = defaultJS;
     }
     function showError(message) {
         let errorElem = elemById('error-alert');
-        errorElem.style.display = 'flex';
+        errorElem.style.display = '';
         let errorText = elemById('error-text');
         errorText.innerHTML = message;
     }
@@ -228,11 +228,20 @@ let liveJS = defaultJS;
         document.getElementById('playground-run-output').innerHTML = text;
     }
 
-    try {
-        await Fluence.start({ connectTo: krasnodar[2] });
+    let connected = false;
+    for(let node of krasnodar) {
+        try {
+            await Fluence.start({ connectTo: node });
+            connected = true;
+            break;
+        }
+        catch(e) { } 
+    }
+
+    if(connected) {
         hideError();
     }
-    catch(e) {
+    else {
         showError('krasnodar is down. refresh later.');
     }
 
