@@ -70,10 +70,18 @@ def api_compile_aqua():
         reason = 'compilation-failed'
 
     response = jsonify({'success': success, 'reason': reason, 'data': resp})
-    response.headers.add('Access-Control-Allow-Origin', '*')
+
+    origin = request.headers.get('Origin')
+    origin_no_port = ':'.join(origin.split(':')[:2])
+    allow_origin_list = ['https://aqua-explore.web.app', 'https://34.77.88.57']
+
+    if 'localhost' in request.base_url:
+        allow_origin_list = ['http://localhost']
+
+    if origin_no_port in allow_origin_list:
+        response.headers.add('Access-Control-Allow-Origin', origin)
+
     return response, status
 
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=8082)
