@@ -240,7 +240,9 @@ let liveJS = defaultJS;
             connected = true;
             break;
         }
-        catch(e) { } 
+        catch(e) { 
+            await Fluence.stop();
+        } 
     }
 
     if(connected) {
