@@ -11,6 +11,7 @@ body {
     display: flex;
     flex-direction: row;
     padding: 0.3em 0.3em 0.3em 0.3em;
+    align-items: center;
 }
 
 .playground-logo {
@@ -24,7 +25,6 @@ body {
 .playground-title {
     display: inline-block;
     vertical-align: middle;
-    line-height: 60px;
     margin: 0;
 }
 
@@ -76,6 +76,9 @@ body {
 }
 
 .playground-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-image: linear-gradient(0deg, transparent 0%, hsl(342deg 70% 93%) 100%);
     background-color: hsl(342deg 70% 43%);
     color: white;
@@ -191,4 +194,38 @@ a {
     display: flex;
     padding: 0.2em;
     margin: 0.1em;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 0.9em;
+    }
+    .playground-header {
+        font-size: 0.8em;
+    }
+    .playground-logo {
+        width: 32px;
+        height: 32px;
+    }
+    .playground-run-button {
+        padding: 0.2em 0.5em;
+    }
+    .tiny-hide {
+        display: none;
+    }
+}
+  
+@media (max-width: 576px) {
+    .playground-title {
+        font-size: 0.9em;
+    }
+    .playground-ide {
+        flex-direction: column;
+    }
+    .playground-editor {
+        width: 100%;
+    }
+    .playground-output {
+        width: 100%;
+    }
 }

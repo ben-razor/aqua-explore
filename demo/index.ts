@@ -233,24 +233,30 @@ let liveJS = defaultJS;
         document.getElementById('playground-run-output').innerHTML = text;
     }
 
-    let connected = false;
-    for(let node of krasnodar) {
-        try {
-            await Fluence.start({ connectTo: node });
-            connected = true;
-            break;
+    let attemptingConnect = true;
+    async function connectToHost() {
+        let connected = false;
+        for(let node of krasnodar) {
+            try {
+                await Fluence.start({ connectTo: node });
+                connected = true;
+                break;
+            }
+            catch(e) { 
+                await Fluence.stop();
+            } 
         }
-        catch(e) { 
-            await Fluence.stop();
-        } 
+
+        attemptingConnect = false;
+        if(connected) {
+            hideError();
+        }
+        else {
+            showError('krasnodar is down. refresh later.');
+        }
     }
 
-    if(connected) {
-        hideError();
-    }
-    else {
-        showError('krasnodar is down. refresh later.');
-    }
+    connectToHost();
 
     async function runScript() {
         setContent('playground-run-output', '');
