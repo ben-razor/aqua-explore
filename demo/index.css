@@ -108,8 +108,10 @@ body {
 
 .playground-run-output {
     background-color: hsl(0deg, 0%, 20%);
-    height: 20em;
+    height: 100%;
     padding: 0.3em;
+    word-break: break-all;
+    min-height: 18em;
 }
 
 .CodeMirror {

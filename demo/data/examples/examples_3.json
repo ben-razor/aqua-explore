@@ -42,6 +42,7 @@
     },
     {
         "aqua": "service TestSrv(\"test-service-id\"):\n    str: -> string\n\nfunc testFunc() -> string:\n    res <- TestSrv.str()\n    <- res\n",
+        "js": "registerTestSrv({\n    str: (str) => {\n        setOutput(JSON.stringify(str))\n    }\n});\n\nconst testAquaService = async () => {\n    await testFunc()\n};\n\ntestAquaService();",
         "name": "func.aqua",
         "title": "func"
     },

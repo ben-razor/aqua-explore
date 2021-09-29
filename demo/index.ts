@@ -261,14 +261,18 @@ let liveJS = defaultJS;
 
     let alreadyImported = [];
     let serverSideIncludes = ['builtin.aqua'];
+    let unprocessedIncludes = []
 
     function startPreprocessAqua(script) {
         alreadyImported = [];
-        return preprocessAqua(script);
+        unprocessedIncludes = [];
+        let processedLines = preprocessAqua(script);
+
+        return unprocessedIncludes.join('\n') + '\n\n' + processedLines.join('\n');
     }
 
     function preprocessAqua(script) {
-        const importsRegex = RegExp('import "(.*)"', 'g');
+        const importsRegex = RegExp('import "(.*)"');
 
         let lines = script.split('\n');
         let outputLines = [];
@@ -284,13 +288,13 @@ let liveJS = defaultJS;
                 let importName = importPathParts.slice(-1)[0];
 
                 if(serverSideIncludes.includes(importName)) {
-                    outputLines.push(line);
+                    unprocessedIncludes.push(line);
                     importHandled = true;
                 }
                 else if(!alreadyImported.includes(importName)) {
                     for(let data of examplesData) {
                         if(data.name === importName) {
-                            outputLines.push(preprocessAqua(data.aqua));
+                            outputLines = outputLines.concat(preprocessAqua(data.aqua));
                             importHandled = true;
                             break;
                         }
@@ -299,7 +303,7 @@ let liveJS = defaultJS;
 
                 if(!importHandled) {
                     // Add non found imports to the script so the server can deal with it
-                    outputLines.push(line);
+                    unprocessedIncludes.push(line);
                 }
             }
             else {
@@ -307,7 +311,7 @@ let liveJS = defaultJS;
             }
         }
 
-        return outputLines.join('\n');
+        return outputLines;
     }
 
     async function runScript() {
@@ -352,12 +356,11 @@ let liveJS = defaultJS;
                 eval(code);
             }
             catch(e) {
-                viewer.setValue('JS Error: ' + e.getMessage());
+                viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
             }
         }
         else {
-            setContent('playground-run-output', 'There was an error while compiling the Aqua.');
-            elemById('playground-run-output').style.display = 'none';
+            setContent('playground-run-output', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
             viewer.refresh();
         }
         hideElem('playground-compiling-overlay');
