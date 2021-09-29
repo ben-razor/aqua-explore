@@ -351,7 +351,7 @@ let liveJS = defaultJS;
             let cleanedJS = cleanedLines.join('\n');
             let code = cleanedJS + ';' + jsScript;
 
-            setContent('playground-run-output', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.');
+            setContent('playground-run-output', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
             try {
                 eval(code);
             }
