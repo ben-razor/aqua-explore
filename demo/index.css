@@ -41,8 +41,13 @@ body {
     color: white;
     display: flex;
     flex-direction: column;
+    min-height: 18em;
 }
 
+.playground-compiled-viewer {
+    height: 100%;
+}
+  
 .playground-controls {
     display: flex;
     flex-direction: row;
@@ -111,7 +116,6 @@ body {
     height: 100%;
     padding: 0.3em;
     word-break: break-all;
-    min-height: 18em;
 }
 
 .CodeMirror {
@@ -213,7 +217,7 @@ a {
         display: none;
     }
 }
-  
+
 @media (max-width: 768px) {
     body {
         font-size: 0.9em;
