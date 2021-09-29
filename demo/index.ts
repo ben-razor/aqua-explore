@@ -49,7 +49,7 @@ const defaultJS = `registerHelloWorld({
     }
 });
 
-const helloBtnOnClick = async () => {
+const testAquaService = async () => {
     const message = await sayHello();
     const relayTime = await getRelayTime();
     const dateStr = new Date(relayTime).toLocaleString();
@@ -57,7 +57,7 @@ const helloBtnOnClick = async () => {
     setOutput(message + '<br /><br />Time on host: ' + dateStr);
 };
 
-helloBtnOnClick();`;
+testAquaService();`;
 
 let defaultExample =     {
     "aqua": defaultAqua,
