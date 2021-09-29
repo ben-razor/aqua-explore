@@ -260,7 +260,7 @@ let liveJS = defaultJS;
     connectToHost();
 
     let alreadyImported = [];
-    let serverSideIncludes = ['builtin.aqua'];
+    let serverSideIncludes = ['builtin.aqua', 'pubsub.aqua', 'dht.aqua'];
     let unprocessedIncludes = []
 
     function startPreprocessAqua(script) {
