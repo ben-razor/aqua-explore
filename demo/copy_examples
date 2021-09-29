@@ -1,0 +1,1 @@
+gsutil -h "Cache-Control:no-store,no-cache,max-age=0" cp -r ./data/examples/* gs://birdfeed-01000101.appspot.com

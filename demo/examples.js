@@ -3,7 +3,7 @@ async function getExamples() {
     let j;
 
     try {
-        let r = await fetch('https://storage.googleapis.com/birdfeed-01000101.appspot.com/examples_2.json');
+        let r = await fetch('https://storage.googleapis.com/birdfeed-01000101.appspot.com/examples_3.json');
         j = await r.json();
     }
     catch(e) {

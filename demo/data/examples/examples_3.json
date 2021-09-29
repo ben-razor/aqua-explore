@@ -1,0 +1,168 @@
+[
+    {
+        "aqua": "service Stringer(\"stringer-id\"):\n    returnString: string -> string\n\nfunc checkStreams(ch: []string) -> []string:\n    stream: *string\n    stream <- Stringer.returnString(\"first\")\n    stream <- Stringer.returnString(\"second\")\n    for b <- ch:\n        stream <- Stringer.returnString(b)\n    <- stream\n\nfunc stringNil() -> *string:\n   valueNil: *string\n   <- valueNil\n\nfunc returnNil() -> *string:\n  relayNil <- stringNil()\n  <- relayNil\n\nfunc stringNone() -> ?string:\n   valueNone: ?string\n   <- valueNone\n\nfunc returnNone() -> ?string:\n  relayNone <- stringNone()\n  <- relayNone\n",
+        "name": "stream.aqua",
+        "title": "stream"
+    },
+    {
+        "aqua": "import \"helloWorld.aqua\"\nimport \"println.aqua\"\nimport \"@fluencelabs/aqua-lib/builtin.aqua\"\nimport \"func.aqua\"\n\nservice TestS(\"some-id\"):\n    t: string -> string\n    multiline(  -- comments\n              a: string, -- comments\n              b: string, -- comments\n              c: bool -- comments\n              ) -> string -- comments\n\n-- just a lot of imports and calls\nfunc doStuff( -- comments\n             a: string, -- comments\n             b: string, -- comments\n             c: bool,\n             d: bool, e: []string, g: []string, str: string -- comments\n             ) -> []string: -- comments\n    stream: *string\n    stream <- TestS.t(str)\n    par Println.print(a)\n    par on a:\n        Peer.identify()\n    on a:\n        on b:\n            if c:\n                if d:\n                    for eEl <- e:\n                        for gEl <- g:\n                            stream <- TestS.t(gEl) -- comments\n                            stream <- TestS.t(eEl)\n                        stream <- TestS.t(eEl)\n    stream <- TestS.multiline( -- comments\n                              a, -- comments\n                              b, -- comments\n                              c -- comments\n                              ) -- comments\n    <- stream\n",
+        "name": "complex.aqua",
+        "title": "complex"
+    },
+    {
+        "aqua": "import \"println.aqua\"\n\nfunc ifElseCall(condition: bool):\n    if condition:\n        Println.print(\"it is true\")\n    else:\n        Println.print(\"it is false\")\n\nfunc ifElseNumCall(condition: u32):\n    if condition == 1:\n        Println.print(\"it is 1\")\n    else:\n        Println.print(\"it is not 1\")\n",
+        "js": "registerPrintln({\n    print: async (str) => {\n        console.log(str)\n        setOutput(str);\n    }\n});\n\nconst testAquaService = async () => {\n\tawait ifElseCall(true)\n};\n\ntestAquaService();",
+        "name": "if.aqua",
+        "title": "if"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice Getter(\"test\"):\n    createStr: u32 -> string\n\nservice OpO(\"op\"):\n    identity: string -> string\n\n-- a question mark means that this constant could be rewritten before this definition\nconst ANOTHER_CONST ?= \"default-str\"\nconst UNIQUE_CONST ?= 5\n\nfunc callConstant() -> []string:\n    res: *string\n    res <- Getter.createStr(UNIQUE_CONST)\n    res <- OpO.identity(ANOTHER_CONST)\n    <- res\n",
+        "name": "constants.aqua",
+        "title": "constants"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice OpH(\"opa\"):\n  identity(s: string) -> string\n\nfunc a(b: string) -> string:\n  c <- OpH.identity(b)\n  <- c\n\nfunc d(e: string) -> string:\n  f <- a(e)\n  <- f",
+        "name": "nestedFuncs.aqua",
+        "title": "nestedFuncs"
+    },
+    {
+        "aqua": "service AquaDHT(\"test-dht\"):\n  put_host_value(key: string, value: string, service_id: []string) -> string\n\nfunc putHostValue(key: string, value: string, service_id: ?string) -> string:\n    res <- AquaDHT.put_host_value(key, value, service_id)\n    <- res\n\nfunc create_client_util(service_id: string) -> string:\n    res <- putHostValue(\"client-util\", service_id, nil)\n    <- res",
+        "name": "passArgs.aqua",
+        "title": "passArgs"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice ParService(\"parservice-id\"):\n    call: -> string\n\n-- here we go to another node and not waiting for execution there\n-- all `ParService.call()` will be executed instantly\nfunc parFunc( node: string, c: Info -> () ):\n    y <- ParService.call()\n    par on node:\n        t <- Peer.identify()\n        c(t)\n    par x <- ParService.call()\n",
+        "name": "par.aqua",
+        "title": "par"
+    },
+    {
+        "aqua": "-- set `PeerId` name to be a type alias for `string` type\nalias PeerId : string\n\n-- define data structure (ADT)\ndata NodeId:\n    peerId: PeerId\n    name: string\n\n-- define service `NodeIdGetter` that will be callable on local client via `somesrv` service id\nservice NodeIdGetter(\"somesrv\"):\n    get: -> NodeId\n\n-- showcases a function that gets data structure from a local service,\n-- and then retrieves aliased data type from that structure\nfunc getAliasedData() -> PeerId:\n    res <- NodeIdGetter.get()\n    <- res.peerId\n",
+        "name": "dataAlias.aqua",
+        "title": "dataAlias"
+    },
+    {
+        "aqua": "service TestSrv(\"test-service-id\"):\n    str: -> string\n\nfunc testFunc() -> string:\n    res <- TestSrv.str()\n    <- res\n",
+        "name": "func.aqua",
+        "title": "func"
+    },
+    {
+        "aqua": "service Println(\"println-service-id\"):\n    print: string -> ()\n\nfunc print(str: string):\n    Println.print(str)\n",
+        "name": "println.aqua",
+        "title": "println"
+    },
+    {
+        "aqua": "service TestService(\"test-service\"):\n    get_records(key: string) -> []string\n\nfunc append_records(peer: string, srum: *[]string):\n  srum <- TestService.get_records(peer)\n\nfunc retrieve_records(peer: string) -> [][]string:\n    records: *[]string\n    append_records(peer, records)\n    <- records",
+        "name": "streamArgs.aqua",
+        "title": "streamArgs"
+    },
+    {
+        "aqua": "service Testo(\"testo\"):\n    getString: string -> string\n\nservice LocalPrint(\"lp\"):\n    print: string -> ()\n\n\nfunc topologyTest(me: string, myRelay: string, friend: string, friendRelay: string) -> string:\n    on friend via friendRelay:\n        str2 <- Testo.getString(\"friends string via\")\n    par LocalPrint.print(\"my string in par\")\n    LocalPrint.print(str2)\n    <- \"finish\"",
+        "name": "topology.aqua",
+        "title": "topology"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice SomeS(\"test2\"):\n    getStr: ?string -> ?string\n    getStr1: -> ?string\n    getStr2: string -> string\n\nfunc useOptional(opt: ?string) -> string:\n    res <- SomeS.getStr(opt)\n    for i <- opt:\n        SomeS.getStr2(i)\n    <- res!\n\nfunc returnOptional() -> ?string:\n    res <- SomeS.getStr1()\n    <- res\n\nfunc returnNone() -> ?string:\n    result: *string\n    Op.noop()\n    <- result",
+        "name": "option.aqua",
+        "title": "option"
+    },
+    {
+        "aqua": "service GetStr(\"multiret-test\"):\n    retStr: string -> string\n\nservice GetNum(\"multiret-num\"):\n    retNum: -> u8\n\nconst SOME_NUM = 5\nconst SOME_STR = \"some-str\"\n\nfunc tupleFunc() -> string, u8:\n    str <- GetStr.retStr(SOME_STR)\n    n <- GetNum.retNum()\n    <- str, n\n\nfunc multiReturnFunc(somethingToReturn: []u8, smthOption: ?string) -> []string, u8, string, []u8, ?string, u8 :\n    res: *string\n    res <- GetStr.retStr(SOME_STR)\n    res <- GetStr.retStr(\"random-str\")\n    res, tNum <- tupleFunc()\n    <- res, SOME_NUM, SOME_STR, somethingToReturn, smthOption, tNum",
+        "name": "multiReturn.aqua",
+        "title": "multiReturn"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\n-- this service is used by fldist to print something into console\nservice Return(\"returnService\"):\n    -- fldist service can accept any number of arguments of any type. Feel free to update accordingly\n    run: Info -> ()\n\nfunc test(node: string):\n    on node:\n        res <- Peer.identify()\n    Return.run(res)\n",
+        "name": "fldist-sample.aqua",
+        "title": "fldist-sample"
+    },
+    {
+        "aqua": "service StringExtra(\"service-id\"):\n    addNameToHello: string -> string\n\nfunc helloWorld(name: string) -> string:\n    res <- StringExtra.addNameToHello(name)\n    <- res\n",
+        "name": "helloWorld.aqua",
+        "title": "helloWorld"
+    },
+    {
+        "aqua": "import \"println.aqua\"\nimport \"@fluencelabs/aqua-lib/builtin.aqua\"\n\n-- functions like `c` are called an 'arrow function' in Aqua\n-- `c` passed to a function from a client, so, it could be called only on a client\nfunc passFunctionAsArg(node: string, str: string, c: string -> string):\n    on node:\n        Peer.identify()\n        -- we go here back on a client\n        res <- c(str)\n        -- then return on a node\n        Peer.identify()\n    print(res)\n",
+        "name": "callArrow.aqua",
+        "title": "callArrow"
+    },
+    {
+        "aqua": "service ServiceWithDefaultId(\"defaultId\"):\n    hello(s: string)\n\nservice ServiceWithOUTDefaultId:\n    hello(s: string)\n\nservice MoreMembers:\n    member1()\n    member2(s1: string)\n    member3(s1: string, s2: string)\n    member4(s1: string, s2: string, i: i32) -> i32\n    member5(s1: string, s2: string, i: i32) -> i32\n\nfunc f1(callback: string, i32 -> ()):\n    callback(\"hello, world\", 42)\n\nfunc f2(num: i32, callback: string, i32 -> ()):\n    callback(\"hello, world\", 42)\n\nfunc f3(num: i32, callback: string, i32 -> ()) -> string:\n    callback(\"hello, world\", 42)\n    <- \"hello world\"\n\nfunc callBackZeroArgs(callback: -> ()):\n    callback()",
+        "name": "new-api-full.aqua",
+        "title": "new-api-full"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice CoService(\"coservice-id\"):\n    call: -> string\n\n-- here we go to another node and not waiting for execution there\n-- all `ParService.call()` will be executed instantly\nfunc coFunc( node: string, c: Info -> () ):\n    y <- CoService.call()\n    on node:\n        t <- Peer.identify()\n        co c(t)\n    x <- CoService.call()\n",
+        "name": "co.aqua",
+        "title": "co"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice Unexisted(\"unex\"):\n  getStr() -> string\n\ndata LastError:\n  instruction: string\n  msg: string\n  peer_id: string\n\nservice OpA(\"op\"):\n  identity(s: string) -> string\n\nfunc tryCatchTest(node_id: string) -> []string:\n    on node_id:\n        f: *string\n        try:\n          f <- Unexisted.getStr()\n        catch err:\n          c: *string\n          f <- OpA.identity(err.msg)\n          -- check if the call takes place on the node\n          i <- Peer.identify()\n          f <- OpA.identity(i.external_addresses!)\n    <- f",
+        "name": "tryCatch.aqua",
+        "title": "tryCatch"
+    },
+    {
+        "aqua": "func returnLiteral() -> string:\n    <- \"some literal\"",
+        "name": "returnLiteral.aqua",
+        "title": "returnLiteral"
+    },
+    {
+        "aqua": "service OpA(\"pop\"):\n  get_str() -> string\n\nfunc get_results() -> []string:\n    results: *string\n    results <<- \"hello\"\n    str <- OpA.get_str()\n    results <<- str\n    <- results",
+        "name": "pushToStream.aqua",
+        "title": "pushToStream"
+    },
+    {
+        "aqua": "import \"imports_exports/subImport.aqua\"\n\nservice ConcatSubs(\"concat_subs\"):\n    get_some(s: SomeString, sr: SomeResult) -> SomeResult\n\nfunc subImportUsage(s: SomeString) -> SomeResult:\n    sr1 <- SubService.sub(s)\n    sr2 <- subImport()\n    result <- ConcatSubs.get_some(sr1.one, sr2)\n    <- result\n\n",
+        "name": "subImportUsage.aqua",
+        "title": "subImportUsage"
+    },
+    {
+        "aqua": "service HelloWorld(\"default\"):\n    sayHello(s: string)\n    getNumber() -> i32\n\nfunc callMeBack(callback: string, i32 -> ()):\n    callback(\"hello, world\", 42)",
+        "name": "new-api.aqua",
+        "title": "new-api"
+    },
+    {
+        "aqua": "service Peer(\"peer\"):\n    is_connected: string -> bool\n\nservice Op(\"op\"):\n    identity: -> ()\n\ndata User:\n    peer_id: string\n    relay_id: string\n    name: string\n\nservice Test(\"test\"):\n    getUserList: -> []User\n    doSomething: -> bool\n\nfunc betterMessage(relay: string):\n    on relay:\n        isOnline <- Peer.is_connected(relay)\n    if isOnline:\n        Test.doSomething()",
+        "name": "example.aqua",
+        "title": "example"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nfunc getPeerExternalAddresses(otherNodePeerId: string) -> []string:\n    on otherNodePeerId:\n        res <- Peer.identify()\n    <- res.external_addresses\n\n-- it is possible to use `via` to built complex routes\nfunc getDistantAddresses(target: string, viaNode: string) -> []string:\n    on target via viaNode:\n        res <- Peer.identify()\n    <- res.external_addresses\n",
+        "name": "on.aqua",
+        "title": "on"
+    },
+    {
+        "aqua": "service Unexisted(\"unex\"):\n  getStr() -> string\n\ndata LastError:\n  instruction: string\n  msg: string\n  peer_id: string\n\nservice OpE(\"op\"):\n  identity(s: string) -> string\n\nfunc tryOtherwiseTest(node_id: string) -> string:\n    on node_id:\n        f: *string\n        try:\n          f <- Unexisted.getStr()\n        otherwise:\n          f <- OpE.identity(\"error\")\n    <- f!",
+        "name": "tryOtherwise.aqua",
+        "title": "tryOtherwise"
+    },
+    {
+        "aqua": "data DT:\n  field: string\n\nservice DTGetter(\"get-dt\"):\n    get_dt(s: string) -> DT\n\nfunc use_name1(name: string) -> string:\n    results <- DTGetter.get_dt(name)\n    <- results.field\n\nfunc use_name2(name: string) -> []string:\n    results: *string\n    results <- use_name1(name)\n    results <- use_name1(name)\n    results <- use_name1(name)\n    <- results",
+        "name": "streamResults.aqua",
+        "title": "streamResults"
+    },
+    {
+        "aqua": "data Prod:\n   value: string\n\nservice OpHa(\"op\"):\n    array(a: string, b: string) -> []string\n    identity(a: string) -> string\n\nfunc doSmth(arg: Prod) -> []string:\n    v = arg.value\n    a <- OpHa.identity(v)\n    b = \"hello\"\n    res <- OpHa.array(a, b)\n    <- res",
+        "name": "assignment.aqua",
+        "title": "assignment"
+    },
+    {
+        "aqua": "import \"println.aqua\"\nimport \"@fluencelabs/aqua-lib/builtin.aqua\"\n\n-- showcases `for` instruction that compiles to `fold` in AIR\nfunc iterateAndPrint(strings: []string):\n    for s <- strings:\n        print(s)\n\nfunc iterateAndPrintParallel(nodes: []string, c: Info -> ()):\n    for s <- nodes par:\n        on s:\n            ads <- Peer.identify()\n            c(ads)\n",
+        "name": "fold.aqua",
+        "title": "fold"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice CustomId(\"cid\"):\n  id(s: string) -> string\n\nfunc viaArr(node_id: string, viaAr: []string) -> Info:\n    on node_id via viaAr:\n        p <- Peer.identify()\n    <- p\n\n\nfunc viaStream(node_id: string, viaStr: *string) -> Info:\n    on node_id via viaStr:\n        p <- Peer.identify()\n    <- p\n\nfunc viaOpt(relay: string, node_id: string, viaOpt: ?string) -> Info:\n    on node_id via viaOpt:\n        p <- Peer.identify()\n    <- p",
+        "name": "via.aqua",
+        "title": "via"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice Op2(\"op\"):\n    identity(s: u64)\n\nfunc getTwoResults(relay: string) -> []u64:\n  on relay:\n    k <- Op.string_to_b58(%init_peer_id%)\n    nodes <- Kademlia.neighborhood(k, nil, nil)\n    res: *u64\n    for n <- nodes par:\n      on n:\n        try:\n          res <- Peer.timestamp_sec()\n    Op2.identity(res!)\n    Op2.identity(res!1)\n    Op2.identity(res!2)\n  <- res",
+        "name": "foldJoin.aqua",
+        "title": "foldJoin"
+    },
+    {
+        "aqua": "import \"@fluencelabs/aqua-dht/pubsub.aqua\"\nimport \"@fluencelabs/aqua-dht/dht.aqua\"\nimport \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nexport getNeighbours, initTopicAndSubscribe, findSubscribers\n\nfunc put_value(initial_peer: string, value: string) -> string:\n    initTopicAndSubscribe(initial_peer, \"some-const3\", value, nil, nil)\n    <- \"OK\"\n\nfunc registerKeyPutValue(node_id: string, key: string, value: string, relay_id: ?string, service_id: ?string) -> []string:\n  nodes <- getNeighbours(key, node_id)\n  for n <- nodes par:\n    on n:\n      t <- Peer.timestamp_sec()\n  <- nodes",
+        "name": "dht-example.aqua",
+        "title": "dht-example"
+    }
+]
