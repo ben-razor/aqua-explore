@@ -20,7 +20,7 @@ A submission for the [Gitcoin GR11](https://gitcoin.co/issue/fluencelabs/Gitcoin
 
 You need to have [Aqua](https://doc.fluence.dev/aqua-book/getting-started/installation) installed to run the aqua_server. You will also need npm + python3.
 
-## How To Use
+## How To Build (Development Version)
 
 The aqua server takes posted Aqua code and runs it through the cli Aqua compiler. Sends back js, ts or air.
 
