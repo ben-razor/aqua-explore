@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+import os, uuid
 from aqua_compile import compile_aqua
 from flask import Flask
 from flask import Flask, request, url_for, render_template, jsonify
 from flask_cors import CORS
-import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -57,6 +57,9 @@ def api_compile_aqua():
         f.write(aqua)
 
     return_code, result_string = compile_aqua(file_name, lang)
+
+    if os.path.exists(input_file):
+        os.remove(input_file)
 
     resp = {
         'output': result_string,

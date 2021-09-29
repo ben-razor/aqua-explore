@@ -27,7 +27,7 @@ def compile_aqua(file_name, lang):
 
     command = ["aqua", ' '.join(args)]
     print('COMMAND', command)
-    
+
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return_code = result.returncode
     print('RESULT', result)
@@ -43,9 +43,6 @@ def compile_aqua(file_name, lang):
       error = ansi_escape.sub('', error)
       print('Error: ' + error)
       result_string = error
-
-    if os.path.exists(input_file):
-      os.remove(input_file)
 
     if os.path.exists(output_file):
       os.remove(output_file)
