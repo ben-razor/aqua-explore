@@ -78,6 +78,7 @@
     },
     {
         "aqua": "service StringExtra(\"service-id\"):\n    addNameToHello: string -> string\n\nfunc helloWorld(name: string) -> string:\n    res <- StringExtra.addNameToHello(name)\n    <- res\n",
+        "js": "registerStringExtra({\n  \taddNameToHello: async (args0) => {\n  \tsetOutput(`Hello, ${args0}!`);\n  },\n});\n\nasync function testAquaService() {\n  await helloWorld('NAME');\n}\n\ntestAquaService();",
         "name": "helloWorld.aqua",
         "title": "helloWorld"
     },
