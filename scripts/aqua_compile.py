@@ -13,18 +13,13 @@ def compile_aqua(file_name, lang):
     script_name_base = script_name.split('.')[0]
     output_ext = lang
     output_dir = './compiled'
+
+    input_file = f'./aqua_scripts/{script_name}'
     output_file = f'{output_dir}/{script_name_base}.{output_ext}'
     
     result_string = ''
     return_code = 0
-    source = ''
-    input_file = f'./aqua_scripts/{script_name}'
-    with open(input_file) as f:
-      source = f.read()
-      source = shlex.quote(source)
-      source = source.replace('(', '(')
-      source = source.replace(')', ')')
-    
+   
     print('OUTPUT', output_dir)
     args = [f'-i {input_file} -o {output_dir}']
     if output_ext in ['js', 'air']:
@@ -32,6 +27,7 @@ def compile_aqua(file_name, lang):
 
     command = ["aqua", ' '.join(args)]
     print('COMMAND', command)
+    
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return_code = result.returncode
     print('RESULT', result)
@@ -47,6 +43,12 @@ def compile_aqua(file_name, lang):
       error = ansi_escape.sub('', error)
       print('Error: ' + error)
       result_string = error
+
+    if os.path.exists(input_file):
+      os.remove(input_file)
+
+    if os.path.exists(output_file):
+      os.remove(output_file)
 
     return (return_code, result_string)
 
