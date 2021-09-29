@@ -10,6 +10,8 @@ A playground for exploring [Fluence Network](https://fluence.network/) Aqua code
 
 View the current version at [Aqua Playground](https://aqua-explore.web.app/).
 
+View the demonstration video at [Aqua Playground Video](https://www.youtube.com/watch?v=Mwmu2Q4Dako).
+
 **The server this is currently deployed on will not handle many simultaneous requests**
 
 **It is still under development**
