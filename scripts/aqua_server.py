@@ -42,7 +42,9 @@ def api_compile_aqua():
 
     aqua = body.get('aqua', '').strip()
     lang = body.get('lang', '').strip()
-    session_id = body.get('id', '').strip()
+    session_id = None
+    if body.get('id', ''):
+        session_id = body.get('id', '').strip()
 
     if not session_id:
         session_id = uuid.uuid4().hex
