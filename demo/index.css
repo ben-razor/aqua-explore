@@ -196,12 +196,9 @@ a {
     margin: 0.1em;
 }
 
-@media (max-width: 768px) {
-    body {
-        font-size: 0.9em;
-    }
+@media (max-width: 992px) {
     .playground-header {
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
     .playground-logo {
         width: 32px;
@@ -215,6 +212,12 @@ a {
     }
 }
   
+@media (max-width: 768px) {
+    body {
+        font-size: 0.9em;
+    }
+}
+
 @media (max-width: 576px) {
     .playground-title {
         font-size: 0.9em;
