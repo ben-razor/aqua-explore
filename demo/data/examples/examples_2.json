@@ -11,6 +11,7 @@
     },
     {
         "aqua": "import \"println.aqua\"\n\nfunc ifElseCall(condition: bool):\n    if condition:\n        Println.print(\"it is true\")\n    else:\n        Println.print(\"it is false\")\n\nfunc ifElseNumCall(condition: u32):\n    if condition == 1:\n        Println.print(\"it is 1\")\n    else:\n        Println.print(\"it is not 1\")\n",
+        "js": "registerPrintln({\n    print: async (str) => {\n        console.log(str)\n        setOutput(str);\n    }\n});\n\nconst testAquaService = async () => {\n\tawait ifElseCall(true)\n};\n\ntestAquaService();",
         "name": "if.aqua",
         "title": "if"
     },

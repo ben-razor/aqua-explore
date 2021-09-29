@@ -27,6 +27,7 @@ import {
     ITextmateThemePlus,
     linkInjections,
 } from 'codemirror-textmate'
+import { start } from 'repl';
 
 const defaultAqua = `import "@fluencelabs/aqua-lib/builtin.aqua"
 
@@ -258,10 +259,62 @@ let liveJS = defaultJS;
 
     connectToHost();
 
+    let alreadyImported = [];
+    let serverSideIncludes = ['builtin.aqua'];
+
+    function startPreprocessAqua(script) {
+        alreadyImported = [];
+        return preprocessAqua(script);
+    }
+
+    function preprocessAqua(script) {
+        const importsRegex = RegExp('import "(.*)"', 'g');
+
+        let lines = script.split('\n');
+        let outputLines = [];
+
+        for(let line of lines) {
+            let regexResult = importsRegex.exec(line);
+
+            if(regexResult && regexResult.length == 2) {
+                let importPath = regexResult[1];
+                let importHandled = false;
+
+                let importPathParts = importPath.split('/');
+                let importName = importPathParts.slice(-1)[0];
+
+                if(serverSideIncludes.includes(importName)) {
+                    outputLines.push(line);
+                    importHandled = true;
+                }
+                else if(!alreadyImported.includes(importName)) {
+                    for(let data of examplesData) {
+                        if(data.name === importName) {
+                            outputLines.push(preprocessAqua(data.aqua));
+                            importHandled = true;
+                            break;
+                        }
+                    }   
+                }
+
+                if(!importHandled) {
+                    // Add non found imports to the script so the server can deal with it
+                    outputLines.push(line);
+                }
+            }
+            else {
+                outputLines.push(line);
+            }
+        }
+
+        return outputLines.join('\n');
+    }
+
     async function runScript() {
         setContent('playground-run-output', '');
         showCompilingOverlay();
         let script = editor.getValue();
+        script = startPreprocessAqua(script);
         let jsScript = jsEditor.getValue();
         let result = await compileAqua(script, 'js');
 
