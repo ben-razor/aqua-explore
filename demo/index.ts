@@ -28,6 +28,7 @@ import {
     linkInjections,
 } from 'codemirror-textmate'
 import { start } from 'repl';
+import { remove } from 'js-cookie';
 
 const defaultAqua = `import "@fluencelabs/aqua-lib/builtin.aqua"
 
@@ -186,16 +187,31 @@ let liveJS = defaultJS;
     function setContent(id, text) {
         elemById(id).innerHTML = text;
     }
+    function addClass(elemID, className) {
+        elemById(elemID).classList.add(className);
+    }
+    function removeClass(elemID, className) {
+        elemById(elemID).classList.remove(className);
+    }
+    function triggerAnimClass(elemID, className) {
+        removeClass(elemID, className);
+        setTimeout(() => { 
+            addClass(elemID, className); 
+            elemById(elemID).addEventListener('animationend', () => {
+                removeClass(elemID, className);
+            })
+        }, 1);
+    }
     let setTab = (elemID) => {
-        elemById(elemID).classList.add('playground-tab-selected');
+        addClass(elemID, 'playground-tab-selected')
         if(elemID === 'playground-tab-aqua') {
-            elemById('playground-tab-js').classList.remove('playground-tab-selected');
+            removeClass('playground-tab-js', 'playground-tab-selected')
             elemById('cm-aqua-container').style.display = 'initial';
             elemById('cm-js-container').style.display = 'none';
             editor.refresh();
         }
         else {
-            elemById('playground-tab-aqua').classList.remove('playground-tab-selected');
+            removeClass('playground-tab-aqua', 'playground-tab-selected');
             elemById('cm-aqua-container').style.display = 'none';
             elemById('cm-js-container').style.display = 'initial';
             jsEditor.refresh();
@@ -203,14 +219,14 @@ let liveJS = defaultJS;
     }
 
     let setOutputTab = (elemID) => {
-        elemById(elemID).classList.add('playground-tab-selected');
+        addClass(elemID, 'playground-tab-selected');
         if(elemID === 'playground-tab-output') {
-            elemById('playground-tab-compiled').classList.remove('playground-tab-selected');
+            removeClass(elemID, 'playground-tab-selected');
             elemById('playground-run-output').style.display = 'initial';
             elemById('playground-compiled-viewer').style.display = 'none';
         }
         else {
-            elemById('playground-tab-output').classList.remove('playground-tab-selected');
+            removeClass('playground-tab-output', 'playground-tab-selected');
             elemById('playground-run-output').style.display = 'none';
             elemById('playground-compiled-viewer').style.display = 'initial';
             viewer.refresh();
@@ -220,18 +236,18 @@ let liveJS = defaultJS;
         return window.location.href.includes('localhost');
     }
 
-    window['selectTab'] = (elem) {
+    window['selectTab'] = elem => {
         let elemID = elem.id;
         setTab(elemID)
     }
 
-    window['selectOutputTab'] = (elem) {
+    window['selectOutputTab'] = elem => {
         let elemID = elem.id;
         setOutputTab(elemID)
     }
     
     window['setOutput'] = text => {
-        document.getElementById('playground-run-output').innerHTML = text;
+        document.getElementById('playground-run-output-text').innerHTML = text;
     }
 
     let attemptingConnect = true;
@@ -314,13 +330,27 @@ let liveJS = defaultJS;
         return outputLines;
     }
 
+    let prevAqua;
+    let prevCompiledAqua;
+
     async function runScript() {
-        setContent('playground-run-output', '');
+        setContent('playground-run-output-text', '');
         showCompilingOverlay();
         let script = editor.getValue();
-        script = startPreprocessAqua(script);
+        let result;
+
+        if(script === prevAqua) {
+            script = prevAqua;
+            result = prevCompiledAqua;
+        }
+        else {
+            prevAqua = script; 
+            script = startPreprocessAqua(script);
+            result = await compileAqua(script, 'js');
+            prevCompiledAqua = result;;
+        }
+
         let jsScript = jsEditor.getValue();
-        let result = await compileAqua(script, 'js');
 
         // Viewer will either contain compiled js or the error message
         viewer.setValue(result.data.output);
@@ -351,16 +381,19 @@ let liveJS = defaultJS;
             let cleanedJS = cleanedLines.join('\n');
             let code = cleanedJS + ';' + jsScript;
 
-            setContent('playground-run-output', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
-            try {
-                eval(code);
-            }
-            catch(e) {
-                viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
-            }
+            triggerAnimClass('playground-run-output-text', 'playground-fade-in')
+            setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
+            setTimeout(() => {
+                try {
+                    eval(code);
+                }
+                catch(e) {
+                    viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
+                }
+            }, 5);
         }
         else {
-            setContent('playground-run-output', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
+            setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
             viewer.refresh();
         }
         hideElem('playground-compiling-overlay');
