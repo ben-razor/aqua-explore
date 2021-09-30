@@ -42,7 +42,7 @@ npm run start
 
 If this all worked then http://localhost:8080/ will show a web interface with an Aqua editor with syntax highlighting. 
 
-Clicking the run button will post the aqua to the server and the output will display either the compiled js or an error message. **(It takes about 5s to compile)** 
+Clicking the run button will post the aqua to the server and the output will display either the compiled js or an error message.
 
 ### About The Code
 
