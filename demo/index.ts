@@ -221,7 +221,7 @@ let liveJS = defaultJS;
     let setOutputTab = (elemID) => {
         addClass(elemID, 'playground-tab-selected');
         if(elemID === 'playground-tab-output') {
-            removeClass(elemID, 'playground-tab-selected');
+            removeClass('playground-tab-compiled', 'playground-tab-selected');
             elemById('playground-run-output').style.display = 'initial';
             elemById('playground-compiled-viewer').style.display = 'none';
         }
