@@ -20,7 +20,7 @@ A submission for the [Gitcoin GR11](https://gitcoin.co/issue/fluencelabs/Gitcoin
 
 ## Prerequisites
 
-You need to have [Aqua](https://doc.fluence.dev/aqua-book/getting-started/installation) installed to run the aqua_server. You will also need npm + python3.
+You need to have [Aqua](https://doc.fluence.dev/aqua-book/getting-started/installation) installed to run the aqua_server. You will also need npm + python3, [Flask](https://flask.palletsprojects.com/en/2.0.x/) and [Flask CORS](https://flask-cors.readthedocs.io/en/latest/).
 
 ## How To Build (Development Version)
 
