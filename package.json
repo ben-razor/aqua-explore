@@ -1,7 +1,7 @@
 {
-  "name": "codemirror-textmate",
+  "name": "aqua-explore",
   "version": "1.1.0",
-  "description": "Textmate based tokenization for CodeMirror",
+  "description": "",
   "main": "dist/index.js",
   "typings": "dist/typings/index.d.ts",
   "scripts": {
@@ -10,21 +10,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neeksandhu/codemirror-textmate.git"
+    "url": "git+https://github.com/ben-razor/aqua-explore.git"
   },
   "keywords": [
-    "codemirror",
-    "textmate",
-    "tm",
-    "tokenizer",
-    "highlighter"
+    "fluence",
+    "aqua",
+    "playground"
   ],
-  "author": "Neek Sandhu <neek.sandhu@outlook.com>",
+  "author": "Ben Razor",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/neeksandhu/codemirror-textmate/issues"
+    "url": "https://github.com/ben-razor/aqua-explore/issues" 
   },
-  "homepage": "https://github.com/neeksandhu/codemirror-textmate#readme",
+  "homepage": "https://github.com/ben-razor/aqua-explore",
   "dependencies": {
     "lru-cache": "^4.1.3",
     "monaco-textmate": "^3.0.0",
