@@ -232,6 +232,9 @@ let liveJS = defaultJS;
             viewer.refresh();
         }
     }
+    function resetOutput() {
+        setContent('playground-run-output-text', 'Use setOutput in JS to output to this console.');
+    }
     function isLocal() {
         return window.location.href.includes('localhost');
     }
@@ -420,6 +423,9 @@ let liveJS = defaultJS;
                 jsEditor.setValue(data.js || '');
                 editor.refresh();
                 jsEditor.refresh();
+                resetOutput();
+                viewer.setValue('');
+                viewer.refresh();
                 break;
             }
         }
