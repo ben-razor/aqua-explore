@@ -1,0 +1,13 @@
+# Export aqua compile code
+gcloud compute scp --recurse /home/chrisb/dev/crypto1/fluence/aqua-explore/scripts aqua-server-1:/home/chrisb/dev/aqua_temp
+
+# Copy aqua compile code
+gcloud compute ssh aqua-server-1
+sudo rsync -avz /var/www/aqua /var/www/aqua_bk
+sudo rsync -avz /home/chrisb/dev/aqua_temp/scripts/* /var/www/aqua
+
+# Kill gunicord aqua compile server
+sudo kill -9 gunicorn_process
+
+# Restart gunicorn aqua compile server
+sudo nohup gunicorn --workers=8 -b 0.0.0.0:8080 --certfile=/etc/letsencrypt/live/benrazor.net/fullchain.pem --keyfile=/etc/letsencrypt/live/benrazor.net/privkey.pem aqua_server:app &
