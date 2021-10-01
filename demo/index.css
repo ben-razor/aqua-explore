@@ -87,7 +87,8 @@ body {
     background-image: linear-gradient(0deg, transparent 0%, hsl(342deg 70% 93%) 100%);
     background-color: hsl(342deg 70% 43%);
     color: white;
-    width: 7em;
+    padding: 0 1em;
+    min-width: 2em;
     margin: 0 3px 0 0;
     text-align: center;
     line-height: 2em;
@@ -203,14 +204,26 @@ a {
     text-align: center;
 }
 
-.error-alert {
-    background-color: hsl(0deg, 100%, 50%);
-    vertical-align: middle;
-    border: 1px solid hsl(0deg, 100%, 20%);
-    box-sizing: border-box;
+.playground-connection {
     display: flex;
+    justify-content: center;
+    vertical-align: middle;
+    box-sizing: border-box;
     padding: 0.2em;
-    margin: 0.1em;
+    margin: 0 3px 0 0;
+    border-radius: 0.4em;
+    width: 2em;
+    height: 2em;
+}
+
+.connection-error {
+    background-color: hsl(0deg, 100%, 50%);
+    border: 1px solid hsl(0deg, 100%, 30%);
+}
+
+.connection-ok {
+    background-color: hsl(100deg, 100%, 30%);
+    border: 1px solid hsl(100deg, 100%, 20%);
 }
 
 @media (max-width: 992px) {

@@ -153,17 +153,21 @@ let liveJS = defaultJS;
         return j;
     }
 
-    function hideError() {
-        let errorElem = elemById('error-alert');
-        errorElem.style.display = 'none';
-        let errorText = elemById('error-text');
-        errorText.innerHTML = '';
+    function hideConnectionError(message) {
+        let elemID = 'connection-error-alert';
+        let textElem = elemById('connection-error-alert');
+        removeClass(elemID, 'connection-error');
+        addClass(elemID, 'connection-ok');
+        textElem.setAttribute('alt', message);
+        textElem.setAttribute('title', message);
     }
-    function showError(message) {
-        let errorElem = elemById('error-alert');
-        errorElem.style.display = '';
-        let errorText = elemById('error-text');
-        errorText.innerHTML = message;
+    function showConnectionError(message) {
+        let elemID = 'connection-error-alert';
+        let textElem = elemById('connection-error-alert');
+        removeClass(elemID, 'connection-ok');
+        addClass(elemID, 'connection-error');
+        textElem.setAttribute('alt', message);
+        textElem.setAttribute('title', message);
     }
     function elemById(id) {
         return document.getElementById(id);
@@ -253,10 +257,12 @@ let liveJS = defaultJS;
     let attemptingConnect = true;
     async function connectToHost() {
         let connected = false;
+        let connectedNode;
         for(let node of krasnodar) {
             try {
                 await Fluence.start({ connectTo: node });
                 connected = true;
+                connectedNode = node;
                 break;
             }
             catch(e) { 
@@ -266,10 +272,15 @@ let liveJS = defaultJS;
 
         attemptingConnect = false;
         if(connected) {
-            hideError();
+            let ma = connectedNode.multiaddr;
+            let maParts = ma.split('/');
+            if(maParts.length >= 6) {
+                ma.split('/').slice(0,6).join('/')
+            }
+            hideConnectionError(`Connected to ${ma}`);
         }
         else {
-            showError('krasnodar is down. refresh later.');
+            showConnectionError('All krasnodar is down. refresh later.');
         }
     }
 
