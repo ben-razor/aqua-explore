@@ -275,7 +275,7 @@ let liveJS = defaultJS;
             let ma = connectedNode.multiaddr;
             let maParts = ma.split('/');
             if(maParts.length >= 6) {
-                ma.split('/').slice(0,6).join('/')
+                ma = ma.split('/').slice(0,6).join('/');
             }
             hideConnectionError(`Connected to ${ma}`);
         }
