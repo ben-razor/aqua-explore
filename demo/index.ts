@@ -280,7 +280,7 @@ let liveJS = defaultJS;
             hideConnectionError(`Connected to ${ma}`);
         }
         else {
-            showConnectionError('All krasnodar is down. refresh later.');
+            showConnectionError('All krasnodar nodes are down. refresh later.');
         }
     }
 
