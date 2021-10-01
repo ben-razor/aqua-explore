@@ -1,7 +1,6 @@
 import * as CodeMirror from 'codemirror'
 import { loadWASM } from 'onigasm'
 import 'codemirror/lib/codemirror.css'
-var cookies = require('browser-cookies');
 import './index.css';
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
 import { krasnodar } from "@fluencelabs/fluence-network-environment";
@@ -139,8 +138,6 @@ let liveJS = defaultJS;
     addTheme(themeX)
     viewer.setOption('theme', themeX.name)
 
-    let session_id = cookies.get('session_id');
-
     let host = 'https://benrazor.net:8080';
     if(isLocal()) {
         host = 'http://localhost:8082';
@@ -149,7 +146,7 @@ let liveJS = defaultJS;
         let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
             'Content-Type': 'application/json',
             'Accept': 'application/json'
-        }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang, 'id': session_id})})
+        }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang})})
 
         let j = await r.json();
 
@@ -360,7 +357,6 @@ let liveJS = defaultJS;
         viewer.refresh();
 
         if(result.success) {
-            cookies.set('session_id', result.data.id);
             let jsFromAqua = result.data.output; 
 
             let inImport = false;
