@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="./images/favicon_io/favicon.ico" />
+    <title>Fluence Aqua Playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="playground-content" id="playground-content" style="opacity: 0; position: absolute;">
+        <div class="playground-compiling-overlay" id="playground-compiling-overlay" style="display: none;">
+            <div class="playground-compiling-overlay-content">
+                <img src="./images/ring-loader.gif" style="width: 100px; height: 100px; margin: auto;" />
+                <h1>Aqua code is compiling...</h1>
+                <p>Relax. For 5 to 10 seconds.</p>
+            </div>
+        </div>
+        <div class="playground-ide">
+            <div class="playground-editor">
+                <div class="playground-controls">
+                    <div class="playground-tab playground-tab-selected" id="playground-tab-aqua" onclick="selectTab(this)">Aqua</div>
+                    <div class="playground-tab" id="playground-tab-js" onclick="selectTab(this)">JS</div>
+                    <div id="example-select-holder">
+                    </div>
+                    <button id="run-script-button" class="playground-run-button">Run<span class="tiny-hide"> Script</span></button>
+                </div>
+                <div class="playground-codemirror-wrapper">
+                    <div id="cm-aqua-container">
+                        <textarea id="cm-host" class="playground-editor"></textarea>
+                    </div>
+                    <div id="cm-js-container">
+                        <textarea id="cm-js-editor" class="playground-editor"></textarea>
+                    </div>
+                </div>
+            </div>
+           <!-- scripts will be auto injected by html-webpack-plugin -->
+            <div id="output-elem" class="playground-output">
+                <div class="playground-controls-output">
+                    <div id="connection-error-alert" class="playground-connection connection-error">
+                        <span id="connection-error-text" class="error-text" role="img">🖧</span>
+                    </div>
+                    <div class="playground-tab playground-tab-selected" id="playground-tab-output" onclick="selectOutputTab(this)">Output</div>
+                    <div class="playground-tab" id="playground-tab-compiled" onclick="selectOutputTab(this)">Compiled</div>
+                </div>
+                <div id="playground-run-output" class="playground-run-output">
+                    <div id="playground-run-output-text" class="playground-run-output-text">Use setOutput in JS to output to this console.</div>
+                </div>
+                <div id="playground-compiled-viewer" class="playground-compiled-viewer" style="display: none;">
+                    <textarea id="cm-viewer" class="playground-editor"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="playground-footer">
+        <div class="playground-info">
+            Made for the <a style="font-weight: bold;" href="https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543" target="_blank" rel="noreferrer">Gitcoin GR11 Hackathon</a>
+        </div>
+    </div>
+
+    <div class="playground-loading" id="playground-loading" style="display: flex;">
+        <div class="playground-loading-content" style="margin: auto; display:flex; flex-direction: column;width:25em; text-align: center;">
+            <h1>RELAX</h1>
+            <img src="./images/ring-loader.gif" style="width: 100px; height: 100px; margin: auto;" />
+            <h1>Aqua Playground is loading...</h1>
+        </div>
+    </div>
+
+   </body>
+</html>

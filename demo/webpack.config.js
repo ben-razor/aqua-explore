@@ -82,6 +82,10 @@ module.exports = {
     plugins: [
         new HTMLWebpackPlugin({
             template: path.resolve('./index.html')
+        }),
+        new HTMLWebpackPlugin({
+            filename: 'sandbox.html',
+            template: './sandbox.html'
         })
     ]
 }

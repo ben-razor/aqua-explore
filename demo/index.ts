@@ -422,10 +422,22 @@ let liveJS = defaultJS;
     let button = document.getElementById('run-script-button');
     button.onclick = runScript; 
 
-    document.getElementById('playground-header').style.display = 'flex';
-    document.getElementById('playground-content').style.opacity = '1';
-    document.getElementById('playground-content').style.position = 'relative';
-    document.getElementById('playground-loading').style.display = 'none';
+    let header = elemById('playground-header');
+    if(header) {
+        header.style.display = 'flex';
+    }
+
+    let content = elemById('playground-content');
+    if(content) {
+        content.style.opacity = '1';
+        content.style.position = 'relative';
+    }
+
+    let loading = elemById('playground-loading');
+    if(loading) {
+        loading.style.display = 'none';
+    }
+
 
     let {success, examplesData} = await getExamples();
     examplesData.unshift(defaultExample); 
