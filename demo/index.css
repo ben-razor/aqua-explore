@@ -231,6 +231,11 @@ a {
     border: 1px solid hsl(100deg, 100%, 20%);
 }
 
+.playground-sandbox {
+    width: 100%;
+    height: 100%;
+}
+
 @media (max-width: 992px) {
     .playground-header {
         font-size: 0.9em;
