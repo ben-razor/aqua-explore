@@ -11,6 +11,7 @@ import { elemById, showElem, hideElem, setContent, addClass, removeClass,
 } from './helpersHTML';
 
 import { PlaygroundUI } from './PlaygroundUI';
+import { AquaCompile } from './AquaCompile';
 
 import {
     ResultCodes,
@@ -32,6 +33,7 @@ import {
     ITextmateThemePlus,
     linkInjections,
 } from 'codemirror-textmate'
+import aqua from './modeSamples/aqua';
 
 let liveJS = defaultJS;
 
@@ -180,56 +182,38 @@ let liveJS = defaultJS;
         }
 
         connectToHost();
+    }
 
-        async function runScript() {
-            let prevAqua;
-            let prevCompiledAqua;
+    playgroundUI.initUIHandlers();
+
+    let examplesData = playgroundUI.initExamples();
+
+    let aquaCompile = new AquaCompile();
+
+    let runScriptButton = elemById('run-script-button');
+    if(runScriptButton) {
+        async function startScriptRun() {
+            let sandbox = elemById('playground-sandbox');
+            sandbox.contentWindow.location.reload();
 
             setContent('playground-run-output-text', '');
             playgroundUI.showCompilingOverlay(); 
-            let script = editor.getValue();
-            let result;
 
-            if(script === prevAqua) {
-                script = prevAqua;
-                result = prevCompiledAqua;
-            }
-            else {
-                prevAqua = script; 
-                script = startPreprocessAqua(script);
-                result = await compileAqua(script, 'js');
-                prevCompiledAqua = result;;
-            }
+            let { success, output } = aquaCompile.compileAqua(editor.getValue());
 
-            let jsScript = jsEditor.getValue();
-
+            hideElem('playground-compiling-overlay');
+ 
             // Viewer will either contain compiled js or the error message
-            viewer.setValue(result.data.output);
+            viewer.setValue(output);
             viewer.refresh();
 
-            if(result.success) {
-                let jsFromAqua = result.data.output; 
-
-                let inImport = false;
-                let lines = jsFromAqua.split('\n');
-                let cleanedLines = [];
-                for(let line of lines) {
-                    if(line.startsWith('import')) {
-                        inImport = true;
-                    }
-                    if(!line) {
-                        inImport = false;
-                    }
-
-                    if(!inImport) {
-                        line = line.replace('export', '');
-                        line = line.replace('!incorrectServiceDefinitions', 'incorrectServiceDefinitions');
-                        cleanedLines.push(line);
-                    }
-                }
-                
-                let cleanedJS = cleanedLines.join('\n');
-                let code = cleanedJS + ';' + jsScript;
+            if(!success) {
+                setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
+                viewer.refresh();
+            }
+            else {
+                let jsScript = jsEditor.getValue();
+                let code = output + ';' + jsScript;
 
                 triggerAnimClass('playground-run-output-text', 'playground-fade-in')
                 setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
@@ -242,78 +226,7 @@ let liveJS = defaultJS;
                     }
                 }, 5);
             }
-            else {
-                setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
-                viewer.refresh();
-            }
-            hideElem('playground-compiling-overlay');
-        }
-    }
-
-    playgroundUI.initUIHandlers();
-
-    let examplesData = playgroundUI.initExamples();
-
-    let alreadyImported = [];
-    let serverSideIncludes = ['builtin.aqua', 'pubsub.aqua', 'dht.aqua'];
-    let unprocessedIncludes = []
-
-    function startPreprocessAqua(script) {
-        alreadyImported = [];
-        unprocessedIncludes = [];
-        let processedLines = preprocessAqua(script);
-
-        return unprocessedIncludes.join('\n') + '\n\n' + processedLines.join('\n');
-    }
-
-    function preprocessAqua(script) {
-        const importsRegex = RegExp('import "(.*)"');
-
-        let lines = script.split('\n');
-        let outputLines = [];
-
-        for(let line of lines) {
-            let regexResult = importsRegex.exec(line);
-
-            if(regexResult && regexResult.length == 2) {
-                let importPath = regexResult[1];
-                let importHandled = false;
-
-                let importPathParts = importPath.split('/');
-                let importName = importPathParts.slice(-1)[0];
-
-                if(serverSideIncludes.includes(importName)) {
-                    unprocessedIncludes.push(line);
-                    importHandled = true;
-                }
-                else if(!alreadyImported.includes(importName)) {
-                    for(let data of examplesData) {
-                        if(data.name === importName) {
-                            outputLines = outputLines.concat(preprocessAqua(data.aqua));
-                            importHandled = true;
-                            break;
-                        }
-                    }   
-                }
-
-                if(!importHandled) {
-                    // Add non found imports to the script so the server can deal with it
-                    unprocessedIncludes.push(line);
-                }
-            }
-            else {
-                outputLines.push(line);
-            }
-        }
-
-        return outputLines;
-    }
-
-    let runScriptButton = elemById('run-script-button');
-    if(runScriptButton) {
-        async function startScriptRun() {
-
-        }
+      }
         runScriptButton.onclick = startScriptRun; 
     }
 
