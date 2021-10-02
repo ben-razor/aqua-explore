@@ -4,13 +4,13 @@ import 'codemirror/lib/codemirror.css'
 import './index.css';
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
 import { krasnodar } from "@fluencelabs/fluence-network-environment";
-import { getExamples } from './examples';
+import { defaultJS, defaultAqua } from './examples';
 
 import { elemById, showElem, hideElem, setContent, addClass, removeClass, 
          triggerAnimClass, isLocal  
 } from './helpersHTML';
 
-import { setTab, setOutputTab, resetOutput, initUIHandlers, showCompilingOverlay } from './helpersPlaygroundUI';
+import { PlaygroundUI } from './helpersPlaygroundUI';
 
 import {
     ResultCodes,
@@ -32,44 +32,6 @@ import {
     ITextmateThemePlus,
     linkInjections,
 } from 'codemirror-textmate'
-
-const defaultAqua = `import "@fluencelabs/aqua-lib/builtin.aqua"
-
-service HelloWorld("hello-world"):
-    hello(str: string)
-    
-func sayHello() -> string:
-    HelloWorld.hello("Hello. Welcome to the Aqua Playground.")
-    <- "Hello. Welcome to the Aqua Playground."
-    
-func getRelayTime() -> u64:
-    on HOST_PEER_ID:
-        ts <- Peer.timestamp_ms()
-    <- ts
-`;
-
-const defaultJS = `registerHelloWorld({
-    hello: async (str) => {
-        console.log(str)
-    }
-});
-
-const testAquaService = async () => {
-    const message = await sayHello();
-    const relayTime = await getRelayTime();
-    const dateStr = new Date(relayTime).toLocaleString();
-    
-    setOutput(message + '<br /><br />Time on host: ' + dateStr);
-};
-
-testAquaService();`;
-
-let defaultExample =     {
-    "aqua": defaultAqua,
-    "js": defaultJS,
-    "name": "helloAqua",
-    "title": "Hello Aqua"
-};
 
 let liveJS = defaultJS;
 
@@ -113,7 +75,7 @@ let liveJS = defaultJS;
     const editor = CodeMirror.fromTextArea(document.getElementById('cm-host') as HTMLTextAreaElement, {
         lineNumbers: true,
         mode: 'typescript',
-        lineWrapping: true;
+        lineWrapping: true
     })
     editor.setValue(defaultAqua);
 
@@ -141,6 +103,8 @@ let liveJS = defaultJS;
     }
     addTheme(themeX)
     viewer.setOption('theme', themeX.name)
+
+    let playgroundUI = new PlaygroundUI(editor, jsEditor, viewer);
 
     let host = 'https://benrazor.net:8080';
     if(isLocal()) {
@@ -206,7 +170,9 @@ let liveJS = defaultJS;
 
     connectToHost();
 
-    initUIHandlers();
+    playgroundUI.initUIHandlers();
+
+    let examplesData = playgroundUI.initExamples();
 
     let alreadyImported = [];
     let serverSideIncludes = ['builtin.aqua', 'pubsub.aqua', 'dht.aqua'];
@@ -268,7 +234,7 @@ let liveJS = defaultJS;
 
     async function runScript() {
         setContent('playground-run-output-text', '');
-        showCompilingOverlay(); 
+        playgroundUI.showCompilingOverlay(); 
         let script = editor.getValue();
         let result;
 
@@ -330,59 +296,9 @@ let liveJS = defaultJS;
         }
         hideElem('playground-compiling-overlay');
     }
-
     let button = document.getElementById('run-script-button');
     button.onclick = runScript; 
 
-    let header = elemById('playground-header');
-    if(header) {
-        header.style.display = 'flex';
-    }
+    playgroundUI.initPlaygroundUI();
 
-    let content = elemById('playground-content');
-    if(content) {
-        content.style.opacity = '1';
-        content.style.position = 'relative';
-    }
-
-    let loading = elemById('playground-loading');
-    if(loading) {
-        loading.style.display = 'none';
-    }
-
-
-    let {success, examplesData} = await getExamples();
-    examplesData.unshift(defaultExample); 
-
-    window["exampleChanged"] = (e) => {
-        let selValue = e.options[e.selectedIndex].value;
-
-        for(let data of examplesData) {
-            if(data.name === selValue) {
-                setTab('playground-tab-aqua');
-                editor.setValue(data.aqua);
-                jsEditor.setValue(data.js || '');
-                editor.refresh();
-                jsEditor.refresh();
-                resetOutput();
-                viewer.setValue('');
-                viewer.refresh();
-                break;
-            }
-        }
-    }
-
-    if(success) {
-        let select = `<select class="playground-examples-select" 
-                              id="playground-examples-select" onchange="exampleChanged(this)">"`
-        for(let data of examplesData) {
-            select += `<option value="${data.name}">${data.title}</option>`;
-        }
-        select += '</select>';
-
-        elemById('example-select-holder').innerHTML = select;
-    }
-    else {
-        console.log('failed to get examples data'); 
-    }
-})()
+ })()
