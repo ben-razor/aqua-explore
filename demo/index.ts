@@ -6,6 +6,12 @@ import { Fluence, FluencePeer } from "@fluencelabs/fluence";
 import { krasnodar } from "@fluencelabs/fluence-network-environment";
 import { getExamples } from './examples';
 
+import { elemById, showElem, hideElem, setContent, addClass, removeClass, 
+         triggerAnimClass, isLocal  
+} from './helpersHTML';
+
+import { setTab, setOutputTab, resetOutput, initUIHandlers, showCompilingOverlay } from './helpersPlaygroundUI';
+
 import {
     ResultCodes,
     RequestFlow,
@@ -167,102 +173,6 @@ let liveJS = defaultJS;
         textElem.setAttribute('alt', message);
         textElem.setAttribute('title', message);
     }
-    function elemById(id) {
-        return document.getElementById(id);
-    }
-    function showElem(id) {
-        elemById(id).style.display = 'initial';
-    }
-    function hideElem(id) {
-        elemById(id).style.display = 'none';
-    }
-    function showCompilingOverlay() {
-        showElem('playground-compiling-overlay');
-        setTimeout(() => {
-            // In case something goes wrong with the compile
-            hideElem('playground-compiling-overlay');
-        }, 10000);
-    }
-    function setContent(id, text) {
-        elemById(id).innerHTML = text;
-    }
-    function addClass(elemID, className) {
-        elemById(elemID).classList.add(className);
-    }
-    function removeClass(elemID, className) {
-        elemById(elemID).classList.remove(className);
-    }
-    function triggerAnimClass(elemID, className) {
-        removeClass(elemID, className);
-        setTimeout(() => { 
-            addClass(elemID, className); 
-            elemById(elemID).addEventListener('animationend', () => {
-                removeClass(elemID, className);
-            })
-        }, 1);
-    }
-    let setTab = (elemID) => {
-        addClass(elemID, 'playground-tab-selected')
-        if(elemID === 'playground-tab-aqua') {
-            removeClass('playground-tab-js', 'playground-tab-selected')
-            elemById('cm-aqua-container').style.display = 'initial';
-            elemById('cm-js-container').style.display = 'none';
-            editor.refresh();
-        }
-        else {
-            removeClass('playground-tab-aqua', 'playground-tab-selected');
-            elemById('cm-aqua-container').style.display = 'none';
-            elemById('cm-js-container').style.display = 'initial';
-            jsEditor.refresh();
-        }
-    }
-
-    let setOutputTab = (elemID) => {
-        addClass(elemID, 'playground-tab-selected');
-        if(elemID === 'playground-tab-output') {
-            removeClass('playground-tab-compiled', 'playground-tab-selected');
-            elemById('playground-run-output').style.display = 'initial';
-            elemById('playground-compiled-viewer').style.display = 'none';
-        }
-        else {
-            removeClass('playground-tab-output', 'playground-tab-selected');
-            elemById('playground-run-output').style.display = 'none';
-            elemById('playground-compiled-viewer').style.display = 'initial';
-            viewer.refresh();
-        }
-    }
-    function resetOutput() {
-        setContent('playground-run-output-text', 'Use setOutput in JS to output to this console.');
-    }
-    function isLocal() {
-        return window.location.href.includes('localhost');
-    }
-
-    window['selectTab'] = elem => {
-        let elemID = elem.id;
-        setTab(elemID)
-    }
-
-    window['selectOutputTab'] = elem => {
-        let elemID = elem.id;
-        setOutputTab(elemID)
-    }
-    
-    window['setOutput'] = text => {
-        setContent('playground-run-output-text', text);
-    }
-
-    window['getOutput'] = () => {
-        return elemById('playground-run-output-text').innerHTML;
-    }
-
-    window['appendOutput'] = text => {
-        let output = window['getOutput']();
-        if(output) {
-            output = output + '\n';
-        }
-        setContent('playground-run-output-text', output + text); 
-    }
 
     let attemptingConnect = true;
     async function connectToHost() {
@@ -295,6 +205,8 @@ let liveJS = defaultJS;
     }
 
     connectToHost();
+
+    initUIHandlers();
 
     let alreadyImported = [];
     let serverSideIncludes = ['builtin.aqua', 'pubsub.aqua', 'dht.aqua'];
