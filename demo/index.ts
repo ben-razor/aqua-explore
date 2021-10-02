@@ -74,7 +74,7 @@ let liveJS = defaultJS;
 
     let editor;
     if(elemById('cm-host')) {
-        const editor = CodeMirror.fromTextArea(elemById('cm-host') as HTMLTextAreaElement, {
+        editor = CodeMirror.fromTextArea(elemById('cm-host') as HTMLTextAreaElement, {
             lineNumbers: true,
             mode: 'typescript',
             lineWrapping: true
@@ -84,7 +84,7 @@ let liveJS = defaultJS;
 
     let jsEditor;
     if(elemById('cm-js-editor')) {
-        const jsEditor = CodeMirror.fromTextArea(document.getElementById('cm-js-editor') as HTMLTextAreaElement, {
+        jsEditor = CodeMirror.fromTextArea(elemById('cm-js-editor') as HTMLTextAreaElement, {
             lineNumbers: true,
             lineWrapping: true,
             mode: 'javascript'
@@ -95,7 +95,7 @@ let liveJS = defaultJS;
 
     let viewer;
     if(elemById('cm-viewer')) {
-        const viewer = CodeMirror.fromTextArea(elemById('cm-viewer') as HTMLTextAreaElement, {
+        viewer = CodeMirror.fromTextArea(elemById('cm-viewer') as HTMLTextAreaElement, {
             lineNumbers: false,
             lineWrapping: true,
             readOnly: true,
