@@ -26,8 +26,6 @@ import {
     ITextmateThemePlus,
     linkInjections,
 } from 'codemirror-textmate'
-import { start } from 'repl';
-import { remove } from 'js-cookie';
 
 const defaultAqua = `import "@fluencelabs/aqua-lib/builtin.aqua"
 
@@ -251,7 +249,19 @@ let liveJS = defaultJS;
     }
     
     window['setOutput'] = text => {
-        document.getElementById('playground-run-output-text').innerHTML = text;
+        setContent('playground-run-output-text', text);
+    }
+
+    window['getOutput'] = () => {
+        return elemById('playground-run-output-text').innerHTML;
+    }
+
+    window['appendOutput'] = text => {
+        let output = window['getOutput']();
+        if(output) {
+            output = output + '\n';
+        }
+        setContent('playground-run-output-text', output + text); 
     }
 
     let attemptingConnect = true;
@@ -346,7 +356,7 @@ let liveJS = defaultJS;
 
     async function runScript() {
         setContent('playground-run-output-text', '');
-        showCompilingOverlay();
+        showCompilingOverlay(); 
         let script = editor.getValue();
         let result;
 

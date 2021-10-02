@@ -42,6 +42,11 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 18em;
+    word-break: break-all;
+}
+
+.playground-run-output-text {
+    white-space: pre;
 }
 
 .playground-compiled-viewer {
