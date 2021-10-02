@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,8 +7,8 @@
     <title>Fluence Aqua Playground</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
-    <div class="playground-content" id="playground-content" style="opacity: 0; position: absolute;">
+<body style="margin: 0; padding: 0; height: 100%;">
+    <div class="playground-content" id="playground-content" style="opacity: 0; position: absolute; height: 100%;">
         <div class="playground-compiling-overlay" id="playground-compiling-overlay" style="display: none;">
             <div class="playground-compiling-overlay-content">
                 <img src="./images/ring-loader.gif" style="width: 100px; height: 100px; margin: auto;" />
@@ -16,25 +16,8 @@
                 <p>Relax. For 5 to 10 seconds.</p>
             </div>
         </div>
-        <div class="playground-ide">
-            <div class="playground-editor">
-                <div class="playground-controls">
-                    <div class="playground-tab playground-tab-selected" id="playground-tab-aqua" onclick="selectTab(this)">Aqua</div>
-                    <div class="playground-tab" id="playground-tab-js" onclick="selectTab(this)">JS</div>
-                    <div id="example-select-holder">
-                    </div>
-                    <button id="run-script-button" class="playground-run-button">Run<span class="tiny-hide"> Script</span></button>
-                </div>
-                <div class="playground-codemirror-wrapper">
-                    <div id="cm-aqua-container">
-                        <textarea id="cm-host" class="playground-editor"></textarea>
-                    </div>
-                    <div id="cm-js-container">
-                        <textarea id="cm-js-editor" class="playground-editor"></textarea>
-                    </div>
-                </div>
-            </div>
-           <!-- scripts will be auto injected by html-webpack-plugin -->
+        <div class="playground-output-elem">
+          <!-- scripts will be auto injected by html-webpack-plugin -->
             <div id="output-elem" class="playground-output">
                 <div class="playground-controls-output">
                     <div id="connection-error-alert" class="playground-connection connection-error">
@@ -50,12 +33,6 @@
                     <textarea id="cm-viewer" class="playground-editor"></textarea>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="playground-footer">
-        <div class="playground-info">
-            Made for the <a style="font-weight: bold;" href="https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543" target="_blank" rel="noreferrer">Gitcoin GR11 Hackathon</a>
         </div>
     </div>
 

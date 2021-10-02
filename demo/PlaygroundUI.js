@@ -16,13 +16,13 @@ export class PlaygroundUI {
             removeClass('playground-tab-js', 'playground-tab-selected')
             elemById('cm-aqua-container').style.display = 'initial';
             elemById('cm-js-container').style.display = 'none';
-            this.editor.refresh();
+            this.editor && this.editor.refresh();
         }
         else {
             removeClass('playground-tab-aqua', 'playground-tab-selected');
             elemById('cm-aqua-container').style.display = 'none';
             elemById('cm-js-container').style.display = 'initial';
-            this.jsEditor.refresh();
+            this.jsEditor && this.jsEditor.refresh();
         }
     }
 
@@ -37,7 +37,7 @@ export class PlaygroundUI {
             removeClass('playground-tab-output', 'playground-tab-selected');
             elemById('playground-run-output').style.display = 'none';
             elemById('playground-compiled-viewer').style.display = 'initial';
-            this.viewer.refresh();
+            this.viewer && this.viewer.refresh();
         }
     }
 
@@ -109,13 +109,17 @@ export class PlaygroundUI {
             for(let data of examplesData) {
                 if(data.name === selValue) {
                     this.setTab('playground-tab-aqua');
-                    this.editor.setValue(data.aqua);
-                    this.jsEditor.setValue(data.js || '');
-                    this.editor.refresh();
-                    this.jsEditor.refresh();
+                    if(this.editor && this.jsEditor) {
+                        this.editor.setValue(data.aqua);
+                        this.jsEditor.setValue(data.js || '');
+                        this.editor.refresh();
+                        this.jsEditor.refresh();
+                    }
                     this.resetOutput();
-                    this.viewer.setValue('');
-                    this.viewer.refresh();
+                    if(this.viewer) {
+                        this.viewer.setValue('');
+                        this.viewer.refresh();
+                    }
                     break;
                 }
             }
@@ -129,7 +133,9 @@ export class PlaygroundUI {
             }
             select += '</select>';
 
-            elemById('example-select-holder').innerHTML = select;
+            if(elemById('example-select-holder')) {
+                elemById('example-select-holder').innerHTML = select;
+            }
         }
         else {
             console.log('failed to get examples data'); 

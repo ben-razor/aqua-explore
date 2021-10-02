@@ -36,8 +36,12 @@ body {
     flex: 1 0;
 }
 
-.playground-output {
+.playground-output-container {
     width: 45%;
+}
+
+.playground-output {
+    width: 100%;
     color: white;
     display: flex;
     flex-direction: column;
@@ -110,6 +114,14 @@ body {
     flex-direction: row;
     width: 100%;
     border-bottom: 5px solid hsl(342deg 50% 83%);
+    min-height: 22em;
+}
+
+.playground-output-elem {
+    display: flex;
+    flex-direction: row;
+    min-height: 22em;
+    height: 100%;
 }
 
 .playground-codemirror-wrapper {

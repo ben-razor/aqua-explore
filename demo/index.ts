@@ -10,7 +10,7 @@ import { elemById, showElem, hideElem, setContent, addClass, removeClass,
          triggerAnimClass, isLocal  
 } from './helpersHTML';
 
-import { PlaygroundUI } from './helpersPlaygroundUI';
+import { PlaygroundUI } from './PlaygroundUI';
 
 import {
     ResultCodes,
@@ -72,103 +72,183 @@ let liveJS = defaultJS;
         }
     }))
 
-    const editor = CodeMirror.fromTextArea(document.getElementById('cm-host') as HTMLTextAreaElement, {
-        lineNumbers: true,
-        mode: 'typescript',
-        lineWrapping: true
-    })
-    editor.setValue(defaultAqua);
-
-    const jsEditor = CodeMirror.fromTextArea(document.getElementById('cm-js-editor') as HTMLTextAreaElement, {
-        lineNumbers: true,
-        lineWrapping: true,
-        mode: 'javascript'
-    })
-    jsEditor.setValue(liveJS);
-    elemById('cm-js-container').style.display = 'none';
-
-    const viewer = CodeMirror.fromTextArea(document.getElementById('cm-viewer') as HTMLTextAreaElement, {
-        lineNumbers: false,
-        lineWrapping: true,
-        readOnly: true,
-        mode: 'javascript'
-    })
-
-    const themeX: ITextmateThemePlus = {
-        ...(await import('./tm/themes/OneDark.tmTheme.json')),
-        gutterSettings: {
-            background: '#1d1f25',
-            divider: '#1d1f25'
-        }
+    let editor;
+    if(elemById('cm-host')) {
+        const editor = CodeMirror.fromTextArea(elemById('cm-host') as HTMLTextAreaElement, {
+            lineNumbers: true,
+            mode: 'typescript',
+            lineWrapping: true
+        })
+        editor.setValue(defaultAqua);
     }
-    addTheme(themeX)
-    viewer.setOption('theme', themeX.name)
 
+    let jsEditor;
+    if(elemById('cm-js-editor')) {
+        const jsEditor = CodeMirror.fromTextArea(document.getElementById('cm-js-editor') as HTMLTextAreaElement, {
+            lineNumbers: true,
+            lineWrapping: true,
+            mode: 'javascript'
+        })
+        jsEditor.setValue(liveJS);
+        elemById('cm-js-container').style.display = 'none';
+    }
+
+    let viewer;
+    if(elemById('cm-viewer')) {
+        const viewer = CodeMirror.fromTextArea(elemById('cm-viewer') as HTMLTextAreaElement, {
+            lineNumbers: false,
+            lineWrapping: true,
+            readOnly: true,
+            mode: 'javascript'
+        })
+
+        const themeX: ITextmateThemePlus = {
+            ...(await import('./tm/themes/OneDark.tmTheme.json')),
+            gutterSettings: {
+                background: '#1d1f25',
+                divider: '#1d1f25'
+            }
+        }
+        addTheme(themeX)
+        viewer.setOption('theme', themeX.name)
+    }
     let playgroundUI = new PlaygroundUI(editor, jsEditor, viewer);
 
-    let host = 'https://benrazor.net:8080';
-    if(isLocal()) {
-        host = 'http://localhost:8082';
-    }
-    async function compileAqua(aquaCode, outputLang) {
-        let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang})})
+    let isSandbox = elemById('playground-run-output');
 
-        let j = await r.json();
+    if(isSandbox) {
+        let host = 'https://benrazor.net:8080';
+        if(isLocal()) {
+            host = 'http://localhost:8082';
+        }
+        async function compileAqua(aquaCode, outputLang) {
+            let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang})})
 
-        return j;
-    }
+            let j = await r.json();
 
-    function hideConnectionError(message) {
-        let elemID = 'connection-error-alert';
-        let textElem = elemById('connection-error-alert');
-        removeClass(elemID, 'connection-error');
-        addClass(elemID, 'connection-ok');
-        textElem.setAttribute('alt', message);
-        textElem.setAttribute('title', message);
-    }
-    function showConnectionError(message) {
-        let elemID = 'connection-error-alert';
-        let textElem = elemById('connection-error-alert');
-        removeClass(elemID, 'connection-ok');
-        addClass(elemID, 'connection-error');
-        textElem.setAttribute('alt', message);
-        textElem.setAttribute('title', message);
-    }
+            return j;
+        }
 
-    let attemptingConnect = true;
-    async function connectToHost() {
-        let connected = false;
-        let connectedNode;
-        for(let node of krasnodar) {
-            try {
-                await Fluence.start({ connectTo: node });
-                connected = true;
-                connectedNode = node;
-                break;
+        function hideConnectionError(message) {
+            let elemID = 'connection-error-alert';
+            let textElem = elemById('connection-error-alert');
+            removeClass(elemID, 'connection-error');
+            addClass(elemID, 'connection-ok');
+            textElem.setAttribute('alt', message);
+            textElem.setAttribute('title', message);
+        }
+        function showConnectionError(message) {
+            let elemID = 'connection-error-alert';
+            let textElem = elemById('connection-error-alert');
+            removeClass(elemID, 'connection-ok');
+            addClass(elemID, 'connection-error');
+            textElem.setAttribute('alt', message);
+            textElem.setAttribute('title', message);
+        }
+
+        let attemptingConnect = true;
+        async function connectToHost() {
+            let connected = false;
+            let connectedNode;
+            for(let node of krasnodar) {
+                try {
+                    await Fluence.start({ connectTo: node });
+                    connected = true;
+                    connectedNode = node;
+                    break;
+                }
+                catch(e) { 
+                    await Fluence.stop();
+                } 
             }
-            catch(e) { 
-                await Fluence.stop();
-            } 
+
+            attemptingConnect = false;
+            if(connected) {
+                let ma = connectedNode.multiaddr;
+                let maParts = ma.split('/');
+                if(maParts.length >= 6) {
+                    ma = ma.split('/').slice(0,6).join('/');
+                }
+                hideConnectionError(`Connected to ${ma}`);
+            }
+            else {
+                showConnectionError('All krasnodar nodes are down. refresh later.');
+            }
         }
 
-        attemptingConnect = false;
-        if(connected) {
-            let ma = connectedNode.multiaddr;
-            let maParts = ma.split('/');
-            if(maParts.length >= 6) {
-                ma = ma.split('/').slice(0,6).join('/');
+        connectToHost();
+
+        async function runScript() {
+            let prevAqua;
+            let prevCompiledAqua;
+
+            setContent('playground-run-output-text', '');
+            playgroundUI.showCompilingOverlay(); 
+            let script = editor.getValue();
+            let result;
+
+            if(script === prevAqua) {
+                script = prevAqua;
+                result = prevCompiledAqua;
             }
-            hideConnectionError(`Connected to ${ma}`);
-        }
-        else {
-            showConnectionError('All krasnodar nodes are down. refresh later.');
+            else {
+                prevAqua = script; 
+                script = startPreprocessAqua(script);
+                result = await compileAqua(script, 'js');
+                prevCompiledAqua = result;;
+            }
+
+            let jsScript = jsEditor.getValue();
+
+            // Viewer will either contain compiled js or the error message
+            viewer.setValue(result.data.output);
+            viewer.refresh();
+
+            if(result.success) {
+                let jsFromAqua = result.data.output; 
+
+                let inImport = false;
+                let lines = jsFromAqua.split('\n');
+                let cleanedLines = [];
+                for(let line of lines) {
+                    if(line.startsWith('import')) {
+                        inImport = true;
+                    }
+                    if(!line) {
+                        inImport = false;
+                    }
+
+                    if(!inImport) {
+                        line = line.replace('export', '');
+                        line = line.replace('!incorrectServiceDefinitions', 'incorrectServiceDefinitions');
+                        cleanedLines.push(line);
+                    }
+                }
+                
+                let cleanedJS = cleanedLines.join('\n');
+                let code = cleanedJS + ';' + jsScript;
+
+                triggerAnimClass('playground-run-output-text', 'playground-fade-in')
+                setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
+                setTimeout(() => {
+                    try {
+                        eval(code);
+                    }
+                    catch(e) {
+                        viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
+                    }
+                }, 5);
+            }
+            else {
+                setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
+                viewer.refresh();
+            }
+            hideElem('playground-compiling-overlay');
         }
     }
-
-    connectToHost();
 
     playgroundUI.initUIHandlers();
 
@@ -229,75 +309,13 @@ let liveJS = defaultJS;
         return outputLines;
     }
 
-    let prevAqua;
-    let prevCompiledAqua;
+    let runScriptButton = elemById('run-script-button');
+    if(runScriptButton) {
+        async function startScriptRun() {
 
-    async function runScript() {
-        setContent('playground-run-output-text', '');
-        playgroundUI.showCompilingOverlay(); 
-        let script = editor.getValue();
-        let result;
-
-        if(script === prevAqua) {
-            script = prevAqua;
-            result = prevCompiledAqua;
         }
-        else {
-            prevAqua = script; 
-            script = startPreprocessAqua(script);
-            result = await compileAqua(script, 'js');
-            prevCompiledAqua = result;;
-        }
-
-        let jsScript = jsEditor.getValue();
-
-        // Viewer will either contain compiled js or the error message
-        viewer.setValue(result.data.output);
-        viewer.refresh();
-
-        if(result.success) {
-            let jsFromAqua = result.data.output; 
-
-            let inImport = false;
-            let lines = jsFromAqua.split('\n');
-            let cleanedLines = [];
-            for(let line of lines) {
-                if(line.startsWith('import')) {
-                    inImport = true;
-                }
-                if(!line) {
-                    inImport = false;
-                }
-
-                if(!inImport) {
-                    line = line.replace('export', '');
-                    line = line.replace('!incorrectServiceDefinitions', 'incorrectServiceDefinitions');
-                    cleanedLines.push(line);
-                }
-            }
-            
-            let cleanedJS = cleanedLines.join('\n');
-            let code = cleanedJS + ';' + jsScript;
-
-            triggerAnimClass('playground-run-output-text', 'playground-fade-in')
-            setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
-            setTimeout(() => {
-                try {
-                    eval(code);
-                }
-                catch(e) {
-                    viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
-                }
-            }, 5);
-        }
-        else {
-            setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
-            viewer.refresh();
-        }
-        hideElem('playground-compiling-overlay');
+        runScriptButton.onclick = startScriptRun; 
     }
-    let button = document.getElementById('run-script-button');
-    button.onclick = runScript; 
 
     playgroundUI.initPlaygroundUI();
 
