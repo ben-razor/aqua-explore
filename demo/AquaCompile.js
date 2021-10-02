@@ -128,6 +128,6 @@ export class AquaCompile {
             cleanOutput = this.processCompiledJS(output);
         }
 
-        return { success: success, rawOutput: rawOutput, cleanOutput: cleanOutput};
+        return { success: success, rawOutput: output, cleanOutput: cleanOutput};
     }
 }

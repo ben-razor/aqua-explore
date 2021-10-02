@@ -189,44 +189,78 @@ let liveJS = defaultJS;
     let examplesData = playgroundUI.initExamples();
 
     let aquaCompile = new AquaCompile();
+    let sandbox = elemById('playground-sandbox');
+
 
     let runScriptButton = elemById('run-script-button');
     if(runScriptButton) {
         async function startScriptRun() {
-            let sandbox = elemById('playground-sandbox');
+            let isSandboxLoaded = false;
+            let isCompiled = false;
+            let success;
+            let rawOutput;
+            let cleanOutput;
+
+            function handleCompiledAndSandboxLoaded() {
+                if(isCompiled && isSandboxLoaded) {
+                    hideElem('playground-compiling-overlay');
+                            
+                    sandbox.contentWindow.addEventListener('message', e => {
+                        let mainWindow = e.source;
+                        let data = e.data;
+
+                        if(data.type && data.type === 'aqua-compile') {
+                            let success = data.success;
+                            let rawOutput = data.rawOutput;
+                            let cleanOutput = data.cleanOutput;
+                            console.log(data);
+
+                            // Viewer will either contain compiled js or the error message
+                            viewer.setValue(rawOutput);
+                            viewer.refresh();
+
+                            if(!success) {
+                                setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
+                                viewer.refresh();
+                            }
+                            else {
+                                let jsScript = jsEditor.getValue();
+                                let code = cleanOutput + ';' + jsScript;
+
+                                triggerAnimClass('playground-run-output-text', 'playground-fade-in')
+                                setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
+                                setTimeout(() => {
+                                    try {
+                                        eval(code);
+                                    }
+                                    catch(e) {
+                                        viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
+                                    }
+                                }, 5);
+                            }
+                        }
+                    })
+       
+                    sandbox.contentWindow.postMessage({
+                        success: success, rawOutput: rawOutput, cleanOutput: cleanOutput, type: 'aqua-compile'
+                    }, 'http://localhost:8080');
+                }
+            }
+
+            sandbox.onload = () => { 
+                isSandboxLoaded = true;
+                handleCompiledAndSandboxLoaded();
+            }
             sandbox.contentWindow.location.reload();
 
             setContent('playground-run-output-text', '');
             playgroundUI.showCompilingOverlay(); 
 
-            let { success, rawOutput, cleanOutput } = await aquaCompile.compileAqua(editor.getValue());
+            ({ success, rawOutput, cleanOutput } = await aquaCompile.compileAqua(editor.getValue()));
 
-            hideElem('playground-compiling-overlay');
- 
-            // Viewer will either contain compiled js or the error message
-            viewer.setValue(rawOutput);
-            viewer.refresh();
-
-            if(!success) {
-                setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
-                viewer.refresh();
-            }
-            else {
-                let jsScript = jsEditor.getValue();
-                let code = cleanOutput + ';' + jsScript;
-
-                triggerAnimClass('playground-run-output-text', 'playground-fade-in')
-                setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
-                setTimeout(() => {
-                    try {
-                        eval(code);
-                    }
-                    catch(e) {
-                        viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
-                    }
-                }, 5);
-            }
-      }
+            isCompiled = true;
+            handleCompiledAndSandboxLoaded();
+     }
         runScriptButton.onclick = startScriptRun; 
     }
 
