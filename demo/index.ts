@@ -199,12 +199,12 @@ let liveJS = defaultJS;
             setContent('playground-run-output-text', '');
             playgroundUI.showCompilingOverlay(); 
 
-            let { success, output } = aquaCompile.compileAqua(editor.getValue());
+            let { success, rawOutput, cleanOutput } = await aquaCompile.compileAqua(editor.getValue());
 
             hideElem('playground-compiling-overlay');
  
             // Viewer will either contain compiled js or the error message
-            viewer.setValue(output);
+            viewer.setValue(rawOutput);
             viewer.refresh();
 
             if(!success) {
@@ -213,7 +213,7 @@ let liveJS = defaultJS;
             }
             else {
                 let jsScript = jsEditor.getValue();
-                let code = output + ';' + jsScript;
+                let code = cleanOutput + ';' + jsScript;
 
                 triggerAnimClass('playground-run-output-text', 'playground-fade-in')
                 setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');

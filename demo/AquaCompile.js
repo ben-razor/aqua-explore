@@ -9,16 +9,16 @@ export class AquaCompile {
         this.prevAqua;
         this.prevCompiledAqua;
 
-        let host = 'https://benrazor.net:8080';
+        this.host = 'https://benrazor.net:8080';
         if(isLocal()) {
-            host = 'http://localhost:8082';
+            this.host = 'http://localhost:8082';
         }
     }
 
     startPreprocessAqua(script) {
         this.alreadyImported = [];
         this.unprocessedIncludes = [];
-        let processedLines = this.preprocessAqua(script);
+        this.processedLines = this.preprocessAqua(script);
 
         return this.unprocessedIncludes.join('\n') + '\n\n' + this.processedLines.join('\n');
     }
@@ -66,17 +66,6 @@ export class AquaCompile {
         return outputLines;
     }
 
-    async compileAqua(aquaCode, outputLang) {
-        let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang})})
-
-        let j = await r.json();
-
-        return j;
-    }
-
     processCompiledJS(jsFromAqua) {
 
         let inImport = false;
@@ -103,29 +92,42 @@ export class AquaCompile {
         return cleanedJS;
     }
 
-    async startCompileAqua() {
+    async reqAquaCompile(aquaCode, outputLang) {
+        let r = await fetch(`${this.host}/api/compile_aqua`, {method: 'POST',   headers : { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang})})
+
+        let j = await r.json();
+
+        return j;
+    }
+
+    async compileAqua(script) {
         let success = false;
         let compiledJS = '';
         let result;
+        let output;
+        let cleanOutput;
 
         if(script === this.prevAqua) {
             script = this.prevAqua;
             result = this.prevCompiledAqua;
         }
         else {
-            this.prevAqua = script; 
             script = this.startPreprocessAqua(script);
-            result = await this.compileAqua(script, 'js');
-            this.prevCompiledAqua = result;
+            result = await this.reqAquaCompile(script, 'js');
         }
 
         output = result.data.output;
 
         if(result.success) {
+            this.prevAqua = script; 
+            this.prevCompiledAqua = result;
             success = true;
-            output = this.processCompiledJS(output);
+            cleanOutput = this.processCompiledJS(output);
         }
 
-        return { success: success, output: output};
+        return { success: success, rawOutput: rawOutput, cleanOutput: cleanOutput};
     }
 }
