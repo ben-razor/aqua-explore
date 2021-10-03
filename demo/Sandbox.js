@@ -1,6 +1,7 @@
 import * as CodeMirror from 'codemirror'
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
-import { elemById, setContent, addClass, removeClass } from './helpersHTML';
+import { krasnodar } from "@fluencelabs/fluence-network-environment";
+import { elemById, setContent, addClass, removeClass, triggerAnimClass } from './helpersHTML';
 import { addTheme } from 'codemirror-textmate';
 
 export class Sandbox {
@@ -73,6 +74,7 @@ export class Sandbox {
 
     initConnection() {
         let attemptingConnect = true;
+        let me = this;
 
         async function connectToHost() {
             let connected = false;
@@ -96,10 +98,10 @@ export class Sandbox {
                 if(maParts.length >= 6) {
                     ma = ma.split('/').slice(0,6).join('/');
                 }
-                this.hideConnectionError(`Connected to ${ma}`);
+                me.hideConnectionError(`Connected to ${ma}`);
             }
             else {
-                this.showConnectionError('All krasnodar nodes are down. refresh later.');
+                me.showConnectionError('All krasnodar nodes are down. refresh later.');
             }
         }
 
@@ -122,6 +124,7 @@ export class Sandbox {
         textElem.setAttribute('alt', message);
         textElem.setAttribute('title', message);
     }
+
     showConnectionError(message) {
         let elemID = 'connection-error-alert';
         let textElem = elemById('connection-error-alert');
@@ -129,5 +132,34 @@ export class Sandbox {
         addClass(elemID, 'connection-error');
         textElem.setAttribute('alt', message);
         textElem.setAttribute('title', message);
+    }
+
+    startEval(compilationData, jsScript) {
+        let success = compilationData.success;
+        let rawOutput = compilationData.rawOutput;
+        let cleanOutput = compilationData.cleanOutput;
+
+        // Viewer will either contain compiled js or the error message
+        this.viewer.setValue(rawOutput);
+        this.viewer.refresh();
+
+        if(!success) {
+            setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
+            this.viewer.refresh();
+        }
+        else {
+            let code = cleanOutput + ';' + jsScript;
+
+            triggerAnimClass('playground-run-output-text', 'playground-fade-in')
+            setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
+            setTimeout(() => {
+                try {
+                    eval(code);
+                }
+                catch(e) {
+                    this.viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
+                }
+            }, 5);
+        }
     }
 }

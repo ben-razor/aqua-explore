@@ -97,19 +97,18 @@ let liveJS = defaultJS;
     }
 
     let playgroundUI = new PlaygroundUI(editor, jsEditor);
+    playgroundUI.initUIHandlers();
+    playgroundUI.initExamples();
 
     let isSandbox = elemById('playground-run-output');
 
-    let sandbox;
     if(isSandbox) {
         let sandbox = new Sandbox();
         await sandbox.initViewer();
         sandbox.initUIHandlers();
-   }
-
-    playgroundUI.initUIHandlers();
-
-    let examplesData = playgroundUI.initExamples();
+        sandbox.initConnection();
+        window['sandbox'] = sandbox;
+    }
 
     let aquaCompile = new AquaCompile();
 
@@ -123,43 +122,22 @@ let liveJS = defaultJS;
             let cleanOutput;
 
             function handleCompiledAndSandboxLoaded() {
+                
                 if(isCompiled && isSandboxLoaded) {
                     hideElem('playground-compiling-overlay');
                             
-                    elemById('playground-sandbox').contentWindow.addEventListener('message', e => {
-                        let mainWindow = e.source;
-                        let data = e.data;
+                    let sandboxWindow = elemById('playground-sandbox').contentWindow;
+                    sandboxWindow.addEventListener('message', e => {
 
-                        if(data.type && data.type === 'aqua-compile') {
-                            let success = data.success;
-                            let rawOutput = data.rawOutput;
-                            let cleanOutput = data.cleanOutput;
-                            console.log(data);
+                        (async () => {
+                            let data = e.data;
 
-                            // Viewer will either contain compiled js or the error message
-                            viewer.setValue(rawOutput);
-                            viewer.refresh();
-
-                            if(!success) {
-                                setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
-                                viewer.refresh();
-                            }
-                            else {
+                            if(data.type && data.type === 'aqua-compile') {
+                                console.log(data);
                                 let jsScript = jsEditor.getValue();
-                                let code = cleanOutput + ';' + jsScript;
-
-                                triggerAnimClass('playground-run-output-text', 'playground-fade-in')
-                                setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
-                                setTimeout(() => {
-                                    try {
-                                        eval(code);
-                                    }
-                                    catch(e) {
-                                        viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
-                                    }
-                                }, 5);
+                                sandboxWindow.sandbox.startEval(data, jsScript);
                             }
-                        }
+                        })();
                     })
        
                     elemById('playground-sandbox').contentWindow.postMessage({

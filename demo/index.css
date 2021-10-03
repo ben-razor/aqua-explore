@@ -283,7 +283,7 @@ a {
     .playground-editor {
         width: 100%;
     }
-    .playground-output {
+    .playground-output-container {
         width: 100%;
     }
 }
