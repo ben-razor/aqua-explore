@@ -75,7 +75,6 @@ export class PlaygroundUI {
                         this.jsEditor.refresh();
                     }
 
-
                     elemById('playground-sandbox').contentWindow.postMessage({
                         type: 'aqua-example-changed'
                     }, 'http://localhost:8080');

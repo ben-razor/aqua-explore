@@ -70,6 +70,7 @@ body {
     position: relative;
     border-bottom: 2px solid #c73d7e17;
     justify-content: flex-end;
+    font-size: 1.1em;
 }
 
 .playground-run-button {

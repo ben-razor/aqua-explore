@@ -3,12 +3,9 @@ import { loadWASM } from 'onigasm'
 import 'codemirror/lib/codemirror.css'
 import './index.css';
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
-import { krasnodar } from "@fluencelabs/fluence-network-environment";
 import { defaultJS, defaultAqua } from './examples';
 
-import { elemById, showElem, hideElem, setContent, addClass, removeClass, 
-         triggerAnimClass, isLocal  
-} from './helpersHTML';
+import { elemById, hideElem, setContent } from './helpersHTML';
 
 import { PlaygroundUI } from './PlaygroundUI';
 import { Sandbox } from './Sandbox';
@@ -18,7 +15,6 @@ import {
     ResultCodes,
     RequestFlow,
     RequestFlowBuilder,
-    CallParams,
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v1.js'
 
 window['Fluence'] = Fluence;
@@ -27,14 +23,7 @@ window['ResultCodes'] = ResultCodes;
 window['RequestFlow'] = RequestFlow;
 window['RequestFlowBuilder'] = RequestFlowBuilder;
 
-import {
-    activateLanguage,
-    addGrammar,
-    addTheme,
-    ITextmateThemePlus,
-    linkInjections,
-} from 'codemirror-textmate'
-import aqua from './modeSamples/aqua';
+import { activateLanguage, addGrammar, } from 'codemirror-textmate'
 
 let liveJS = defaultJS;
 
@@ -133,7 +122,6 @@ let liveJS = defaultJS;
                             let data = e.data;
 
                             if(data.type && data.type === 'aqua-compile') {
-                                console.log(data);
                                 let jsScript = jsEditor.getValue();
                                 sandboxWindow.sandbox.startEval(data, jsScript);
                             }

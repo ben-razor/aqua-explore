@@ -115,8 +115,8 @@ export class AquaCompile {
             result = this.prevCompiledAqua;
         }
         else {
-            script = this.startPreprocessAqua(script);
-            result = await this.reqAquaCompile(script, 'js');
+            let preprocessed = this.startPreprocessAqua(script);
+            result = await this.reqAquaCompile(preprocessed, 'js');
         }
 
         output = result.data.output;
