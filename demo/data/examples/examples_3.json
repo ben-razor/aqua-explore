@@ -55,16 +55,19 @@
     },
     {
         "aqua": "service Println(\"println-service-id\"):\n    print: string -> ()\n\nfunc print(str: string):\n    Println.print(str)\n",
+        "js": "registerPrintln({\n    print: async (str) => {\n        appendOutput(str)\n    }\n});\n\nconst testAquaService = async () => {\n    await print(\"Coca-Cola...\");\n    await print(\"- Não\");\n    await print(\"Aqua...\");\n    await print(\"- Sim\");\n};\n\ntestAquaService();",
         "name": "println.aqua",
         "title": "println"
     },
     {
         "aqua": "service TestService(\"test-service\"):\n    get_records(key: string) -> []string\n\nfunc append_records(peer: string, srum: *[]string):\n  srum <- TestService.get_records(peer)\n\nfunc retrieve_records(peer: string) -> [][]string:\n    records: *[]string\n    append_records(peer, records)\n    <- records",
+        "js": "async function streamArgsCall() {\n    registerTestService({\n        get_records: (key) => {\n        \tlet ret = [key, key];\n            appendOutput(JSON.stringify(ret));\n            return ret;\n        },\n    });\n\n    return await retrieve_records('peer_id');\n}\n\n(async () => {\n\tawait streamArgsCall();\n})();",
         "name": "streamArgs.aqua",
         "title": "streamArgs"
     },
     {
         "aqua": "service Testo(\"testo\"):\n    getString: string -> string\n\nservice LocalPrint(\"lp\"):\n    print: string -> ()\n\n\nfunc topologyTest(me: string, myRelay: string, friend: string, friendRelay: string) -> string:\n    on friend via friendRelay:\n        str2 <- Testo.getString(\"friends string via\")\n    par LocalPrint.print(\"my string in par\")\n    LocalPrint.print(str2)\n    <- \"finish\"",
+        "js": "async function topologyCall(peer2) {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n    const selfPeerId = Fluence.getPeer().getStatus().peerId;\n\n    const relayPeerId2 = peer2.getStatus().relayPeerId;\n    const selfPeerId2 = peer2.getStatus().peerId;\n\n    registerTesto(peer2, {\n        getString: (args0) => {\n            let ret = 'hello from client2: ' + args0;\n            appendOutput(ret);\n            return ret;\n        },\n    });\n\n    registerLocalPrint({\n        print: (args0) => {\n            appendOutput('print on client1: ' + args0);\n        },\n    });\n\n    return await topologyTest(selfPeerId, relayPeerId, selfPeerId2, relayPeerId2, {\n        ttl: 10000,\n    });\n}\n\n(async () => {\n    let peer2 = Fluence.getPeer();\n\ttopologyCall(peer2);\n})();",
         "name": "topology.aqua",
         "title": "topology"
     },
