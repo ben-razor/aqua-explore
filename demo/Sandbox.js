@@ -8,6 +8,7 @@ export class Sandbox {
     constructor() {
         console.log('sandbox constructing')
         this.viewer = null;
+        this.connected = false;
     }
 
     async initViewer() {
@@ -77,12 +78,12 @@ export class Sandbox {
         let me = this;
 
         async function connectToHost() {
-            let connected = false;
+            me.connected = false;
             let connectedNode;
             for(let node of krasnodar) {
                 try {
                     await Fluence.start({ connectTo: node });
-                    connected = true;
+                    me.connected = true;
                     connectedNode = node;
                     break;
                 }
@@ -92,13 +93,14 @@ export class Sandbox {
             }
 
             attemptingConnect = false;
-            if(connected) {
+            if(me.connected) {
                 let ma = connectedNode.multiaddr;
                 let maParts = ma.split('/');
                 if(maParts.length >= 6) {
                     ma = ma.split('/').slice(0,6).join('/');
                 }
                 me.hideConnectionError(`Connected to ${ma}`);
+                me.evalWhenConnected();
             }
             else {
                 me.showConnectionError('All krasnodar nodes are down. refresh later.');
@@ -135,6 +137,7 @@ export class Sandbox {
     }
 
     startEval(compilationData, jsScript) {
+        this.initConnection();
         let success = compilationData.success;
         let rawOutput = compilationData.rawOutput;
         let cleanOutput = compilationData.cleanOutput;
@@ -149,17 +152,23 @@ export class Sandbox {
         }
         else {
             let code = cleanOutput + ';' + jsScript;
+            this.code = code;
+            this.evalWhenConnected();
+        }
+    }
 
+    evalWhenConnected() {
+        if(this.code && this.connected) {
             triggerAnimClass('playground-run-output-text', 'playground-fade-in')
             setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
             setTimeout(() => {
                 try {
-                    eval(code);
+                    eval(this.code);
                 }
                 catch(e) {
                     this.viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
                 }
-            }, 5);
+            }, 10);
         }
     }
 }
