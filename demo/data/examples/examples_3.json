@@ -19,26 +19,31 @@
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice Getter(\"test\"):\n    createStr: u32 -> string\n\nservice OpO(\"op\"):\n    identity: string -> string\n\n-- a question mark means that this constant could be rewritten before this definition\nconst ANOTHER_CONST ?= \"default-str\"\nconst UNIQUE_CONST ?= 5\n\nfunc callConstant() -> []string:\n    res: *string\n    res <- Getter.createStr(UNIQUE_CONST)\n    res <- OpO.identity(ANOTHER_CONST)\n    <- res\n",
+        "js": "function constantsCall() {\n    registerGetter({\n        createStr: (arg0) => {\n        \tappendOutput(arg0);\n            return '' + arg0;\n        },\n    });\n\n    callConstant();\n}\n\nconstantsCall();",
         "name": "constants.aqua",
         "title": "constants"
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice OpH(\"opa\"):\n  identity(s: string) -> string\n\nfunc a(b: string) -> string:\n  c <- OpH.identity(b)\n  <- c\n\nfunc d(e: string) -> string:\n  f <- a(e)\n  <- f",
+        "js": "async function nestedFuncsCall() {\n    registerOpH({\n        identity: (args0) => {\n        \tappendOutput(args0);\n            return args0;\n        },\n    });\n\n    return await d('some-str');\n}\n\n(async () => {\n\tnestedFuncsCall();\n})();",
         "name": "nestedFuncs.aqua",
         "title": "nestedFuncs"
     },
     {
         "aqua": "service AquaDHT(\"test-dht\"):\n  put_host_value(key: string, value: string, service_id: []string) -> string\n\nfunc putHostValue(key: string, value: string, service_id: ?string) -> string:\n    res <- AquaDHT.put_host_value(key, value, service_id)\n    <- res\n\nfunc create_client_util(service_id: string) -> string:\n    res <- putHostValue(\"client-util\", service_id, nil)\n    <- res",
+        "js": "async function passArgsCall() {\n    registerAquaDHT({\n        put_host_value: (args0, args1) => {\n        \tappendOutput(args0 + ' ' + args1)\n            return args0 + args1;\n        },\n    });\n\n    return await create_client_util('sid');\n}\n\npassArgsCall();",
         "name": "passArgs.aqua",
         "title": "passArgs"
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice ParService(\"parservice-id\"):\n    call: -> string\n\n-- here we go to another node and not waiting for execution there\n-- all `ParService.call()` will be executed instantly\nfunc parFunc( node: string, c: Info -> () ):\n    y <- ParService.call()\n    par on node:\n        t <- Peer.identify()\n        c(t)\n    par x <- ParService.call()\n",
+        "js": "async function parCall() {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n\n    let promise = new Promise((resolve, reject) => {\n        registerParService({\n            call: () => {\n                appendOutput('hello from parservice-id');\n                let result = 'hello';\n                resolve(result);\n                return result;\n            },\n        });\n    });\n\n    await parFunc(relayPeerId, (c) => {\n    \tappendOutput('parFunc. external addresses par: ' + c.external_addresses);\n    });\n    \n    return promise;\n}\n\n(async () => {\n\tparCall().then(result => { appendOutput(result); });\n})();",
         "name": "par.aqua",
         "title": "par"
     },
     {
         "aqua": "-- set `PeerId` name to be a type alias for `string` type\nalias PeerId : string\n\n-- define data structure (ADT)\ndata NodeId:\n    peerId: PeerId\n    name: string\n\n-- define service `NodeIdGetter` that will be callable on local client via `somesrv` service id\nservice NodeIdGetter(\"somesrv\"):\n    get: -> NodeId\n\n-- showcases a function that gets data structure from a local service,\n-- and then retrieves aliased data type from that structure\nfunc getAliasedData() -> PeerId:\n    res <- NodeIdGetter.get()\n    <- res.peerId\n",
+        "js": "async function dataAliasCall() {\n    registerNodeIdGetter({\n        get: () => {\n            let obj = {\n                peerId: 'peer id str',\n                name: 'name str',\n            };\n            \n            appendOutput(JSON.stringify(obj));\n            return obj;\n        },\n    });\n\n    return await getAliasedData();\n}\n\n(async () => {\n\tawait dataAliasCall();\n})();",
         "name": "dataAlias.aqua",
         "title": "dataAlias"
     },
