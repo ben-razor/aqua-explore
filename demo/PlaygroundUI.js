@@ -58,9 +58,13 @@ export class PlaygroundUI {
         }
     }
 
-    async initExamples() {
+    async initExamples(examplesLoadedHandler) {
         let {success, examplesData} = await getExamples(); 
         examplesData.unshift(defaultExample); 
+
+        if(examplesLoadedHandler) {
+            examplesLoadedHandler.onExamplesLoaded(examplesData);
+        }
 
         window["exampleChanged"] = (e) => {
             let selValue = e.options[e.selectedIndex].value;

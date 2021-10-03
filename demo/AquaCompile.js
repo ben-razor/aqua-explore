@@ -8,11 +8,16 @@ export class AquaCompile {
         this.unprocessedIncludes = []
         this.prevAqua;
         this.prevCompiledAqua;
+        this.examplesData = [];
 
         this.host = 'https://benrazor.net:8080';
         if(isLocal()) {
             this.host = 'http://localhost:8082';
         }
+    }
+
+    onExamplesLoaded(examplesData) {
+        this.examplesData = examplesData;
     }
 
     startPreprocessAqua(script) {
@@ -44,9 +49,10 @@ export class AquaCompile {
                     importHandled = true;
                 }
                 else if(!this.alreadyImported.includes(importName)) {
-                    for(let data of examplesData) {
+                    for(let data of this.examplesData) {
                         if(data.name === importName) {
-                            outputLines = outputLines.concat(preprocessAqua(data.aqua));
+                            let preprocessed = this.preprocessAqua(data.aqua); 
+                            outputLines = outputLines.concat(preprocessed);
                             importHandled = true;
                             break;
                         }

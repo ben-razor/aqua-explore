@@ -87,7 +87,6 @@ let liveJS = defaultJS;
 
     let playgroundUI = new PlaygroundUI(editor, jsEditor);
     playgroundUI.initUIHandlers();
-    playgroundUI.initExamples();
 
     let isSandbox = elemById('playground-run-output');
 
@@ -95,11 +94,11 @@ let liveJS = defaultJS;
         let sandbox = new Sandbox();
         await sandbox.initViewer();
         sandbox.initUIHandlers();
-        sandbox.initConnection();
         window['sandbox'] = sandbox;
     }
 
     let aquaCompile = new AquaCompile();
+    playgroundUI.initExamples(aquaCompile);
 
     let runScriptButton = elemById('run-script-button');
     if(runScriptButton) {
@@ -148,7 +147,7 @@ let liveJS = defaultJS;
 
             isCompiled = true;
             handleCompiledAndSandboxLoaded();
-     }
+        }
         runScriptButton.onclick = startScriptRun; 
     }
 
