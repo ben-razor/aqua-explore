@@ -11,6 +11,7 @@ import { elemById, showElem, hideElem, setContent, addClass, removeClass,
 } from './helpersHTML';
 
 import { PlaygroundUI } from './PlaygroundUI';
+import { Sandbox } from './Sandbox';
 import { AquaCompile } from './AquaCompile';
 
 import {
@@ -95,102 +96,22 @@ let liveJS = defaultJS;
         elemById('cm-js-container').style.display = 'none';
     }
 
-    let viewer;
-    if(elemById('cm-viewer')) {
-        viewer = CodeMirror.fromTextArea(elemById('cm-viewer') as HTMLTextAreaElement, {
-            lineNumbers: false,
-            lineWrapping: true,
-            readOnly: true,
-            mode: 'javascript'
-        })
-
-        const themeX: ITextmateThemePlus = {
-            ...(await import('./tm/themes/OneDark.tmTheme.json')),
-            gutterSettings: {
-                background: '#1d1f25',
-                divider: '#1d1f25'
-            }
-        }
-        addTheme(themeX)
-        viewer.setOption('theme', themeX.name)
-    }
-    let playgroundUI = new PlaygroundUI(editor, jsEditor, viewer);
+    let playgroundUI = new PlaygroundUI(editor, jsEditor);
 
     let isSandbox = elemById('playground-run-output');
 
+    let sandbox;
     if(isSandbox) {
-        let host = 'https://benrazor.net:8080';
-        if(isLocal()) {
-            host = 'http://localhost:8082';
-        }
-        async function compileAqua(aquaCode, outputLang) {
-            let r = await fetch(`${host}/api/compile_aqua`, {method: 'POST',   headers : { 
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }, body: JSON.stringify({'aqua': aquaCode, 'lang': outputLang})})
-
-            let j = await r.json();
-
-            return j;
-        }
-
-        function hideConnectionError(message) {
-            let elemID = 'connection-error-alert';
-            let textElem = elemById('connection-error-alert');
-            removeClass(elemID, 'connection-error');
-            addClass(elemID, 'connection-ok');
-            textElem.setAttribute('alt', message);
-            textElem.setAttribute('title', message);
-        }
-        function showConnectionError(message) {
-            let elemID = 'connection-error-alert';
-            let textElem = elemById('connection-error-alert');
-            removeClass(elemID, 'connection-ok');
-            addClass(elemID, 'connection-error');
-            textElem.setAttribute('alt', message);
-            textElem.setAttribute('title', message);
-        }
-
-        let attemptingConnect = true;
-        async function connectToHost() {
-            let connected = false;
-            let connectedNode;
-            for(let node of krasnodar) {
-                try {
-                    await Fluence.start({ connectTo: node });
-                    connected = true;
-                    connectedNode = node;
-                    break;
-                }
-                catch(e) { 
-                    await Fluence.stop();
-                } 
-            }
-
-            attemptingConnect = false;
-            if(connected) {
-                let ma = connectedNode.multiaddr;
-                let maParts = ma.split('/');
-                if(maParts.length >= 6) {
-                    ma = ma.split('/').slice(0,6).join('/');
-                }
-                hideConnectionError(`Connected to ${ma}`);
-            }
-            else {
-                showConnectionError('All krasnodar nodes are down. refresh later.');
-            }
-        }
-
-        connectToHost();
-    }
+        let sandbox = new Sandbox();
+        await sandbox.initViewer();
+        sandbox.initUIHandlers();
+   }
 
     playgroundUI.initUIHandlers();
 
     let examplesData = playgroundUI.initExamples();
 
     let aquaCompile = new AquaCompile();
-    let sandbox = elemById('playground-sandbox');
-
 
     let runScriptButton = elemById('run-script-button');
     if(runScriptButton) {
@@ -205,7 +126,7 @@ let liveJS = defaultJS;
                 if(isCompiled && isSandboxLoaded) {
                     hideElem('playground-compiling-overlay');
                             
-                    sandbox.contentWindow.addEventListener('message', e => {
+                    elemById('playground-sandbox').contentWindow.addEventListener('message', e => {
                         let mainWindow = e.source;
                         let data = e.data;
 
@@ -241,17 +162,18 @@ let liveJS = defaultJS;
                         }
                     })
        
-                    sandbox.contentWindow.postMessage({
+                    elemById('playground-sandbox').contentWindow.postMessage({
                         success: success, rawOutput: rawOutput, cleanOutput: cleanOutput, type: 'aqua-compile'
                     }, 'http://localhost:8080');
                 }
             }
 
-            sandbox.onload = () => { 
+            let sandboxElem = elemById('playground-sandbox');
+            sandboxElem.onload = () => { 
                 isSandboxLoaded = true;
                 handleCompiledAndSandboxLoaded();
             }
-            sandbox.contentWindow.location.reload();
+            sandboxElem.contentWindow.location.reload();
 
             setContent('playground-run-output-text', '');
             playgroundUI.showCompilingOverlay(); 

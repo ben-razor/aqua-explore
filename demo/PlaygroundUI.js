@@ -4,10 +4,9 @@ import { elemById, showElem, hideElem, setContent, addClass, removeClass,
 } from './helpersHTML';
 
 export class PlaygroundUI {
-    constructor(editor, jsEditor, viewer) {
+    constructor(editor, jsEditor) {
         this.editor = editor;
         this.jsEditor = jsEditor;
-        this.viewer = viewer;
     }
 
     setTab(elemID) {
@@ -26,50 +25,10 @@ export class PlaygroundUI {
         }
     }
 
-    setOutputTab(elemID) {
-        addClass(elemID, 'playground-tab-selected');
-        if(elemID === 'playground-tab-output') {
-            removeClass('playground-tab-compiled', 'playground-tab-selected');
-            elemById('playground-run-output').style.display = 'initial';
-            elemById('playground-compiled-viewer').style.display = 'none';
-        }
-        else {
-            removeClass('playground-tab-output', 'playground-tab-selected');
-            elemById('playground-run-output').style.display = 'none';
-            elemById('playground-compiled-viewer').style.display = 'initial';
-            this.viewer && this.viewer.refresh();
-        }
-    }
-
-    resetOutput() {
-        setContent('playground-run-output-text', 'Use setOutput in JS to output to this console.');
-    }
-
     initUIHandlers() {
         window['selectTab'] = elem => {
             let elemID = elem.id;
             this.setTab(elemID)
-        }
-
-        window['selectOutputTab'] = elem => {
-            let elemID = elem.id;
-            this.setOutputTab(elemID)
-        }
-
-        window['setOutput'] = text => {
-            setContent('playground-run-output-text', text);
-        }
-
-        window['getOutput'] = () => {
-            return elemById('playground-run-output-text').innerHTML;
-        }
-
-        window['appendOutput'] = text => {
-            let output = window['getOutput']();
-            if(output) {
-                output = output + '\n';
-            }
-            setContent('playground-run-output-text', output + text); 
         }
     }
 
@@ -115,11 +74,12 @@ export class PlaygroundUI {
                         this.editor.refresh();
                         this.jsEditor.refresh();
                     }
-                    this.resetOutput();
-                    if(this.viewer) {
-                        this.viewer.setValue('');
-                        this.viewer.refresh();
-                    }
+
+
+                    elemById('playground-sandbox').contentWindow.postMessage({
+                        type: 'aqua-example-changed'
+                    }, 'http://localhost:8080');
+                    
                     break;
                 }
             }
