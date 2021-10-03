@@ -151,7 +151,7 @@ export class Sandbox {
             this.viewer.refresh();
         }
         else {
-            let code = cleanOutput + ';' + jsScript;
+            let code = cleanOutput + ";setOutput('');" + jsScript;
             this.code = code;
             this.evalWhenConnected();
         }

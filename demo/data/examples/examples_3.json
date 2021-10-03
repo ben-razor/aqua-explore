@@ -1,6 +1,7 @@
 [
     {
         "aqua": "service Stringer(\"stringer-id\"):\n    returnString: string -> string\n\nfunc checkStreams(ch: []string) -> []string:\n    stream: *string\n    stream <- Stringer.returnString(\"first\")\n    stream <- Stringer.returnString(\"second\")\n    for b <- ch:\n        stream <- Stringer.returnString(b)\n    <- stream\n\nfunc stringNil() -> *string:\n   valueNil: *string\n   <- valueNil\n\nfunc returnNil() -> *string:\n  relayNil <- stringNil()\n  <- relayNil\n\nfunc stringNone() -> ?string:\n   valueNone: ?string\n   <- valueNone\n\nfunc returnNone() -> ?string:\n  relayNone <- stringNone()\n  <- relayNone\n",
+        "js": "function streamCall() {\n    registerStringer({\n        returnString: (args0) => {\n            appendOutput(args0 + ' updated');\n        },\n    });\n\n    return checkStreams(['third', 'fourth']);\n}\n\nstreamCall();",
         "name": "stream.aqua",
         "title": "stream"
     },
