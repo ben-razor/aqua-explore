@@ -1,7 +1,7 @@
 import * as CodeMirror from 'codemirror'
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
 import { krasnodar } from "@fluencelabs/fluence-network-environment";
-import { elemById, setContent, addClass, removeClass, triggerAnimClass } from './helpersHTML';
+import { elemById, setContent, addClass, removeClass, triggerAnimClass, showElem } from './helpersHTML';
 import { addTheme } from 'codemirror-textmate';
 
 let defaultOutputText = `Use these functions in JS to output to this console:
@@ -93,6 +93,8 @@ export class Sandbox {
         let me = this;
 
         async function connectToHost() {
+            showElem('connection-error-alert', 'flex');
+
             me.connected = false;
             let connectedNode;
             for(let node of krasnodar) {

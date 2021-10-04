@@ -1,10 +1,10 @@
 export function elemById(id) {
     return document.getElementById(id);
 }
-export function showElem(id) {
+export function showElem(id, displayStyle='initial') {
     let elem = elemById(id);
     if(elem) {
-        elem.style.display = 'initial';
+        elem.style.display = displayStyle;
     }
     else {
         console.log(`Error: showElem called on missing elem ${id}`);
