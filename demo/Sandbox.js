@@ -4,6 +4,18 @@ import { krasnodar } from "@fluencelabs/fluence-network-environment";
 import { elemById, setContent, addClass, removeClass, triggerAnimClass } from './helpersHTML';
 import { addTheme } from 'codemirror-textmate';
 
+let defaultOutputText = `Use these functions in JS to output to this console:
+    
+    setOutput - Write to console (overwriting current text)
+    getOutput - Get current output as text
+    appendOutput - Append to current output text
+
+These variables are available in JS:
+
+    playgroundNodes[] - An array of currently connected relay nodes
+
+`;
+
 export class Sandbox {
     constructor() {
         console.log('sandbox constructing')
@@ -72,6 +84,8 @@ export class Sandbox {
             }
             setContent('playground-run-output-text', output + text); 
         }
+
+        this.addExampleChangedListener();
     }
 
     initConnection() {
@@ -117,6 +131,7 @@ export class Sandbox {
         if(this.viewer) {
             this.viewer.setValue('');
             this.viewer.refresh();
+            setContent('playground-run-output-text', defaultOutputText);
         }
     }
 
@@ -157,6 +172,16 @@ export class Sandbox {
             this.code = code;
             this.evalWhenConnected();
         }
+    }
+
+    addExampleChangedListener() {
+        this.window.addEventListener('message', e => {
+            let data = e.data;
+
+            if(data.type && data.type === 'aqua-example-changed') {
+                this.handleExampleLoaded();
+            }
+        })
     }
 
     evalWhenConnected() {
