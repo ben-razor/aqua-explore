@@ -40,6 +40,27 @@ Having these guides open when using the Aqua Playground will be worthwhile.
 4. The functions from the compiled Aqua are automatically imported and your JS uses those functions
 5. Special methods like **appendOutput** are made available to JS to provide output
 
+### Writing Aqua
+
+The Aqua code is about definining services and functions. In the functions you can define which nodes different aspects of the code should run.
+
+Here is a simple example:
+
+```
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
+service HelloWorld("hello-world"):
+    hello(str: string)
+    
+func sayHello() -> string:
+    HelloWorld.hello("Hello. Welcome to the Aqua Playground.")
+    
+func getRelayTime() -> u64:
+    on HOST_PEER_ID:
+        ts <- Peer.timestamp_ms()
+    <- ts
+```
+
 ### Compilation of Aqua to JS
 
 The compilation creates a JS file that the Aqua Playground automatically imports before running your entered JS.
