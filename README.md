@@ -8,13 +8,13 @@ A playground for exploring [Fluence Network](https://fluence.network/) Aqua code
 * User can select from a number of example Aqua scripts
 * The app displays the generated JS allowing the user to copy it in their project
 
-View the current version at [Aqua Playground](https://aqua-explore.web.app/).
+View the current demo version at [Aqua Playground](https://aqua-explore.web.app/).
+
+**The server the demo is currently deployed on will not handle many simultaneous requests**
 
 View the demonstration video at [Aqua Playground Video](https://www.youtube.com/watch?v=Mwmu2Q4Dako).
 
-**The server this is currently deployed on will not handle many simultaneous requests**
-
-**It is still under development**
+Read the guide to using the application at [Aqua Playground Guide](https://github.com/ben-razor/aqua-explore/blob/main/demo/docs/playground.md).
 
 A submission for the [Gitcoin GR11](https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543#) hackathon.
 
