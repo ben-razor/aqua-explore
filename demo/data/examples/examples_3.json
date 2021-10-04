@@ -73,6 +73,7 @@
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice SomeS(\"test2\"):\n    getStr: ?string -> ?string\n    getStr1: -> ?string\n    getStr2: string -> string\n\nfunc useOptional(opt: ?string) -> string:\n    res <- SomeS.getStr(opt)\n    for i <- opt:\n        SomeS.getStr2(i)\n    <- res!\n\nfunc returnOptional() -> ?string:\n    res <- SomeS.getStr1()\n    <- res\n\nfunc returnNone() -> ?string:\n    result: *string\n    Op.noop()\n    <- result",
+        "hidden": true,
         "name": "option.aqua",
         "title": "option"
     },
@@ -96,11 +97,13 @@
     },
     {
         "aqua": "import \"println.aqua\"\nimport \"@fluencelabs/aqua-lib/builtin.aqua\"\n\n-- functions like `c` are called an 'arrow function' in Aqua\n-- `c` passed to a function from a client, so, it could be called only on a client\nfunc passFunctionAsArg(node: string, str: string, c: string -> string):\n    on node:\n        Peer.identify()\n        -- we go here back on a client\n        res <- c(str)\n        -- then return on a node\n        Peer.identify()\n    print(res)\n",
+        "hidden": true,
         "name": "callArrow.aqua",
         "title": "callArrow"
     },
     {
         "aqua": "service ServiceWithDefaultId(\"defaultId\"):\n    hello(s: string)\n\nservice ServiceWithOUTDefaultId:\n    hello(s: string)\n\nservice MoreMembers:\n    member1()\n    member2(s1: string)\n    member3(s1: string, s2: string)\n    member4(s1: string, s2: string, i: i32) -> i32\n    member5(s1: string, s2: string, i: i32) -> i32\n\nfunc f1(callback: string, i32 -> ()):\n    callback(\"hello, world\", 42)\n\nfunc f2(num: i32, callback: string, i32 -> ()):\n    callback(\"hello, world\", 42)\n\nfunc f3(num: i32, callback: string, i32 -> ()) -> string:\n    callback(\"hello, world\", 42)\n    <- \"hello world\"\n\nfunc callBackZeroArgs(callback: -> ()):\n    callback()",
+        "hidden": true,
         "name": "new-api-full.aqua",
         "title": "new-api-full"
     },
@@ -178,21 +181,25 @@
     },
     {
         "aqua": "import \"println.aqua\"\nimport \"@fluencelabs/aqua-lib/builtin.aqua\"\n\n-- showcases `for` instruction that compiles to `fold` in AIR\nfunc iterateAndPrint(strings: []string):\n    for s <- strings:\n        print(s)\n\nfunc iterateAndPrintParallel(nodes: []string, c: Info -> ()):\n    for s <- nodes par:\n        on s:\n            ads <- Peer.identify()\n            c(ads)\n",
+        "js": "async function foldCall() {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n\n    await iterateAndPrint([relayPeerId]);\n\n    return new Promise((resolve, reject) => {\n        iterateAndPrintParallel([relayPeerId], (c) => {\n            appendOutput('iterateAndPrintParallel. external addresses: ' + c.external_addresses);\n            resolve(c.external_addresses);\n        });\n    });\n}\n\n(async () => {\n\tlet ret = await foldCall();\n\tappendOutput(JSON.stringify(ret));\n})();",
         "name": "fold.aqua",
         "title": "fold"
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice CustomId(\"cid\"):\n  id(s: string) -> string\n\nfunc viaArr(node_id: string, viaAr: []string) -> Info:\n    on node_id via viaAr:\n        p <- Peer.identify()\n    <- p\n\n\nfunc viaStream(node_id: string, viaStr: *string) -> Info:\n    on node_id via viaStr:\n        p <- Peer.identify()\n    <- p\n\nfunc viaOpt(relay: string, node_id: string, viaOpt: ?string) -> Info:\n    on node_id via viaOpt:\n        p <- Peer.identify()\n    <- p",
+        "js": "async function viaCall() {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n\n    registerCustomId({\n        id: (args0) => {\n            return args0;\n        },\n    });\n\n    let res = await viaArr(krasnodar[4].peerId, [krasnodar[2].peerId, krasnodar[1].peerId]);\n    let res2 = await viaOpt(relayPeerId, krasnodar[4].peerId, krasnodar[2].peerId);\n    let res3 = await viaOpt(relayPeerId, krasnodar[4].peerId, krasnodar[2].peerId || null);\n    let res4 = await viaStream(krasnodar[4].peerId, [krasnodar[2].peerId, krasnodar[1].peerId]);\n\n    return [res.external_addresses, res2.external_addresses, res3.external_addresses, res4.external_addresses];\n}\n\n(async () => {\n\tlet ret = viaCall();\n\tappendOutput(JSON.stringify(ret));\n})();",
         "name": "via.aqua",
         "title": "via"
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice Op2(\"op\"):\n    identity(s: u64)\n\nfunc getTwoResults(relay: string) -> []u64:\n  on relay:\n    k <- Op.string_to_b58(%init_peer_id%)\n    nodes <- Kademlia.neighborhood(k, nil, nil)\n    res: *u64\n    for n <- nodes par:\n      on n:\n        try:\n          res <- Peer.timestamp_sec()\n    Op2.identity(res!)\n    Op2.identity(res!1)\n    Op2.identity(res!2)\n  <- res",
+        "js": "async function foldJoinCall() {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n    return await getTwoResults(relayPeerId);\n}\n\n(async () => {\n\tlet ret = await foldJoinCall();\n\tappendOutput(JSON.stringify(ret));\n})();",
         "name": "foldJoin.aqua",
         "title": "foldJoin"
     },
     {
         "aqua": "import \"@fluencelabs/aqua-dht/pubsub.aqua\"\nimport \"@fluencelabs/aqua-dht/dht.aqua\"\nimport \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nexport getNeighbours, initTopicAndSubscribe, findSubscribers\n\nfunc put_value(initial_peer: string, value: string) -> string:\n    initTopicAndSubscribe(initial_peer, \"some-const3\", value, nil, nil)\n    <- \"OK\"\n\nfunc registerKeyPutValue(node_id: string, key: string, value: string, relay_id: ?string, service_id: ?string) -> []string:\n  nodes <- getNeighbours(key, node_id)\n  for n <- nodes par:\n    on n:\n      t <- Peer.timestamp_sec()\n  <- nodes",
+        "hidden": true,
         "name": "dht-example.aqua",
         "title": "dht-example"
     }
