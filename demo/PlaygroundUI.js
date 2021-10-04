@@ -99,7 +99,7 @@ export class PlaygroundUI {
         }
 
         if(success) {
-            let select = `<select class="playground-examples-select" 
+            let select = `<select class="playground-examples-select flexcroll"  
                                 id="playground-examples-select" onchange="exampleChanged(this)">"`
             for(let data of examplesData) {
                 if(!data.hidden) {
