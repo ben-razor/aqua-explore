@@ -102,3 +102,7 @@ setOutput - Write to console (overwriting current text)
 getOutput - Get current output as text
 appendOutput - Append to current output text
 ```
+
+### Handling Errors
+
+Errors in compilation of Aqua or running of JS are displayed in the Output panel.
