@@ -69,6 +69,11 @@ export class PlaygroundUI {
         window["exampleChanged"] = (e) => {
             let selValue = e.options[e.selectedIndex].value;
 
+            let origin = 'http://localhost:8080';
+            if(!isLocal()) {
+                origin = 'https://aqua-explore.web.app';
+            }
+
             for(let data of examplesData) {
                 if(data.name === selValue) {
                     this.setTab('playground-tab-aqua');
@@ -81,7 +86,7 @@ export class PlaygroundUI {
 
                     elemById('playground-sandbox').contentWindow.postMessage({
                         type: 'aqua-example-changed'
-                    }, 'http://localhost:8080');
+                    }, origin);
                     
                     break;
                 }
