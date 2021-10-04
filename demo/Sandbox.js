@@ -67,7 +67,7 @@ export class Sandbox {
     }
 
     reportError(errorLang='JS') {
-        let outputText = `There was an error while compiling the ${errorLang}.<br /><br />View the error in the Compiled panel.`;
+        let outputText = `There was an error while compiling the ${errorLang}.<br /><br />View the details in the Errors panel.`;
         setContent('playground-run-output-text', outputText);
         setContent('playground-tab-compiled', 'Errors')
     } 
