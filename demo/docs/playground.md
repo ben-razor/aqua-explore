@@ -32,7 +32,7 @@ The [Aqua Book](https://doc.fluence.dev/aqua-book/language) describes the Aqua l
 
 Having these guides open when using the Aqua Playground will be worthwhile.
 
-## Using Aqua Playground
+# Using Aqua Playground
 
 1. Write Aqua code that contains **func** and **service** definitions
 2. Write JS code that calls the functions and attaches callbacks to the services
