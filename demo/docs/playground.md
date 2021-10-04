@@ -28,8 +28,8 @@ Importantly, **Aqua** can be compiled to JS so that rich applications can be wri
 
 1. Write Aqua code that contains **func** and **service** definitions
 2. Write JS code that calls the functions and attaches callbacks to the services
-3. Hitting Run compiles the Aqua code to JS
-4. The functions from the compiled Aqua are imported and your JS uses those functions
+3. Hit Run to compile the Aqua code to JS
+4. The functions from the compiled Aqua are automatically imported and your JS uses those functions
 5. Special methods like **appendOutput** are made available to JS to provide output
 
 ### Compilation of Aqua to JS
