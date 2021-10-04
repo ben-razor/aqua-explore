@@ -97,8 +97,8 @@ playgroundNodes[0].multiaddr
 
 * Output helpers:
 
-```js
-    setOutput - Write to console (overwriting current text)
-    getOutput - Get current output as text
-    appendOutput - Append to current output text
+```
+setOutput - Write to console (overwriting current text)
+getOutput - Get current output as text
+appendOutput - Append to current output text
 ```
