@@ -6,7 +6,7 @@ import { Fluence, FluencePeer } from "@fluencelabs/fluence";
 import { krasnodar } from "@fluencelabs/fluence-network-environment";
 import { defaultJS, defaultAqua } from './examples';
 
-import { elemById, hideElem, setContent } from './helpersHTML';
+import { elemById, hideElem, setContent, isLocal } from './helpersHTML';
 
 import { PlaygroundUI } from './PlaygroundUI';
 import { Sandbox } from './Sandbox';
@@ -114,6 +114,10 @@ let liveJS = defaultJS;
             let cleanOutput;
 
             function handleCompiledAndSandboxLoaded() {
+                let origin = 'http://localhost:8080';
+                if(!isLocal()) {
+                    origin = 'https://aqua-explore.web.app';
+                }
                 
                 if(isCompiled && isSandboxLoaded) {
                     hideElem('playground-compiling-overlay');
@@ -133,7 +137,8 @@ let liveJS = defaultJS;
        
                     elemById('playground-sandbox').contentWindow.postMessage({
                         success: success, rawOutput: rawOutput, cleanOutput: cleanOutput, type: 'aqua-compile'
-                    }, 'http://localhost:8080');
+                    }, origin);
+
                 }
             }
 
