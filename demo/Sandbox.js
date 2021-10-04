@@ -66,6 +66,12 @@ export class Sandbox {
         setContent('playground-run-output-text', 'Use setOutput in JS to output to this console.');
     }
 
+    reportError(errorLang='JS') {
+        let outputText = `There was an error while compiling the ${errorLang}.<br /><br />View the error in the Compiled panel.`;
+        setContent('playground-run-output-text', outputText);
+        setContent('playground-tab-compiled', 'Errors')
+    } 
+
     initUIHandlers() {
         window['selectOutputTab'] = elem => {
             let elemID = elem.id;
@@ -85,7 +91,7 @@ export class Sandbox {
             setContent('playground-run-output-text', output + text); 
         }
 
-        this.addExampleChangedListener();
+        this.addMessageListener();
     }
 
     initConnection() {
@@ -166,7 +172,7 @@ export class Sandbox {
         this.viewer.refresh();
 
         if(!success) {
-            setContent('playground-run-output-text', 'There was an error while compiling the Aqua.<br /><br />View the error in the Compiled panel.');
+            this.reportError('Aqua');
             this.viewer.refresh();
         }
         else {
@@ -176,36 +182,44 @@ export class Sandbox {
         }
     }
 
-    addExampleChangedListener() {
+    addMessageListener() {
         this.window.addEventListener('message', e => {
             let data = e.data;
 
-            if(data.type && data.type === 'aqua-example-changed') {
-                this.handleExampleLoaded();
+            if(data.type) {
+                if(data.type === 'aqua-example-changed') {
+                    this.handleExampleLoaded();
+                }
             }
         })
     }
 
     evalWhenConnected() {
+        let me = this;
         if(this.code && this.connected) {
+            setContent('playground-tab-compiled', 'Compiled')
             this.window.addEventListener('unhandledrejection', function(e) {
                 let message = e.reason.message;
                 let stack = e.reason.stack;
 
                 if(stack.indexOf('eval') !== -1) {
-                    window['sandbox'].viewer.setValue(['JS Error: ', message, stack].join('\n\n'));
+                    window['sandbox'].viewer.setValue(['JS Error: ', message].join('\n\n'));
+                    window['sandbox'].reportError();
                     e.preventDefault();
                 }
+                return true;
             });
 
             triggerAnimClass('playground-run-output-text', 'playground-fade-in')
+
             setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
             setTimeout(() => {
                 try {
                     eval(this.code);
                 }
                 catch(e) {
-                    this.viewer.setValue(['JS Error: ', e.message, e.stack].join('\n\n'));
+                    this.viewer.setValue(['JS Error: ', e.message].join('\n\n'));
+                    this.reportError();
                 }
             }, 10);
         }
