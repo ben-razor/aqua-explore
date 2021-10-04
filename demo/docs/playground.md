@@ -51,7 +51,7 @@ In this JS file are two types of definition:
 
 ### Writing JS
 
-There are a number of objects and functions exposed to the JS entry editor:
+There are a number of objects and functions exposed to the JS editor:
 
 * The [Fluence](https://fluence.network/fluence-js/modules.html#Fluence) object
 
