@@ -56,6 +56,11 @@ export class PlaygroundUI {
         if(loading) {
             loading.style.display = 'none';
         }
+
+        let footer = elemById('playground-footer');
+        if(footer) {
+            footer.style.display = 'initial';
+        }
     }
 
     async initExamples(examplesLoadedHandler) {

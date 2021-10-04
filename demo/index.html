@@ -6,6 +6,17 @@
     <link rel="icon" href="./images/favicon_io/favicon.ico" />
     <title>Fluence Aqua Playground</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @keyframes loading-fade-in {
+            0% { opacity: 0; }
+            20% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .loading-fade-in {
+            animation: loading-fade-in 5s;
+        }
+    </style>
 </head>
 <body>
     <div class="playground-header" id="playground-header" style="display: none;">
@@ -58,7 +69,7 @@
         </div>
     </div>
 
-    <div class="playground-footer">
+    <div class="playground-footer" id="playground-footer" style="display: none;">
         <div class="playground-info">
             Made for the <a style="font-weight: bold;" href="https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543" target="_blank" rel="noreferrer">Gitcoin GR11 Hackathon</a>
         </div>
@@ -66,9 +77,9 @@
 
     <div class="playground-loading" id="playground-loading" style="display: flex;">
         <div class="playground-loading-content" style="margin: auto; display:flex; flex-direction: column;width:25em; text-align: center;">
-            <h1>RELAX</h1>
+            <h1 class="loading-fade-in">RELAX</h1>
             <img src="./images/ring-loader.gif" style="width: 100px; height: 100px; margin: auto;" />
-            <h1>Aqua Playground is loading...</h1>
+            <h1 class="loading-fade-in">Aqua Playground is loading...</h1>
         </div>
     </div>
 
