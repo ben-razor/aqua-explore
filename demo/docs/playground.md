@@ -1,4 +1,4 @@
-# Fluence Aqua Playground
+# Aqua Playground Guide
 ## Fluence Network
 > [Fluence Network](https://fluence.network/) is an open application platform where apps can build on each other, share data and users.
 
