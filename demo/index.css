@@ -7,6 +7,10 @@ body {
     font-family: AquaPlaygroundRegular, sans-serif; 
 }
 
+button, select, input {
+    outline-color: lightgrey;
+}
+
 .playground-header {
     display: flex;
     flex-direction: row;
