@@ -32,6 +32,8 @@ The [Aqua Book](https://doc.fluence.dev/aqua-book/language) describes the Aqua l
 
 Having these guides open when using the Aqua Playground will be worthwhile.
 
+This guide describes how to use the Playground. For a development guide see [Aqua Playground Github](https://github.com/ben-razor/aqua-explore).
+
 # Using Aqua Playground
 
 The Aqua Playground presents a quick way to test out what is possible with Aqua and Fluence JS.
