@@ -9,12 +9,12 @@
     <style>
         @keyframes loading-fade-in {
             0% { opacity: 0; }
-            20% { opacity: 0; }
+            10% { opacity: 0; }
             100% { opacity: 1; }
         }
 
         .loading-fade-in {
-            animation: loading-fade-in 5s;
+            animation: loading-fade-in 7s;
         }
     </style>
 </head>
@@ -76,7 +76,7 @@
     </div>
 
     <div class="playground-loading" id="playground-loading" style="display: flex;">
-        <div class="playground-loading-content" style="margin: auto; display:flex; flex-direction: column;width:25em; text-align: center;">
+        <div class="playground-loading-content" style="margin: auto; display:flex; flex-direction: column;min-width:50%; text-align: center;">
             <h1 class="loading-fade-in">RELAX</h1>
             <img src="./images/ring-loader.gif" style="width: 100px; height: 100px; margin: auto;" />
             <h1 class="loading-fade-in">Aqua Playground is loading...</h1>
