@@ -9,6 +9,7 @@ export class Sandbox {
         console.log('sandbox constructing')
         this.viewer = null;
         this.connected = false;
+        this.window = window;
     }
 
     async initViewer() {
@@ -160,6 +161,16 @@ export class Sandbox {
 
     evalWhenConnected() {
         if(this.code && this.connected) {
+            this.window.addEventListener('unhandledrejection', function(e) {
+                let message = e.reason.message;
+                let stack = e.reason.stack;
+
+                if(stack.indexOf('eval') !== -1) {
+                    window['sandbox'].viewer.setValue(['JS Error: ', message, stack].join('\n\n'));
+                    e.preventDefault();
+                }
+            });
+
             triggerAnimClass('playground-run-output-text', 'playground-fade-in')
             setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
             setTimeout(() => {
