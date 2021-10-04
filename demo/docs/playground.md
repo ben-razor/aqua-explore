@@ -1,14 +1,15 @@
-# Fluence Network
+# Fluence Aqua Playground
+## Fluence Network
 > [Fluence Network](https://fluence.network/) is an open application platform where apps can build on each other, share data and users.
 
 It is a **decentralized cloud platform** maintained and governed by its developers
 
-## Fluence Nodes
+### Fluence Nodes
 Services are distributed across nodes forming p2p networks configured for specific applications.
 
 Nodes may be specially configured servers, or lightweight nodes running in the browser.
 
-# Aqua
+## Aqua
 [Aqua](https://doc.fluence.dev/aqua-book/) is the language for configuring communication between services of network.
 
 * Aqua expresses **services** and **functions** that will be executed on nodes.
