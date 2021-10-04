@@ -78,13 +78,15 @@
     },
     {
         "aqua": "service GetStr(\"multiret-test\"):\n    retStr: string -> string\n\nservice GetNum(\"multiret-num\"):\n    retNum: -> u8\n\nconst SOME_NUM = 5\nconst SOME_STR = \"some-str\"\n\nfunc tupleFunc() -> string, u8:\n    str <- GetStr.retStr(SOME_STR)\n    n <- GetNum.retNum()\n    <- str, n\n\nfunc multiReturnFunc(somethingToReturn: []u8, smthOption: ?string) -> []string, u8, string, []u8, ?string, u8 :\n    res: *string\n    res <- GetStr.retStr(SOME_STR)\n    res <- GetStr.retStr(\"random-str\")\n    res, tNum <- tupleFunc()\n    <- res, SOME_NUM, SOME_STR, somethingToReturn, smthOption, tNum",
+        "js": "async function multiReturnCall() {\n    registerGetStr({\n        retStr: (args0) => {\n        \tappendOutput(args0);\n            return args0;\n        },\n    });\n\n    registerGetNum({\n        retNum: () => {\n            return 10;\n        },\n    });\n\n    return await multiReturnFunc([1, 2], null);\n}\n\nmultiReturnCall().then(val => {\n\tappendOutput(JSON.stringify(val))\n});",
         "name": "multiReturn.aqua",
         "title": "multiReturn"
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\n-- this service is used by fldist to print something into console\nservice Return(\"returnService\"):\n    -- fldist service can accept any number of arguments of any type. Feel free to update accordingly\n    run: Info -> ()\n\nfunc test(node: string):\n    on node:\n        res <- Peer.identify()\n    Return.run(res)\n",
+        "js": "registerReturn({\n    run: async (info) => {\n        appendOutput(\"Air version: \" + info.air_version);\n        appendOutput(\"Ext Addr: \" + JSON.stringify(info.external_addresses));\n        appendOutput(\"Node version: \" + info.node_version);\n    }\n});\n\nconst testAquaService = async () => {\n\tlet message = \"You're playing the wrong message\";\n    let kPeerId = krasnodar[0].peerId;\n\tmessage = await test(kPeerId);\n    return message;\n};\n\ntestAquaService();",
         "name": "fldist-sample.aqua",
-        "title": "fldist-sample"
+        "title": "fldist-sample"    
     },
     {
         "aqua": "service StringExtra(\"service-id\"):\n    addNameToHello: string -> string\n\nfunc helloWorld(name: string) -> string:\n    res <- StringExtra.addNameToHello(name)\n    <- res\n",
@@ -103,57 +105,74 @@
         "title": "new-api-full"
     },
     {
-        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice CoService(\"coservice-id\"):\n    call: -> string\n\n-- here we go to another node and not waiting for execution there\n-- all `ParService.call()` will be executed instantly\nfunc coFunc( node: string, c: Info -> () ):\n    y <- CoService.call()\n    on node:\n        t <- Peer.identify()\n        co c(t)\n    x <- CoService.call()\n",
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\nimport \"par.aqua\"\n\nservice CoService(\"coservice-id\"):\n    call: -> string\n\n-- here we go to another node and not waiting for execution there\n-- all `ParService.call()` will be executed instantly\nfunc coFunc( node: string, c: Info -> () ):\n    y <- CoService.call()\n    on node:\n        t <- Peer.identify()\n        co c(t)\n    x <- CoService.call()\n",
+        "js": "function coCall() {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n\n    registerCoService({\n        call: () => {\n            return 'hello';\n        },\n    });\n\n    return new Promise((resolve, reject) => {\n        parFunc(relayPeerId, (c) => {\n            resolve(c.external_addresses);\n        });\n    });\n}\n\n(async () => {\n    coCall().then((addr) => appendOutput(JSON.stringify(addr)));\n})();",
         "name": "co.aqua",
         "title": "co"
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice Unexisted(\"unex\"):\n  getStr() -> string\n\ndata LastError:\n  instruction: string\n  msg: string\n  peer_id: string\n\nservice OpA(\"op\"):\n  identity(s: string) -> string\n\nfunc tryCatchTest(node_id: string) -> []string:\n    on node_id:\n        f: *string\n        try:\n          f <- Unexisted.getStr()\n        catch err:\n          c: *string\n          f <- OpA.identity(err.msg)\n          -- check if the call takes place on the node\n          i <- Peer.identify()\n          f <- OpA.identity(i.external_addresses!)\n    <- f",
+        "js": "async function tryCatchCall() {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n    return await tryCatchTest(playgroundNodes[0].peerId);\n}\n\n(async () => {\n\tlet res = await tryCatchCall();\n    appendOutput(res);\n})();\n",
         "name": "tryCatch.aqua",
         "title": "tryCatch"
     },
     {
         "aqua": "func returnLiteral() -> string:\n    <- \"some literal\"",
+        "js": "async function literalCall() {\n    return returnLiteral();\n}\n\n(async () => {\n\tlet val = await literalCall();\n    appendOutput(val);\n})();",
         "name": "returnLiteral.aqua",
         "title": "returnLiteral"
     },
     {
         "aqua": "service OpA(\"pop\"):\n  get_str() -> string\n\nfunc get_results() -> []string:\n    results: *string\n    results <<- \"hello\"\n    str <- OpA.get_str()\n    results <<- str\n    <- results",
+        "js": "async function pushToStreamCall() {\n    registerOpA({\n        get_str: () => {\n            return 'get_string';\n        },\n    });\n\n    return await get_results();\n}\n\n(async () => {\n\tlet ret = await pushToStreamCall();\n    appendOutput(JSON.stringify(ret));\n})();",
         "name": "pushToStream.aqua",
         "title": "pushToStream"
     },
     {
+        "aqua": "alias SomeString : string\n\ndata SomeResult:\n    one: SomeString\n    two: u32\n\nservice SubService(\"sub_service\"):\n    sub(s: SomeString) -> SomeResult\n\nfunc subImport() -> SomeResult:\n    res <- SubService.sub(\"some thing\")\n    <- res",
+        "hidden": true,
+        "name": "subImport.aqua",
+        "title": "subImport"
+    },
+    {
         "aqua": "import \"imports_exports/subImport.aqua\"\n\nservice ConcatSubs(\"concat_subs\"):\n    get_some(s: SomeString, sr: SomeResult) -> SomeResult\n\nfunc subImportUsage(s: SomeString) -> SomeResult:\n    sr1 <- SubService.sub(s)\n    sr2 <- subImport()\n    result <- ConcatSubs.get_some(sr1.one, sr2)\n    <- result\n\n",
+        "js": "async function subImportCall() {\n    // helloWorld.aqua\n    registerSubService({\n        sub: (s) => {\n            return {\n                one: s,\n                two: 42,\n            };\n        },\n    });\n    registerConcatSubs({\n        get_some: (s, sr) => {\n            return {\n                one: s,\n                two: sr.two,\n            };\n        },\n    });\n\n    return await subImportUsage('random_string');\n}\n\n(async () => {\n\tlet ret = await subImportCall();\n    appendOutput(JSON.stringify(ret));\n})();",
         "name": "subImportUsage.aqua",
         "title": "subImportUsage"
     },
     {
         "aqua": "service HelloWorld(\"default\"):\n    sayHello(s: string)\n    getNumber() -> i32\n\nfunc callMeBack(callback: string, i32 -> ()):\n    callback(\"hello, world\", 42)",
+        "js": "registerHelloWorld({\n    sayHello: async str => appendOutput(str),\n    getNumber: async num => appendOutput(num) \n});\n\nconst testAquaService = async () => {\n\tawait callMeBack((s, i) => { \n    \tappendOutput(s);\n        appendOutput(i);\n    });\n};\n\ntestAquaService();",
         "name": "new-api.aqua",
         "title": "new-api"
     },
     {
-        "aqua": "service Peer(\"peer\"):\n    is_connected: string -> bool\n\nservice Op(\"op\"):\n    identity: -> ()\n\ndata User:\n    peer_id: string\n    relay_id: string\n    name: string\n\nservice Test(\"test\"):\n    getUserList: -> []User\n    doSomething: -> bool\n\nfunc betterMessage(relay: string):\n    on relay:\n        isOnline <- Peer.is_connected(relay)\n    if isOnline:\n        Test.doSomething()",
+        "aqua": "service Peer(\"peer\"):\n    is_connected: string -> bool\n\nservice Op(\"op\"):\n    identity: -> ()\n\ndata User:\n    peer_id: string\n    relay_id: string\n    name: string\n\nservice Test(\"test\"):\n    getUserList: -> []User\n    doSomething: -> bool\n\nfunc betterMessage(relay: string):\n    on relay:\n        isOnline <- Peer.is_connected(relay)\n        Test.doSomething()",
+        "js": "registerPeer({\n    is_connected: async b => appendOutput('Conn: ' + b.toString())\n});\n\nregisterTest({\n    getUserList: async ul => appendOutput('UL: ' + JSON.stringify(ul)),\n    doSomething: async b => appendOutput(JSON.stringify(b))\n});\n\nconst testAquaService = async () => {\n\tawait betterMessage(Fluence.getPeer().getStatus().peerId);\n};\n\ntestAquaService();",
         "name": "example.aqua",
         "title": "example"
     },
     {
         "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nfunc getPeerExternalAddresses(otherNodePeerId: string) -> []string:\n    on otherNodePeerId:\n        res <- Peer.identify()\n    <- res.external_addresses\n\n-- it is possible to use `via` to built complex routes\nfunc getDistantAddresses(target: string, viaNode: string) -> []string:\n    on target via viaNode:\n        res <- Peer.identify()\n    <- res.external_addresses\n",
+        "js": "async function onCall() {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n    return await getPeerExternalAddresses(relayPeerId);\n}\n\n(async () => {\n\tlet ret = await onCall();\n    appendOutput(JSON.stringify(ret));\n})();",
         "name": "on.aqua",
         "title": "on"
     },
     {
         "aqua": "service Unexisted(\"unex\"):\n  getStr() -> string\n\ndata LastError:\n  instruction: string\n  msg: string\n  peer_id: string\n\nservice OpE(\"op\"):\n  identity(s: string) -> string\n\nfunc tryOtherwiseTest(node_id: string) -> string:\n    on node_id:\n        f: *string\n        try:\n          f <- Unexisted.getStr()\n        otherwise:\n          f <- OpE.identity(\"error\")\n    <- f!",
+        "js": "async function tryOtherwiseCall() {\n    const relayPeerId = Fluence.getPeer().getStatus().relayPeerId;\n    return await tryOtherwiseTest(relayPeerId);\n}\n\n(async () => {\n\tlet ret = tryOtherwiseCall()\n\tappendOutput(JSON.stringify(ret));\n})();",
         "name": "tryOtherwise.aqua",
         "title": "tryOtherwise"
     },
     {
         "aqua": "data DT:\n  field: string\n\nservice DTGetter(\"get-dt\"):\n    get_dt(s: string) -> DT\n\nfunc use_name1(name: string) -> string:\n    results <- DTGetter.get_dt(name)\n    <- results.field\n\nfunc use_name2(name: string) -> []string:\n    results: *string\n    results <- use_name1(name)\n    results <- use_name1(name)\n    results <- use_name1(name)\n    <- results",
+        "js": "async function streamResultsCall() {\n    registerDTGetter({\n        get_dt: (args0) => {\n        \t\n            let serviceRet = {\n                field: args0,\n            };\n            \n            appendOutput(JSON.stringify(serviceRet));\n            return serviceRet\n        },\n    });\n\n    return await use_name2('new_name');\n}\n\n(async () => {\n\tlet ret = await streamResultsCall();\n\tappendOutput(JSON.stringify(ret));\n})();",
         "name": "streamResults.aqua",
         "title": "streamResults"
     },
     {
         "aqua": "data Prod:\n   value: string\n\nservice OpHa(\"op\"):\n    array(a: string, b: string) -> []string\n    identity(a: string) -> string\n\nfunc doSmth(arg: Prod) -> []string:\n    v = arg.value\n    a <- OpHa.identity(v)\n    b = \"hello\"\n    res <- OpHa.array(a, b)\n    <- res",
+        "js": "async function assignmentCall() {\n    return await doSmth({ value: 'abc' }, { ttl: 6000 });\n}\n\n(async () => {\n\tlet ret = await assignmentCall();\n\tappendOutput(JSON.stringify(ret));\n})();",
         "name": "assignment.aqua",
         "title": "assignment"
     },

@@ -32,7 +32,16 @@
                     <div class="playground-tab" id="playground-tab-compiled" onclick="selectOutputTab(this)">Compiled</div>
                 </div>
                 <div id="playground-run-output" class="playground-run-output">
-                    <div id="playground-run-output-text" class="playground-run-output-text">Use setOutput in JS to output to this console.</div>
+                    <div id="playground-run-output-text" class="playground-run-output-text">Use these functions in JS to output to this console:
+    
+    setOutput - Write to console (overwriting current text)
+    getOutput - Get current output as text
+    appendOutput - Append to current output text
+
+These variables are available in JS:
+
+    playgroundNodes[] - An array of currently connected relay nodes
+                    </div>
                 </div>
                 <div id="playground-compiled-viewer" class="playground-compiled-viewer" style="display: none;">
                     <textarea id="cm-viewer" class="playground-editor"></textarea>

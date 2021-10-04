@@ -3,6 +3,7 @@ import { loadWASM } from 'onigasm'
 import 'codemirror/lib/codemirror.css'
 import './index.css';
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
+import { krasnodar } from "@fluencelabs/fluence-network-environment";
 import { defaultJS, defaultAqua } from './examples';
 
 import { elemById, hideElem, setContent } from './helpersHTML';
@@ -17,11 +18,14 @@ import {
     RequestFlowBuilder,
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v1.js'
 
+// These assignments are necessary to ensure that webpack pulls in these things
+// from the modules so that they are available to the code running in the sandbox
 window['Fluence'] = Fluence;
 window['FluencePeer'] = FluencePeer;
 window['ResultCodes'] = ResultCodes;
 window['RequestFlow'] = RequestFlow;
 window['RequestFlowBuilder'] = RequestFlowBuilder;
+window['krasnodar'] = krasnodar;
 
 import { activateLanguage, addGrammar, } from 'codemirror-textmate'
 

@@ -92,7 +92,9 @@ export class PlaygroundUI {
             let select = `<select class="playground-examples-select" 
                                 id="playground-examples-select" onchange="exampleChanged(this)">"`
             for(let data of examplesData) {
-                select += `<option value="${data.name}">${data.title}</option>`;
+                if(!data.hidden) {
+                    select += `<option value="${data.name}">${data.title}</option>`;
+                }
             }
             select += '</select>';
 

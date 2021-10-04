@@ -85,6 +85,7 @@ export class Sandbox {
                     await Fluence.start({ connectTo: node });
                     me.connected = true;
                     connectedNode = node;
+                    window['playgroundNodes'] = [connectedNode];
                     break;
                 }
                 catch(e) { 
