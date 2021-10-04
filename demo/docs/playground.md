@@ -34,6 +34,10 @@ Having these guides open when using the Aqua Playground will be worthwhile.
 
 # Using Aqua Playground
 
+The Aqua Playground presents a quick way to test out what is possible with Aqua and Fluence JS.
+
+Running code on the Aqua Playground follows these steps:
+
 1. Write Aqua code that contains **func** and **service** definitions
 2. Write JS code that calls the functions and attaches callbacks to the services
 3. Hit Run to compile the Aqua code to JS
