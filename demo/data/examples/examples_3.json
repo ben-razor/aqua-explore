@@ -18,8 +18,8 @@
         "title": "if"
     },
     {
-        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice Getter(\"test\"):\n    createStr: u32 -> string\n\nservice OpO(\"op\"):\n    identity: string -> string\n\n-- a question mark means that this constant could be rewritten before this definition\nconst ANOTHER_CONST ?= \"default-str\"\nconst UNIQUE_CONST ?= 5\n\nfunc callConstant() -> []string:\n    res: *string\n    res <- Getter.createStr(UNIQUE_CONST)\n    res <- OpO.identity(ANOTHER_CONST)\n    <- res\n",
-        "js": "function constantsCall() {\n    registerGetter({\n        createStr: (arg0) => {\n        \tappendOutput(arg0);\n            return '' + arg0;\n        },\n    });\n\n    callConstant();\n}\n\nconstantsCall();",
+        "aqua": "import \"@fluencelabs/aqua-lib/builtin.aqua\"\n\nservice Getter(\"test\"):\n    createStr: u32 -> string\n\nservice OpO(\"op\"):\n    copyStr: string -> string\n\n-- a question mark means that this constant could be rewritten before this definition\nconst ANOTHER_CONST ?= \"default-str\"\nconst UNIQUE_CONST ?= 5\n\nfunc callConstant() -> []string:\n    res: *string\n    res <- Getter.createStr(UNIQUE_CONST)\n    res <- OpO.copyStr(ANOTHER_CONST)\n    <- res\n",
+        "js": "function constantsCall() {\n    registerGetter({\n        createStr: (arg0) => {\n        \tappendOutput(arg0);\n            return '' + arg0;\n        },\n    });\n    \n    registerOpO({\n        copyStr: (arg0) => {\n            appendOutput(arg0);\n            return '' + arg0;\n        },\n    });\n\n    callConstant();\n}\n\nconstantsCall();",
         "name": "constants.aqua",
         "title": "constants"
     },
