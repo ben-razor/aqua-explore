@@ -8,10 +8,13 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+script_dir = os.path.dirname(os.path.realpath(__file__))
+os.chdir(script_dir)
+
 @app.route("/")
 def razor():
     return_code, result_string = compile_aqua('string_thing.aqua', 'js')
-    return result_string
+    return result_string 
 
 @app.route("/api/compile_aqua", methods=['POST'])
 def api_compile_aqua():
