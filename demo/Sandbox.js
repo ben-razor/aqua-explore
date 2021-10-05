@@ -202,12 +202,12 @@ export class Sandbox {
                 let message = e.reason.message;
                 let stack = e.reason.stack;
 
-                if(stack.indexOf('eval') !== -1) {
+                if(message && stack && stack.indexOf('eval') !== -1) {
                     window['sandbox'].viewer.setValue(['JS Error: ', message].join('\n\n'));
                     window['sandbox'].reportError();
                     e.preventDefault();
+                    return true;
                 }
-                return true;
             });
 
             triggerAnimClass('playground-run-output-text', 'playground-fade-in')
