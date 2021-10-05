@@ -15,7 +15,7 @@ func getRelayTime() -> u64:
 
 export const defaultJS = `registerHelloWorld({
     hello: async (str) => {
-        console.log(str)
+        appendOutput(str);
     }
 });
 
@@ -24,7 +24,7 @@ const testAquaService = async () => {
     const relayTime = await getRelayTime();
     const dateStr = new Date(relayTime).toLocaleString();
     
-    setOutput(message + '<br /><br />Time on host: ' + dateStr);
+    appendOutput('Time on host: ' + dateStr);
 };
 
 testAquaService();`;
