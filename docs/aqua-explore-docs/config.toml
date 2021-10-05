@@ -1,0 +1,7 @@
+baseURL = 'http://example.org/'
+languageCode = 'en-us'
+title = 'Aqua Playground'
+
+[params]
+    BookTheme = 'light'
+    BookLogo = 'favicon-32x32.png'

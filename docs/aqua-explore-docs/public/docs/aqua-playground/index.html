@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Using Aqua Playground #  The Aqua Playground is a quick way to test out what is possible with Aqua and Fluence JS.
+Running code on the Aqua Playground follows these steps:
+ Write Aqua code that contains func and service definitions Write JS code that calls the functions and attaches callbacks to the services Hit Run to compile the Aqua code to JS The functions from the compiled Aqua are automatically imported and your JS uses those functions Special methods like appendOutput are made available to JS to provide output  Prerequisites #  The Fluence JS Tutorial provides a quick guide to the steps involved in creating a Fluence Application.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Using Aqua Playground" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://example.org/docs/aqua-playground/" />
+
+<title>Using Aqua Playground | Aqua Playground</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
+  <script defer src="/flexsearch.min.js"></script>
+  <script defer src="/en.search.min.bd2c2f1bac38b9a9d655e5d2625812111c13e2a945a08bd9075c231f0c44876a.js" integrity="sha256-vSwvG6w4uanWVeXSYlgSERwT4qlFoIvZB1wjHwxEh2o=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="http://example.org/docs/aqua-playground/index.xml" title="Aqua Playground" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/favicon-32x32.png" alt="Logo" /><span>Aqua Playground</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li class="book-section-flat" >
+          
+  
+  
+
+  
+    <a href="http://example.org/docs/aqua-playground/" class=" active">Using Aqua Playground</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Using Aqua Playground</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#writing-aqua">Writing Aqua</a></li>
+    <li><a href="#compilation-of-aqua-to-js">Compilation of Aqua to JS</a></li>
+    <li><a href="#writing-js">Writing JS</a></li>
+    <li><a href="#handling-errors">Handling Errors</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="using-aqua-playground">
+  Using Aqua Playground
+  <a class="anchor" href="#using-aqua-playground">#</a>
+</h1>
+<p>The Aqua Playground is a quick way to test out what is possible with Aqua and Fluence JS.</p>
+<p>Running code on the Aqua Playground follows these steps:</p>
+<ol>
+<li>Write Aqua code that contains <strong>func</strong> and <strong>service</strong> definitions</li>
+<li>Write JS code that calls the functions and attaches callbacks to the services</li>
+<li>Hit Run to compile the Aqua code to JS</li>
+<li>The functions from the compiled Aqua are automatically imported and your JS uses those functions</li>
+<li>Special methods like <strong>appendOutput</strong> are made available to JS to provide output</li>
+</ol>
+<h2 id="prerequisites">
+  Prerequisites
+  <a class="anchor" href="#prerequisites">#</a>
+</h2>
+<p>The <a href="https://doc.fluence.dev/docs/fluence-js/1_concepts">Fluence JS Tutorial</a> provides a quick guide to the steps involved in creating a Fluence Application.</p>
+<p>The <a href="https://doc.fluence.dev/aqua-book/language">Aqua Book</a> describes the Aqua language.</p>
+<p>Having these guides open when using the Aqua Playground will be worthwhile.</p>
+<p>This guide describes how to use the Playground. For a development guide see <a href="https://github.com/ben-razor/aqua-explore">Aqua Playground Github</a>.</p>
+<h2 id="writing-aqua">
+  Writing Aqua
+  <a class="anchor" href="#writing-aqua">#</a>
+</h2>
+<p>The Aqua code is about definining services and functions. In the functions you can define which nodes different aspects of the code should run.</p>
+<p>Here is a simple example:</p>
+<pre tabindex="0"><code>import &quot;@fluencelabs/aqua-lib/builtin.aqua&quot;
+
+service HelloWorld(&quot;hello-world&quot;):
+    hello(str: string)
+    
+func sayHello() -&gt; string:
+    HelloWorld.hello(&quot;Hello. Welcome to the Aqua Playground.&quot;)
+    
+func getRelayTime() -&gt; u64:
+    on HOST_PEER_ID:
+        ts &lt;- Peer.timestamp_ms()
+    &lt;- ts
+</code></pre><h2 id="compilation-of-aqua-to-js">
+  Compilation of Aqua to JS
+  <a class="anchor" href="#compilation-of-aqua-to-js">#</a>
+</h2>
+<p>The compilation creates a JS file that the Aqua Playground automatically imports before running your entered JS.</p>
+<p>In this JS file are two types of definition:</p>
+<ol>
+<li>For each <strong>service</strong> in Aqua, a JS function named register<strong>ServiceName</strong> is created. register<strong>ServiceName</strong> is called with an JS object containing callbacks that will be called when functions of the service are triggered.</li>
+<li>For each <strong>func</strong> in Aqua, an async JS function is created with the same name.</li>
+</ol>
+<h2 id="writing-js">
+  Writing JS
+  <a class="anchor" href="#writing-js">#</a>
+</h2>
+<p>There are a number of objects and functions exposed to the JS editor:</p>
+<ul>
+<li>The <a href="https://fluence.network/fluence-js/modules.html#Fluence">Fluence</a> object</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">Fluence</span>.<span style="color:#a6e22e">getPeer</span>().<span style="color:#a6e22e">getStatus</span>().<span style="color:#a6e22e">peerId</span>;
+<span style="color:#a6e22e">Fluence</span>.<span style="color:#a6e22e">getPeer</span>().<span style="color:#a6e22e">getStatus</span>().<span style="color:#a6e22e">relayPeerId</span>;
+</code></pre></div><ul>
+<li>The <strong>krasnodar</strong> array of test node information</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">krasnodar</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">peerId</span>
+<span style="color:#a6e22e">krasnodar</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">multiaddr</span>
+</code></pre></div><ul>
+<li>The <strong>playgroundNodes</strong> array of currently connected node information</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#a6e22e">playgroundNodes</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">peerId</span>
+<span style="color:#a6e22e">playgroundNodes</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">multiaddr</span>
+</code></pre></div><ul>
+<li>Output helpers:</li>
+</ul>
+<pre tabindex="0"><code>setOutput - Write to console (overwriting current text)
+getOutput - Get current output as text
+appendOutput - Append to current output text
+</code></pre><h2 id="handling-errors">
+  Handling Errors
+  <a class="anchor" href="#handling-errors">#</a>
+</h2>
+<p>Errors in compilation of Aqua or running of JS are displayed in the Output panel.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#writing-aqua">Writing Aqua</a></li>
+    <li><a href="#compilation-of-aqua-to-js">Compilation of Aqua to JS</a></li>
+    <li><a href="#writing-js">Writing JS</a></li>
+    <li><a href="#handling-errors">Handling Errors</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
