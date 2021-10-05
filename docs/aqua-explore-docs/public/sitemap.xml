@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://example.org/docs/aqua-playground/</loc>
+    <loc>https://aqua-explore-docs.web.app/docs/aqua-playground/</loc>
   </url><url>
-    <loc>http://example.org/categories/</loc>
+    <loc>https://aqua-explore-docs.web.app/categories/</loc>
   </url><url>
-    <loc>http://example.org/docs/</loc>
+    <loc>https://aqua-explore-docs.web.app/docs/</loc>
   </url><url>
-    <loc>http://example.org/</loc>
+    <loc>https://aqua-explore-docs.web.app/</loc>
   </url><url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://aqua-explore-docs.web.app/tags/</loc>
   </url>
 </urlset>
