@@ -73,6 +73,10 @@ let liveJS = defaultJS;
         editor = CodeMirror.fromTextArea(elemById('cm-host') as HTMLTextAreaElement, {
             lineNumbers: true,
             mode: 'typescript',
+            'extraKeys': {
+                'Shift-Tab': 'indentLess',
+                'Tab': 'indentMore'
+            },
             lineWrapping: true
         })
         editor.setValue(defaultAqua);
@@ -82,6 +86,10 @@ let liveJS = defaultJS;
     if(elemById('cm-js-editor')) {
         jsEditor = CodeMirror.fromTextArea(elemById('cm-js-editor') as HTMLTextAreaElement, {
             lineNumbers: true,
+            'extraKeys': {
+                'Shift-Tab': 'indentLess',
+                'Tab': 'indentMore'
+            },
             lineWrapping: true,
             mode: 'javascript'
         })
