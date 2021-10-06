@@ -6,7 +6,6 @@ import { addTheme } from 'codemirror-textmate';
 
 export class Sandbox {
     constructor() {
-        console.log('sandbox constructing')
         this.viewer = null;
         this.connected = false;
         this.window = window;

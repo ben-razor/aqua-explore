@@ -167,7 +167,6 @@ let liveJS = defaultJS;
             sandboxElem.src = location.origin + '/sandbox.html';
             sandboxElem.contentWindow.location.reload();
 
-            setContent('playground-run-output-text', '');
             playgroundUI.showCompilingOverlay(); 
 
             Object.assign(compileData, await aquaCompile.compileAqua(editor.getValue()));

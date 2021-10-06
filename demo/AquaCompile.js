@@ -115,7 +115,6 @@ export class AquaCompile {
 
     async compileAqua(script) {
         let success = false;
-        let compiledJS = '';
         let result;
         let output;
         let cleanOutput;
