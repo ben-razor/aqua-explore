@@ -74,10 +74,7 @@ export class PlaygroundUI {
         window["exampleChanged"] = (e) => {
             let selValue = e.options[e.selectedIndex].value;
 
-            let origin = 'http://localhost:8080';
-            if(!isLocal()) {
-                origin = 'https://aqua-explore.web.app';
-            }
+            let origin = location.origin;
 
             for(let data of examplesData) {
                 if(data.name === selValue) {

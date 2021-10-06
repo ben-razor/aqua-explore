@@ -122,10 +122,7 @@ let liveJS = defaultJS;
             let cleanOutput;
 
             function handleCompiledAndSandboxLoaded() {
-                let origin = 'http://localhost:8080';
-                if(!isLocal()) {
-                    origin = 'https://aqua-explore.web.app';
-                }
+                let origin = location.origin;
                 
                 if(isCompiled && isSandboxLoaded) {
                     hideElem('playground-compiling-overlay');
