@@ -50,7 +50,7 @@ button, select, input {
     color: white;
     display: flex;
     flex-direction: column;
-    min-height: 18em;
+    height: 100%;
 }
 
 .playground-run-output-text {
@@ -122,13 +122,12 @@ button, select, input {
     flex-direction: row;
     width: 100%;
     border-bottom: 5px solid hsl(342deg 50% 83%);
-    min-height: 22em;
+    min-height: 25em;
 }
 
 .playground-output-elem {
     display: flex;
     flex-direction: row;
-    min-height: 22em;
     height: 100%;
 }
 
@@ -142,6 +141,7 @@ button, select, input {
     height: 100%;
     padding: 0.3em;
     word-break: break-all;
+    overflow-y: auto;
 }
 
 @keyframes playground-fade-in {
@@ -155,7 +155,7 @@ button, select, input {
 }
 
 .CodeMirror {
-    height: 100%;
+    height: calc(100% - 2.5em);
 }
 
 .playground-loading {
@@ -253,7 +253,7 @@ a {
 
 .playground-sandbox {
     width: 100%;
-    height: 100%;
+    min-height: 25em;
 }
 
 @media (max-width: 992px) {

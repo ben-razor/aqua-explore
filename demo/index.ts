@@ -152,6 +152,7 @@ let liveJS = defaultJS;
                 isSandboxLoaded = true;
                 handleCompiledAndSandboxLoaded();
             }
+            sandboxElem.src = location.origin + '/sandbox.html';
             sandboxElem.contentWindow.location.reload();
 
             setContent('playground-run-output-text', '');

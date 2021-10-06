@@ -24,7 +24,7 @@ const testAquaService = async () => {
     const relayTime = await getRelayTime();
     const dateStr = new Date(relayTime).toLocaleString();
     
-    appendOutput('Time on host: ' + dateStr);
+    appendOutput('<p><b>' + 'Time on host: ' + dateStr + '</b></p>');
 };
 
 testAquaService();`;

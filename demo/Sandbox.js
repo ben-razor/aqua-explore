@@ -197,7 +197,8 @@ export class Sandbox {
     evalWhenConnected() {
         let me = this;
         if(this.code && this.connected) {
-            setContent('playground-tab-compiled', 'Compiled')
+            showElem('playground-tab-compiled');
+            setContent('playground-tab-compiled', 'Compiled');
             this.window.addEventListener('unhandledrejection', function(e) {
                 let message = e.reason.message;
                 let stack = e.reason.stack;
