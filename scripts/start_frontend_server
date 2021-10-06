@@ -1,0 +1,10 @@
+base_dir=`pwd`
+cd ./demo/dist
+frontend_dir=`pwd`
+echo 'Starting frontend from '$frontend_dir'...'
+python3 -m http.server 8080 &
+backend_dir=`pwd`
+echo 'Starting backend from '$backend_dir'...'
+cd $base_dir
+cd ./scripts
+./aqua_server.py
