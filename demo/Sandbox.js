@@ -1,20 +1,8 @@
 import * as CodeMirror from 'codemirror'
 import { Fluence, FluencePeer } from "@fluencelabs/fluence";
 import { krasnodar } from "@fluencelabs/fluence-network-environment";
-import { elemById, setContent, addClass, removeClass, triggerAnimClass, showElem } from './helpersHTML';
+import { elemById, setContent, addClass, removeClass, triggerAnimClass, showElem, hideElem } from './helpersHTML';
 import { addTheme } from 'codemirror-textmate';
-
-let defaultOutputText = `Use these functions in JS to output to this console:
-    
-    setOutput - Write to console (overwriting current text)
-    getOutput - Get current output as text
-    appendOutput - Append to current output text
-
-These variables are available in JS:
-
-    playgroundNodes[] - An array of currently connected relay nodes
-
-`;
 
 export class Sandbox {
     constructor() {
@@ -63,11 +51,13 @@ export class Sandbox {
     }
 
     resetOutput() {
-        setContent('playground-run-output-text', 'Use setOutput in JS to output to this console.');
+        showElem('playground-run-output-help');
     }
 
     reportError(errorLang='JS') {
-        let outputText = `There was an error while compiling the ${errorLang}.<br /><br />View the details in the Errors panel.`;
+        let outputText = `There was an error when compiling the ${errorLang}.<br /><br />View the details in the Errors panel.`;
+        hideElem('playground-run-output-help');
+        showElem('playground-tab-compiled');
         setContent('playground-run-output-text', outputText);
         setContent('playground-tab-compiled', 'Errors')
     } 
@@ -139,6 +129,7 @@ export class Sandbox {
         if(this.viewer) {
             this.viewer.setValue('');
             this.viewer.refresh();
+            showElem('playground-run-output-help');
             setContent('playground-run-output-text', defaultOutputText);
         }
     }
@@ -211,6 +202,7 @@ export class Sandbox {
                 }
             });
 
+            hideElem('playground-run-output-help');
             triggerAnimClass('playground-run-output-text', 'playground-fade-in')
 
             setContent('playground-run-output-text', 'The script produced no output.<br /><br />Use setOutput in JS to output to this console.<br /><br />View the compiled module JS in the Compiled panel.');
