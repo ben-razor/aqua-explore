@@ -240,6 +240,7 @@ a {
     border-radius: 0.4em;
     width: 2em;
     height: 2em;
+    cursor: default;
 }
 
 .connection-error {

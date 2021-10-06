@@ -84,6 +84,10 @@ export class Sandbox {
         this.addMessageListener();
     }
 
+    postLoadedMessage() {
+        this.window.parent.postMessage({ type: 'aqua-sandbox-loaded' }, window.origin);     
+    }
+
     initConnection() {
         let attemptingConnect = true;
         let me = this;

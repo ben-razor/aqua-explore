@@ -107,61 +107,73 @@ let liveJS = defaultJS;
         await sandbox.initViewer();
         sandbox.initUIHandlers();
         window['sandbox'] = sandbox;
+        sandbox.postLoadedMessage()
     }
 
     let aquaCompile = new AquaCompile();
     playgroundUI.initExamples(aquaCompile);
 
     let runScriptButton = elemById('run-script-button');
+    let sandboxLoadedListenerAdded = false;
+
     if(runScriptButton) {
-        async function startScriptRun() {
-            let isSandboxLoaded = false;
-            let isCompiled = false;
-            let success;
-            let rawOutput;
-            let cleanOutput;
+        let compileData = { success: false, rawOutput: '', cleanOutput: '' };
+        let isSandboxLoaded = false;
+        let isCompiled = false;
 
-            function handleCompiledAndSandboxLoaded() {
-                let origin = location.origin;
-                
-                if(isCompiled && isSandboxLoaded) {
-                    hideElem('playground-compiling-overlay');
-                            
-                    let sandboxWindow = elemById('playground-sandbox').contentWindow;
-                    sandboxWindow.addEventListener('message', e => {
+        function handleCompiledAndSandboxLoaded(compileData, isCompiled, isSandboxLoaded) {
+            let origin = location.origin;
+            
+            if(isCompiled && isSandboxLoaded) {
+                hideElem('playground-compiling-overlay');
+                        
+                let sandboxWindow = elemById('playground-sandbox').contentWindow;
+                sandboxWindow.addEventListener('message', e => {
+                    (async () => {
+                        let data = e.data;
 
-                        (async () => {
-                            let data = e.data;
+                        if(data.type && data.type === 'aqua-compile') {
+                            let jsScript = jsEditor.getValue();
+                            sandboxWindow.sandbox.startEval(data, jsScript);
+                        }
+                    })();
+                })
+    
+                elemById('playground-sandbox').contentWindow.postMessage({
+                    success: compileData.success, 
+                    rawOutput: compileData.rawOutput, 
+                    cleanOutput: compileData.cleanOutput,
+                    type: 'aqua-compile'
+                }, origin);
 
-                            if(data.type && data.type === 'aqua-compile') {
-                                let jsScript = jsEditor.getValue();
-                                sandboxWindow.sandbox.startEval(data, jsScript);
-                            }
-                        })();
-                    })
-       
-                    elemById('playground-sandbox').contentWindow.postMessage({
-                        success: success, rawOutput: rawOutput, cleanOutput: cleanOutput, type: 'aqua-compile'
-                    }, origin);
-
-                }
             }
+        }
+        
+        let sandboxLoadedListener = e => {
+            let data = e.data;
+            if(data.type && data.type === 'aqua-sandbox-loaded') {
+                isSandboxLoaded = true;
+                handleCompiledAndSandboxLoaded(compileData, isCompiled, isSandboxLoaded);
+            }
+        }
+
+        window.addEventListener('message', sandboxLoadedListener);
+
+        async function startScriptRun() {
+            isSandboxLoaded = false;
+            isCompiled = false;
 
             let sandboxElem = elemById('playground-sandbox');
-            sandboxElem.onload = () => { 
-                isSandboxLoaded = true;
-                handleCompiledAndSandboxLoaded();
-            }
             sandboxElem.src = location.origin + '/sandbox.html';
             sandboxElem.contentWindow.location.reload();
 
             setContent('playground-run-output-text', '');
             playgroundUI.showCompilingOverlay(); 
 
-            ({ success, rawOutput, cleanOutput } = await aquaCompile.compileAqua(editor.getValue()));
+            Object.assign(compileData, await aquaCompile.compileAqua(editor.getValue()));
 
             isCompiled = true;
-            handleCompiledAndSandboxLoaded();
+            handleCompiledAndSandboxLoaded(compileData, isCompiled, isSandboxLoaded);
         }
         runScriptButton.onclick = startScriptRun; 
     }
