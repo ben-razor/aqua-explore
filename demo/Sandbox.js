@@ -130,7 +130,7 @@ export class Sandbox {
             this.viewer.setValue('');
             this.viewer.refresh();
             showElem('playground-run-output-help');
-            setContent('playground-run-output-text', defaultOutputText);
+            setContent('playground-run-output-text', ''); 
         }
     }
 
