@@ -155,7 +155,7 @@ button, select, input {
 }
 
 .CodeMirror {
-    height: calc(100% - 2.5em);
+    height: calc(100% - 2.8em);
 }
 
 .playground-loading {
@@ -252,6 +252,7 @@ a {
 }
 
 .playground-sandbox {
+    height: 100%;
     width: 100%;
     min-height: 25em;
 }
