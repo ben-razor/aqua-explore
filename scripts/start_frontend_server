@@ -1,10 +1,14 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 base_dir=`pwd`
-cd ./demo/dist
+echo "BASE_DIR: $base_dir"
+echo "SCRIPT_DIR"$SCRIPT_DIR
+cd $SCRIPT_DIR'/../demo/dist'
 frontend_dir=`pwd`
 echo 'Starting frontend from '$frontend_dir'...'
 python3 -m http.server 8080 &
 backend_dir=`pwd`
 echo 'Starting backend from '$backend_dir'...'
-cd $base_dir
-cd ./scripts
+cd $SCRIPT_DIR
 ./aqua_server.py
