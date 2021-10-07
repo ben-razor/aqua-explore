@@ -12,10 +12,7 @@ export class AquaCompile {
 
         this.host = 'https://benrazor.net:8080';
         if(isLocal()) {
-            let aquaCompilePort = process.env.AQUA_COMPILE_PORT;
-            if(!aquaCompilePort) {
-                aquaCompilePort = 8082; 
-            }
+            let aquaCompilePort = 8868; 
             this.host = `http://localhost:${aquaCompilePort}`;
         }
     }

@@ -7,7 +7,7 @@ echo "SCRIPT_DIR"$SCRIPT_DIR
 cd $SCRIPT_DIR'/../demo/dist'
 frontend_dir=`pwd`
 echo 'Starting frontend from '$frontend_dir'...'
-python3 -m http.server 8080 &
+python3 -m http.server 8866 &
 backend_dir=`pwd`
 echo 'Starting backend from '$backend_dir'...'
 cd $SCRIPT_DIR

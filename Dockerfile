@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /opt/aqua-compile
 
-EXPOSE 8082
-EXPOSE 8080
+EXPOSE 8866
+EXPOSE 8868
 
 ENTRYPOINT /opt/aqua-compile/scripts/start_frontend_server

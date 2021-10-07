@@ -1,4 +1,10 @@
 docker build . -t benrazor/aqua-compile
 docker run -it -p 80:8082 benrazor/aqua-compile
 
-docker run -it -p 8080:8080 -p 8082:8082 benrazor/aqua-compile
+docker run -it -p 8866:8866 -p 8868:8868 benrazor/aqua-compile
+
+# Removed stopped containers
+docker rm  $(docker ps -q -a)
+
+# Remove an image
+docker image rm <image_id>
