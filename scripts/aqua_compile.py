@@ -8,27 +8,30 @@ def compile_aqua(file_name, lang):
     :param file_name File name of a file containing Aqua code
     :param lang One of (js|ts|air)
     """
-    print('DIR ', os.curdir)
+    real_dir = os.path.dirname(os.path.realpath(__file__))
+    print('real_dir', real_dir)
     script_name = file_name
     script_name_base = script_name.split('.')[0]
     output_ext = lang
-    output_dir = './compiled'
+    output_dir = os.path.join(real_dir, 'compiled')
 
-    input_file = f'./aqua_scripts/{script_name}'
+    input_file = os.path.join(real_dir, f'aqua_scripts/{script_name}')
     output_file = f'{output_dir}/{script_name_base}.{output_ext}'
     
     result_string = ''
     return_code = 0
    
     print('OUTPUT', output_dir)
-    args = [f'-i {input_file} -o {output_dir}']
+    args = ['-i', f'{input_file}', '-o', f'{output_dir}']
     if output_ext in ['js', 'air']:
       args.append(f'--{output_ext}')
 
-    command = ["aqua", ' '.join(args)]
+    command = ["aqua"]
+    command.extend(args)
+    command = ' '.join(command)
     print('COMMAND', command)
 
-    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     return_code = result.returncode
     print('RESULT', result)
 
@@ -46,6 +49,11 @@ def compile_aqua(file_name, lang):
 
     if os.path.exists(output_file):
       os.remove(output_file)
+
+    # Compiler is generating .d.ts files along with js
+    output_file_d_ts = output_file.replace('.js', '.d.ts')
+    if os.path.exists(output_file_d_ts):
+      os.remove(output_file_d_ts) 
 
     return (return_code, result_string)
 

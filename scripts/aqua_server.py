@@ -12,6 +12,10 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 os.chdir(script_dir)
 
 @app.route("/")
+def home():
+    return "All is Well", 200
+
+@app.route("/test_compile")
 def razor():
     return_code, result_string = compile_aqua('string_thing.aqua', 'js')
     return result_string 
@@ -57,6 +61,7 @@ def api_compile_aqua():
 
     return_code, result_string = compile_aqua(file_name, lang)
 
+    print(f'REMOVE INPUT FILE {input_file}')
     if os.path.exists(input_file):
         os.remove(input_file)
 
