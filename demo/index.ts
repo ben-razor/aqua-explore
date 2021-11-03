@@ -18,12 +18,19 @@ import {
     RequestFlowBuilder,
 } from '@fluencelabs/fluence/dist/internal/compilerSupport/v1.js'
 
+import {
+    CallParams,
+    callFunction, 
+    registerService 
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
+
 // These assignments are necessary to ensure that webpack pulls in these things
 // from the modules so that they are available to the code running in the sandbox
 window['Fluence'] = Fluence;
 window['FluencePeer'] = FluencePeer;
 window['ResultCodes'] = ResultCodes;
-window['RequestFlow'] = RequestFlow;
+window['registerService'] = registerService;
+window['callFunction'] = callFunction;
 window['RequestFlowBuilder'] = RequestFlowBuilder;
 window['krasnodar'] = krasnodar;
 
