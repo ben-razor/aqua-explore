@@ -10,4 +10,9 @@ sudo rsync -avz /home/chrisb/dev/aqua_temp/scripts/* /var/www/aqua
 sudo kill -9 gunicorn_process
 
 # Restart gunicorn aqua compile server
+cd /var/www/aqua
 sudo nohup gunicorn --workers=8 -b 0.0.0.0:8080 --certfile=/etc/letsencrypt/live/benrazor.net/fullchain.pem --keyfile=/etc/letsencrypt/live/benrazor.net/privkey.pem aqua_server:app &
+
+Or from /home/chrisb:
+
+sudo ./start_server
