@@ -11,7 +11,7 @@ sudo kill -9 gunicorn_process
 
 # Restart gunicorn aqua compile server
 cd /var/www/aqua
-sudo nohup gunicorn --workers=8 -b 0.0.0.0:8080 --certfile=/etc/letsencrypt/live/benrazor.net/fullchain.pem --keyfile=/etc/letsencrypt/live/benrazor.net/privkey.pem aqua_server:app &
+sudo nohup gunicorn --workers=2 -b 0.0.0.0:8080 --certfile=/etc/letsencrypt/live/benrazor.net/fullchain.pem --keyfile=/etc/letsencrypt/live/benrazor.net/privkey.pem aqua_server:app &
 
 Or from /home/chrisb:
 
