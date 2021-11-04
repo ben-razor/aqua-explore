@@ -39,23 +39,22 @@ import { activateLanguage, addGrammar, } from 'codemirror-textmate'
 let liveJS = defaultJS;
 
 (async () => {
-    await loadWASM(
-        // webpack has been configured to resolve `.wasm` files to actual 'paths" as opposed to using the built-in wasm-loader
-        // oniguruma is a low-level library and stock wasm-loader isn't equipped with advanced low-level API's to interact with libonig
-        require('onigasm/lib/onigasm.wasm'))
+    // webpack has been configured to resolve `.wasm` files to actual 'paths" as opposed to using the built-in wasm-loader
+    // oniguruma is a low-level library and stock wasm-loader isn't equipped with advanced low-level API's to interact with libonig
+    await loadWASM(require('onigasm/lib/onigasm.wasm'));
 
-        const grammars = {
-            'source.aqua': {
-                loader: () => import('./tm/grammars/aqua.tmLanguage.json'),
-                language: 'typescript',
-                priority: 'asap'
-            },
-            'source.js': {
-                loader: () => import('./tm/grammars/JavaScript.tmLanguage.json'),
-                language: 'javascript',
-                priority: 'asap'
-            }
+    const grammars = {
+        'source.aqua': {
+            loader: () => import('./tm/grammars/aqua.tmLanguage.json'),
+            language: 'typescript',
+            priority: 'asap'
+        },
+        'source.js': {
+            loader: () => import('./tm/grammars/JavaScript.tmLanguage.json'),
+            language: 'javascript',
+            priority: 'asap'
         }
+    }
 
     // To avoid FOUC, await for high priority languages to get ready (loading/compiling takes time, and it's an async process for which CM won't wait)
     await Promise.all(Object.keys(grammars).map(async scopeName => {
