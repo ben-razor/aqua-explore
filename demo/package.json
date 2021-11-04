@@ -1,6 +1,7 @@
 {
   "scripts": {
     "start": "npm run __build-cm-tm && webpack-dev-server .",
+    "serve": "webpack-dev-server .",
     "__build-cm-tm": "tsc --build ../tsconfig.json",
     "build": "webpack --config=webpack.config.js"
   },
