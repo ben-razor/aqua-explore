@@ -21,13 +21,18 @@ New features that will be implemented include:
 
 ## Client Side Aqua compilation
 
-**This feature would need a little work on the Fluence side:**
+**This feature is fundamental to the viability of the application and would need a little work on the Fluence side:**
 
 A target will need adding to the Aqua compiler build script to allow the JS target to be imported as a library. The library would export a compileAqua 
-method taking the current CLI params as input and returning the compiled JS/TS/AIR. I couldn't see how to do it myself without spending a 
-lot of time learning the Scala language and build tools.
+method taking the current CLI params as input and returning the compiled JS/TS/AIR.
 
-If this is implemented it will vastly speed up the compilation time and allow other creative uses of the compiler.
+If this can be implemented it will vastly speed up the compilation time and allow other creative uses of the compiler.
+
+If not implemented and a compilation server continues to be used, the number of concurrent users will be severely limited.
+
+An alternative solution is to distribute the client and server in a container but then the easy accessibilty of the web version is lost.
+
+I couldn't see how to do this myself without spending a lot of time learning the Scala language and build tools.
 
 ## Summary
 
