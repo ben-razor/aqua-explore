@@ -13,7 +13,7 @@ New features that will be implemented include:
 * HTML / CSS editor support
 * User log in (Using Ceramic DID)
 * Ability to save and load projects that are grouped into collections
-* A series of interactive Aqua tutorials implemented within the IDE
+* A series of Aqua tutorials implemented within the IDE
 * UI Improvements
 * Editor improvements (Basic autocomplete / tooltips)
 * Make it extremely cool
