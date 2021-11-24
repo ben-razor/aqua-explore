@@ -35,4 +35,4 @@ The Aqua language and Fluence platform can be somewhat challenging to get to gri
 majority of developers are familiar with.
 
 With these features implemented, the Aqua Playground can serve as an entry point for new developers to get to grips with Fluence. This will increase the 
-likelyhood of onboarding new developers to the project, speeding up adoption of the platform.
+likelihood of on-boarding new developers to the project, speeding up adoption of the platform.
