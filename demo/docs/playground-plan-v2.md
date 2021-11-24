@@ -17,7 +17,7 @@ New features that will be implemented include:
 * UI Improvements
 * Editor improvements (Basic autocomplete / tooltips)
 * Make it extremely cool
-* Efficiency, stability, usability and code base improvements
+* Efficiency, stability, usability and codebase improvements
 
 ## Client Side Aqua compilation
 
