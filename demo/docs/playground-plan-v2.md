@@ -28,7 +28,7 @@ method taking the current CLI params as input and returning the compiled JS/TS/A
 
 If this can be implemented it will vastly speed up the compilation time and allow other creative uses of the compiler.
 
-If not implemented and a compilation server continues to be used, the number of concurrent users will be severely limited.
+If not implemented and a compilation server continues to be used, the number of concurrent users is severely limited.
 
 An alternative solution is to distribute the client and server in a container but then the easy accessibilty of the web version is lost.
 
