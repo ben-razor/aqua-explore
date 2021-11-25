@@ -16,7 +16,6 @@ New features that will be implemented include:
 * A series of Aqua tutorials implemented within the IDE
 * UI Improvements
 * Editor improvements (Basic autocomplete / tooltips)
-* Make it extremely cool
 * Efficiency, stability, usability and codebase improvements
 
 ## Client Side Aqua compilation
