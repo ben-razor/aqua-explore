@@ -40,3 +40,7 @@ majority of developers are familiar with.
 
 With these features implemented, the Aqua Playground can serve as an entry point for new developers to get to grips with Fluence. This will increase the 
 likelihood of on-boarding new developers to the project, speeding up adoption of the platform.
+
+Here is an artist's impression of how the software may appear:
+
+![Aqua Playground Screenshot](https://raw.githubusercontent.com/ben-razor/aqua-explore/main/demo/docs/aqua-playground-3.png)
