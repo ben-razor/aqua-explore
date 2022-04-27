@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="./images/favicon_io/favicon.ico" />
+    <title>Fluence Aqua Playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        
+        @keyframes loading-fade-in {
+            0% { opacity: 0; }
+            10% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .loading-fade-in {
+            animation: loading-fade-in 7s;
+        }
+    </style>
+</head>
+<body>
+    <div class="playground-header" id="playground-header" style="display: none;">
+        <div class="playground-logo"></div>
+        <h1 class="playground-title">Fluence Aqua Playground</h1>
+        <div class="playground-menu">
+            <div class="playground-menu-item">
+                <a href="https://fluence.network/" target="_blank" rel="noreferrer">Fluence<span class="tiny-hide"> Network</span></a>
+            </div>
+            <div class="playground-menu-item">
+                <a href="https://doc.fluence.dev/aqua-book/" target="_blank" rel="noreferrer"><span class="tiny-hide">About </span>Aqua</a>
+            </div>
+            <div class="playground-menu-item">
+                <a href="https://aqua-explore-docs.web.app/" target="_blank" rel="noreferrer"><span class="tiny-hide">Playground </span>Docs</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="playground-content" id="playground-content" style="opacity: 0; position: absolute;">
+        <div class="playground-compiling-overlay" id="playground-compiling-overlay" style="display: none;">
+            <div class="playground-compiling-overlay-content">
+                <img src="./images/ring-loader.gif" style="width: 100px; height: 100px; margin: auto;" />
+                <h1>Aqua code is compiling...</h1>
+                <p>Relax. For a few seconds.</p>
+            </div>
+        </div>
+        <div class="playground-ide">
+            <div class="playground-editor">
+                <div class="playground-controls">
+                    <div class="playground-tab playground-tab-selected" id="playground-tab-aqua" onclick="selectTab(this)">Aqua</div>
+                    <div class="playground-tab" id="playground-tab-js" onclick="selectTab(this)">JS</div>
+                    <div id="example-select-holder">
+                    </div>
+                    <button id="run-script-button" class="playground-run-button">Run<span class="tiny-hide"> Script</span></button>
+                </div>
+                <div class="playground-codemirror-wrapper">
+                    <div id="cm-aqua-container">
+                        <textarea id="cm-host" class="playground-editor"></textarea>
+                    </div>
+                    <div id="cm-js-container">
+                        <textarea id="cm-js-editor" class="playground-editor"></textarea>
+                    </div>
+                </div>
+            </div>
+           <!-- scripts will be auto injected by html-webpack-plugin -->
+            <div id="output-elem" class="playground-output-container">
+                <iframe class="playground-sandbox" id="playground-sandbox" src="./sandbox.html" 
+                        sandbox="allow-same-origin allow-scripts" frameBorder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="playground-footer" id="playground-footer" style="display: none;">
+        <div class="playground-info">
+            Made for the <a style="font-weight: bold;" href="https://gitcoin.co/issue/fluencelabs/Gitcoin-GR11-Hackathon/10/100026543" target="_blank" rel="noreferrer">Gitcoin GR11 Hackathon</a>
+        </div>
+    </div>
+
+    <div class="playground-loading" id="playground-loading" style="display: flex;">
+        <div class="playground-loading-content" style="margin: auto; display:flex; flex-direction: column;min-width:50%; text-align: center;">
+            <h1 class="loading-fade-in">RELAX</h1>
+            <img src="./images/ring-loader.gif" style="width: 100px; height: 100px; margin: auto;" />
+            <h1 class="loading-fade-in">Aqua Playground is loading...</h1>
+        </div>
+    </div>
+
+   <script src="index.js"></script></body>
+</html>

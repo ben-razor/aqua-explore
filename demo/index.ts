@@ -13,25 +13,17 @@ import { Sandbox } from './Sandbox';
 import { AquaCompile } from './AquaCompile';
 
 import {
-    ResultCodes,
-    RequestFlow,
-    RequestFlowBuilder,
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v1.js'
-
-import {
     CallParams,
     callFunction, 
-    registerService 
-} from '@fluencelabs/fluence/dist/internal/compilerSupport/v2';
+    registerService,
+} from '@fluencelabs/fluence/dist/internal/compilerSupport/v3';
 
 // These assignments are necessary to ensure that webpack pulls in these things
 // from the modules so that they are available to the code running in the sandbox
 window['Fluence'] = Fluence;
 window['FluencePeer'] = FluencePeer;
-window['ResultCodes'] = ResultCodes;
 window['registerService'] = registerService;
 window['callFunction'] = callFunction;
-window['RequestFlowBuilder'] = RequestFlowBuilder;
 window['krasnodar'] = krasnodar;
 
 import { activateLanguage, addGrammar, } from 'codemirror-textmate'

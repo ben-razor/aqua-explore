@@ -10,8 +10,8 @@ export class AquaCompile {
         this.prevCompiledAqua;
         this.examplesData = [];
 
-        this.host = 'https://benrazor.net:8080';
-        if(isLocal()) {
+        this.host = 'https://i1.benrazor.net:8080';
+        if(false) {//isLocal()) {
             let aquaCompilePort = 8868; 
             this.host = `http://localhost:${aquaCompilePort}`;
         }

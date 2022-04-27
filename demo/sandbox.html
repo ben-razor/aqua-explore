@@ -6,11 +6,7 @@
     <link rel="icon" href="./images/favicon_io/favicon.ico" />
     <title>Fluence Aqua Playground</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <script>
-
-
-    </script>
+    <script src="https://kit.fontawesome.com/39075e0af3.js" crossorigin="anonymous"></script>
 </head>
 <body style="margin: 0; padding: 0; height: 100%;">
     <div class="playground-content" id="playground-content" style="opacity: 0; position: absolute; height: 100%;">
@@ -25,8 +21,8 @@
           <!-- scripts will be auto injected by html-webpack-plugin -->
             <div id="output-elem" class="playground-output">
                 <div class="playground-controls-output">
-                    <div id="connection-error-alert" class="playground-connection connection-error" style="display: none;">
-                        <span id="connection-error-text" class="error-text" role="img">🖧</span>
+                    <div id="connection-error-alert" class="playground-connection connection-error" style="display: none; align-items: center;">
+                        <img src="./images/favicon_io/favicon-32x32-white.png" style="width: 1em" />
                     </div>
                     <div class="playground-tab playground-tab-selected" id="playground-tab-output" onclick="selectOutputTab(this)">Output</div>
                     <div class="playground-tab" id="playground-tab-compiled" onclick="selectOutputTab(this)" style="display: none;">Compiled</div>
